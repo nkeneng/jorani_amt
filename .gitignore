@@ -16,6 +16,8 @@ application/temp/*
 /application/language/test.txt
 /.sonar/
 
+/application/config/database.php
+
 /.vscode/
 
 /vendor/
