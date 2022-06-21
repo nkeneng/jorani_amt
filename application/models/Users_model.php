@@ -193,7 +193,6 @@ class Users_model extends CI_Model {
         foreach($this->input->post("role") as $role_bit){
             $role = $role | $role_bit;
         }
-
         $data = array(
             'firstname' => $this->input->post('firstname'),
             'lastname' => $this->input->post('lastname'),

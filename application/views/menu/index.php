@@ -93,63 +93,108 @@ $this->lang->load('menu', $language);?>
                       <?php } ?>
                       &nbsp;<b class="caret"></b>
                   </a>
-                  <ul class="dropdown-menu">
-                    <li><a href="<?php echo base_url();?>requests/delegations"><?php echo lang('menu_validation_delegations');?></a></li>
-                    <li><a href="<?php echo base_url();?>requests/collaborators"><?php echo lang('menu_validation_collaborators');?></a></li>
-                    <li><a href="<?php echo base_url();?>requests/balance"><?php echo lang('menu_hr_report_leave_balance');?></a></li>
-                    <li class="divider"></li>
-                    <li class="nav-header"><?php echo lang('menu_validation_title');?></li>
-                    <li><a href="<?php echo base_url();?>requests">
-                      <?php if ($requested_leaves_count > 0) { ?>
-                      <span class="badge badge-info"><?php echo $requested_leaves_count;?></span>
-                      <?php } ?>
-                        <?php echo lang('menu_validation_leaves');?></a></li>
-                    <?php if ($this->config->item('disable_overtime') === FALSE) { ?>
-                    <li><a href="<?php echo base_url();?>overtime">
-                      <?php if ($requested_extra_count > 0) { ?>
-                      <span class="badge badge-info"><?php echo $requested_extra_count;?></span>
-                      <?php } ?>
-                        <?php echo lang('menu_validation_overtime');?></a></li>
-                    <?php } ?>
-                  </ul>
+                    <ul class="dropdown-menu">
+                        <li>
+                            <a href="<?php echo base_url(); ?>requests/delegations"><?php echo lang('menu_validation_delegations'); ?></a>
+                        </li>
+                        <li>
+                            <a href="<?php echo base_url(); ?>requests/collaborators"><?php echo lang('menu_validation_collaborators'); ?></a>
+                        </li>
+                        <li>
+                            <a href="<?php echo base_url(); ?>requests/balance"><?php echo lang('menu_hr_report_leave_balance'); ?></a>
+                        </li>
+                        <li class="divider"></li>
+                        <li class="nav-header"><?php echo lang('menu_validation_title'); ?></li>
+                        <li>
+                            <a href="<?php echo base_url(); ?>requests">
+                                <?php if ($requested_leaves_count > 0) { ?>
+                                    <span class="badge badge-info"><?php echo $requested_leaves_count; ?></span>
+                                <?php } ?>
+                                <?php echo lang('menu_validation_leaves'); ?>
+                            </a></li>
+                        <?php if ($this->config->item('disable_overtime') === FALSE) { ?>
+                            <li>
+                                <a href="<?php echo base_url(); ?>overtime">
+                                    <?php if ($requested_extra_count > 0) { ?>
+                                        <span class="badge badge-info"><?php echo $requested_extra_count; ?></span>
+                                    <?php } ?>
+                                    <?php echo lang('menu_validation_overtime'); ?>
+                                </a></li>
+                        <?php } ?>
+                    </ul>
                 </li>
-              <?php } ?>
+             <?php } ?>
 
-                <li class="dropdown">
-                  <a href="#" class="dropdown-toggle" data-toggle="dropdown"><?php echo lang('menu_requests_title');?> <b class="caret"></b></a>
-                  <ul class="dropdown-menu">
-                    <li class="nav-header"><?php echo lang('menu_requests_leaves');?></li>
-                    <li><a href="<?php echo base_url();?>leaves/counters"><?php echo lang('menu_leaves_counters');?></a></li>
-                    <li><a href="<?php echo base_url();?>leaves"><?php echo lang('menu_leaves_list_requests');?></a></li>
-                    <li><a href="<?php echo base_url();?>leaves/create"><?php echo lang('menu_leaves_create_request');?></a></li>
-                    <?php if ($this->config->item('disable_overtime') === FALSE) { ?>
-                    <li class="divider"></li>
-                    <li class="nav-header"><?php echo lang('menu_requests_overtime');?></li>
-                    <li><a href="<?php echo base_url();?>extra"><?php echo lang('menu_requests_list_extras');?></a></li>
-                    <li><a href="<?php echo base_url();?>extra/create"><?php echo lang('menu_requests_request_extra');?></a></li>
-                    <?php } ?>
-                  </ul>
-                </li>
+                    <li class="dropdown">
+                        <a href="#"
+                           class="dropdown-toggle"
+                           data-toggle="dropdown"><?php echo lang('menu_requests_title'); ?>
+                            <b class="caret"></b></a>
+                        <ul class="dropdown-menu">
+                            <li class="nav-header"><?php echo lang('menu_requests_leaves'); ?></li>
+                            <li>
+                                <a href="<?php echo base_url(); ?>leaves/counters"><?php echo lang('menu_leaves_counters'); ?></a>
+                            </li>
+                            <li>
+                                <a href="<?php echo base_url(); ?>leaves"><?php echo lang('menu_leaves_list_requests'); ?></a>
+                            </li>
+                            <li>
+                                <a href="<?php echo base_url(); ?>leaves/create"><?php echo lang('menu_leaves_create_request'); ?></a>
+                            </li>
+                            <?php if ($contract && $contract == '4') : ?>
+                                <li>
+                                    <a href="<?php echo base_url(); ?>leaves/createfreeleave"><?php echo lang('menu_leaves_create_request_free_leave'); ?></a>
+                                </li>
+                            <?php endif; ?>
+                            <?php if ($this->config->item('disable_overtime') === FALSE) { ?>
+                                <li class="divider"></li>
+                                <li class="nav-header"><?php echo lang('menu_requests_overtime'); ?></li>
+                                <li>
+                                    <a href="<?php echo base_url(); ?>extra"><?php echo lang('menu_requests_list_extras'); ?></a>
+                                </li>
+                                <li>
+                                    <a href="<?php echo base_url(); ?>extra/create"><?php echo lang('menu_requests_request_extra'); ?></a>
+                                </li>
+                            <?php } ?>
+                        </ul>
+                    </li>
 
-                <li class="dropdown">
-                  <a href="#" class="dropdown-toggle" data-toggle="dropdown"><?php echo lang('menu_calendar_title');?> <b class="caret"></b></a>
-                  <ul class="dropdown-menu">
-                      <li><a href="<?php echo base_url();?>calendar/individual"><?php echo lang('menu_calendar_individual');?></a></li>
-                      <li><a href="<?php echo base_url();?>calendar/year"><?php echo lang('menu_calendar_year');?></a></li>
-                      <?php if ($this->config->item('disable_workmates_calendar') == FALSE) { ?>
-                      <li><a href="<?php echo base_url();?>calendar/workmates"><?php echo lang('menu_calendar_workmates');?></a></li>
-                      <?php } ?>
-                      <?php if ($is_manager == TRUE) { ?>
-                      <li><a href="<?php echo base_url();?>calendar/collaborators"><?php echo lang('menu_calendar_collaborators');?></a></li>
-                      <?php } ?>
-                      <?php if (($is_hr == TRUE) || ($is_admin == TRUE) || ($this->config->item('hide_global_cals_to_users') === FALSE) ) { ?>
-                      <?php if ($this->config->item('disable_department_calendar') == FALSE) { ?>
-                      <li><a href="<?php echo base_url();?>calendar/department"><?php echo lang('menu_calendar_department');?></a></li>
-                      <?php } ?>
-                      <li><a href="<?php echo base_url();?>calendar/organization"><?php echo lang('menu_calendar_organization');?></a></li>
-                      <li><a href="<?php echo base_url();?>calendar/tabular"><?php echo lang('menu_calendar_tabular');?></a></li>
-                      <?php } ?>
-                  </ul>
+                    <li class="dropdown">
+                        <a href="#"
+                           class="dropdown-toggle"
+                           data-toggle="dropdown"><?php echo lang('menu_calendar_title'); ?>
+                            <b class="caret"></b></a>
+                        <ul class="dropdown-menu">
+                            <li>
+                                <a href="<?php echo base_url(); ?>calendar/individual"><?php echo lang('menu_calendar_individual'); ?></a>
+                            </li>
+                            <li>
+                                <a href="<?php echo base_url(); ?>calendar/year"><?php echo lang('menu_calendar_year'); ?></a>
+                            </li>
+                            <?php if ($this->config->item('disable_workmates_calendar') == FALSE) { ?>
+                                <li>
+                                    <a href="<?php echo base_url(); ?>calendar/workmates"><?php echo lang('menu_calendar_workmates'); ?></a>
+                                </li>
+                            <?php } ?>
+                            <?php if ($is_manager == TRUE) { ?>
+                                <li>
+                                    <a href="<?php echo base_url(); ?>calendar/collaborators"><?php echo lang('menu_calendar_collaborators'); ?></a>
+                                </li>
+                            <?php } ?>
+                            <?php if (($is_hr == TRUE) || ($is_admin == TRUE) || ($this->config->item('hide_global_cals_to_users') === FALSE)) { ?>
+                                <?php if ($this->config->item('disable_department_calendar') == FALSE) { ?>
+                                    <li>
+                                        <a href="<?php echo base_url(); ?>calendar/department"><?php echo lang('menu_calendar_department'); ?></a>
+                                    </li>
+                                <?php } ?>
+                                <li>
+                                    <a href="<?php echo base_url(); ?>calendar/organization"><?php echo lang('menu_calendar_organization'); ?></a>
+                                </li>
+                                <li>
+                                    <a href="<?php echo base_url(); ?>calendar/tabular"><?php echo lang('menu_calendar_tabular'); ?></a>
+                                </li>
+                            <?php } ?>
+                        </ul>
                 </li>
 
                 <li>

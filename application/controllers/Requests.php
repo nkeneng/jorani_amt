@@ -29,15 +29,22 @@ class Requests extends CI_Controller {
         $this->load->model('leaves_model');
         $this->lang->load('requests', $this->language);
         $this->lang->load('global', $this->language);
+        $this->load->model('users_model');
     }
 
     /**
-     * Display the list of all requests submitted to you
-     * Status is submitted or accepted/rejected depending on the filter parameter.
-     * @param string $name Filter the list of submitted leave requests (all or requested)
-     * @author Benjamin BALET <benjamin.balet@gmail.com>
+     * Display the list of all requests submitted
+     * to you Status is submitted or
+     * accepted/rejected depending on the filter
+     * parameter.
+     * @param string $name Filter the list of
+     *     submitted leave requests (all or
+     *     requested)
+     * @author Benjamin BALET
+     *     <benjamin.balet@gmail.com>
      */
-    public function index($filter = 'requested') {
+    public function index($filter = 'requested')
+    {
         $this->auth->checkIfOperationIsAllowed('list_requests');
         $data = getUserContext($this);
         $this->load->model('types_model');
@@ -46,12 +53,14 @@ class Requests extends CI_Controller {
         $data['filter'] = $filter;
         $data['title'] = lang('requests_index_title');
         $data['help'] = $this->help->create_help_link('global_link_doc_page_leave_validation');
-        ($filter == 'all')? $showAll = TRUE : $showAll = FALSE;
-        if ($this->config->item('enable_history') == TRUE){
-          $data['requests'] = $this->leaves_model->getLeavesRequestedToManagerWithHistory($this->session->userdata('id'), $showAll);
-        }else{
-          $data['requests'] = $this->leaves_model->getLeavesRequestedToManager($this->session->userdata('id'), $showAll);
+        ($filter == 'all') ? $showAll = TRUE : $showAll = FALSE;
+        if ($this->config->item('enable_history') == TRUE) {
+            $data['requests'] = $this->leaves_model->getLeavesRequestedToManagerWithHistory($this->session->userdata('id'), $showAll);
+        } else {
+            $data['requests'] = $this->leaves_model->getLeavesRequestedToManager($this->session->userdata('id'), $showAll);
         }
+        $userEl = $this->users_model->getUsers($this->session->userdata('id'));
+        $data['contract'] = $userEl['contract'];
         $data['types'] = $this->types_model->getTypes();
         $data['showAll'] = $showAll;
         $data['flash_partial_view'] = $this->load->view('templates/flash', $data, TRUE);
@@ -61,12 +70,83 @@ class Requests extends CI_Controller {
         $this->load->view('templates/footer');
     }
 
+    public function viewDetails($id, $show = false, $filter = 'requested')
+    {
+
+        $this->auth->checkIfOperationIsAllowed('list_requests');
+        $data = getUserContext($this);
+        $this->load->model('types_model');
+        $this->lang->load('datatable', $this->language);
+        $this->load->helper('form');
+        $data['filter'] = $filter;
+        $data['id_parent_leave'] = $id;
+        $data['title'] = lang('requests_index_title');
+        $data['help'] = $this->help->create_help_link('global_link_doc_page_leave_validation');
+        ($filter == 'all') ? $showAll = TRUE : $showAll = FALSE;
+        if ($show) {
+            if ($this->config->item('enable_history') == TRUE) {
+                $data['requests'] = $this->leaves_model->getSubLeavesDetailsRequestedToManagerWithHistory($this->session->userdata('id'), $showAll, $id);
+            } else {
+                $data['requests'] = $this->leaves_model->getSubLeavesDetailsRequestedToManager($this->session->userdata('id'), $showAll, $id);
+            }
+            //   echo json_encode($this->session->userdata('id'));
+            $data['types'] = $this->types_model->getTypes();
+            $data['showAll'] = $showAll;
+            $data['flash_partial_view'] = $this->load->view('templates/flash', $data, TRUE);
+        } else {
+            if ($this->config->item('enable_history') == TRUE) {
+                $data['requests'] = $this->leaves_model->getSubLeavesRequestedToManagerWithHistory($this->session->userdata('id'), $showAll, $id);
+            } else {
+                $data['requests'] = $this->leaves_model->getSubLeavesRequestedToManager($this->session->userdata('id'), $showAll, $id);
+            }
+            $data['types'] = $this->types_model->getTypes();
+            $data['showAll'] = $showAll;
+            $data['flash_partial_view'] = $this->load->view('templates/flash', $data, TRUE);
+        }
+
+        $this->load->view('templates/header', $data);
+        $this->load->view('menu/index', $data);
+        $this->load->view('requests/view_sub_request', $data);
+        $this->load->view('templates/footer');
+    }
+
+    public function viewDetailsFilter($id, $filter = 'requested')
+    {
+        $showAll = true;
+        $this->auth->checkIfOperationIsAllowed('list_requests');
+        $data = getUserContext($this);
+        $this->load->model('types_model');
+        $this->lang->load('datatable', $this->language);
+        $this->load->helper('form');
+        $data['filter'] = $filter;
+        $data['id_parent_leave'] = $id;
+        $data['title'] = lang('requests_index_title');
+        $data['help'] = $this->help->create_help_link('global_link_doc_page_leave_validation');
+        ($filter == 'all') ? $showAll = TRUE : $showAll = FALSE;
+
+        if ($this->config->item('enable_history') == TRUE) {
+            $data['requests'] = $this->leaves_model->getSubLeavesRequestedToManagerWithHistory($this->session->userdata('id'), $showAll, $id);
+        } else {
+            $data['requests'] = $this->leaves_model->getSubLeavesRequestedToManager($this->session->userdata('id'), $showAll, $id);
+        }
+        $data['types'] = $this->types_model->getTypes();
+        $data['showAll'] = $showAll;
+        $data['flash_partial_view'] = $this->load->view('templates/flash', $data, TRUE);
+
+        $this->load->view('templates/header', $data);
+        $this->load->view('menu/index', $data);
+        $this->load->view('requests/view_sub_request', $data);
+        $this->load->view('templates/footer');
+    }
+
     /**
      * Accept a leave request
      * @param int $id leave request identifier
-     * @author Benjamin BALET <benjamin.balet@gmail.com>
+     * @author Benjamin BALET
+     *     <benjamin.balet@gmail.com>
      */
-    public function accept($id) {
+    public function accept($id)
+    {
         $this->auth->checkIfOperationIsAllowed('accept_requests');
         $this->load->model('users_model');
         $this->load->model('delegations_model');
@@ -76,14 +156,31 @@ class Requests extends CI_Controller {
         }
         $employee = $this->users_model->getUsers($leave['employee']);
         $is_delegate = $this->delegations_model->isDelegateOfManager($this->user_id, $employee['manager']);
-        if (($this->user_id == $employee['manager']) || ($this->is_hr)  || ($is_delegate)) {
+        if (($this->user_id == $employee['manager']) || ($this->is_hr) || ($is_delegate)) {
             $this->leaves_model->switchStatus($id, LMS_ACCEPTED);
             $this->sendMail($id, LMS_REQUESTED_ACCEPTED);
             $this->session->set_flashdata('msg', lang('requests_accept_flash_msg_success'));
+            //verify if this leave is parrent leave
+            if ($leave['parent_leave_id']) {
+                $verf = $this->leaves_model->verifySubLeavesExists($leave['parent_leave_id']);
+                if (!$verf) {
+                    $this->leaves_model->closeRequestTreated($leave['parent_leave_id']);
+                }
+            }
+            $newleave = $this->leaves_model->getLeaves($id);
+            //verify if this leave as treated sub leave
+            if ($newleave['sub_leaves_treated'] == 0) {
+                $otherLeaves = $this->leaves_model->getOtherSubLeavesExists($newleave['id']);
+                foreach ($otherLeaves as $value) {
+                    $this->leaves_model->switchStatus($value->id, LMS_ACCEPTED);
+                }
+            }
             if (isset($_GET['source'])) {
+                //echo "<script>alert('1');</script>";
                 redirect($_GET['source']);
             } else {
-                redirect('requests');
+                echo "<script>window.history.back();</script>";
+                //redirect('requests');
             }
         } else {
             log_message('error', 'User #' . $this->user_id . ' illegally tried to accept leave #' . $id);
@@ -108,17 +205,31 @@ class Requests extends CI_Controller {
         $employee = $this->users_model->getUsers($leave['employee']);
         $is_delegate = $this->delegations_model->isDelegateOfManager($this->user_id, $employee['manager']);
         if (($this->user_id == $employee['manager']) || ($this->is_hr)  || ($is_delegate)) {
-            if(isset($_POST['comment'])){
-              $this->leaves_model->switchStatusAndComment($id, LMS_REJECTED, $_POST['comment']);
+            if (isset($_POST['comment'])) {
+                $this->leaves_model->switchStatusAndComment($id, LMS_REJECTED, $_POST['comment']);
             } else {
-              $this->leaves_model->switchStatus($id, LMS_REJECTED);
+                $this->leaves_model->switchStatus($id, LMS_REJECTED);
             }
             $this->sendMail($id, LMS_REQUESTED_REJECTED);
-            $this->session->set_flashdata('msg',  lang('requests_reject_flash_msg_success'));
+            $this->session->set_flashdata('msg', lang('requests_reject_flash_msg_success'));
+            if ($leave['parent_leave_id']) {
+                $verf = $this->leaves_model->verifySubLeavesExists($leave['parent_leave_id']);
+                if (!$verf) {
+                    $this->leaves_model->closeRequestTreated($leave['parent_leave_id']);
+                }
+            }
+            $newleave = $this->leaves_model->getLeaves($id);
+            if ($newleave['sub_leaves_treated'] == 0) {
+                $otherLeaves = $this->leaves_model->getOtherSubLeavesExists($newleave['id']);
+                foreach ($otherLeaves as $value) {
+                    $this->leaves_model->switchStatus($value->id, LMS_REJECTED);
+                }
+            }
             if (isset($_GET['source'])) {
                 redirect($_GET['source']);
             } else {
-                redirect('requests');
+                echo "<script>window.history.back();</script>";
+                //redirect('requests');
             }
         } else {
             log_message('error', 'User #' . $this->user_id . ' illegally tried to reject leave #' . $id);
@@ -158,12 +269,111 @@ class Requests extends CI_Controller {
         }
     }
 
+    public function listAccepted()
+    {
+        $tab = array_map('intval', explode(',', $this->input->get('array')));
+        $error = false;
+        $not_found = false;
+        for ($i = 0; $i < count($tab); $i++) {
+            $this->auth->checkIfOperationIsAllowed('accept_requests');
+            $this->load->model('users_model');
+            $this->load->model('delegations_model');
+            $leave = $this->leaves_model->getLeaves($tab[$i]);
+            if (empty($leave)) {
+                $not_found = true;
+                break;
+            }
+            $employee = $this->users_model->getUsers($leave['employee']);
+            $is_delegate = $this->delegations_model->isDelegateOfManager($this->user_id, $employee['manager']);
+            if (($this->user_id == $employee['manager']) || ($this->is_hr) || ($is_delegate)) {
+                $this->leaves_model->switchStatus($tab[$i], LMS_ACCEPTED);
+                $this->sendMail($tab[$i], LMS_REQUESTED_ACCEPTED);
+                $error = false;
+            } else {
+                $error = true;
+                break;
+            }
+        }
+        if ($not_found) {
+            redirect('notfound');
+        } else {
+            if ($error) {
+                log_message('error', 'User #' . $this->user_id . ' illegally tried to accept leave #' . json_encode($tab));
+                $this->session->set_flashdata('msg', lang('requests_accept_flash_msg_error'));
+                redirect('leaves');
+            } else {
+                if (count($tab) > 1) {
+                    $this->session->set_flashdata('msg', lang('requests_accept_multi_flash_msg_success'));
+                } else {
+                    $this->session->set_flashdata('msg', lang('requests_accept_flash_msg_success'));
+                }
+                if (isset($_GET['source'])) {
+                    redirect($_GET['source']);
+                } else {
+                    redirect('requests');
+                }
+            }
+        }
+
+    }
+
+
+    public function listRejected()
+    {
+        $tab = array_map('intval', explode(',', $this->input->get('array')));
+        $error = false;
+        $not_found = false;
+        for ($i = 0; $i < count($tab); $i++) {
+            $this->auth->checkIfOperationIsAllowed('accept_requests');
+            $this->load->model('users_model');
+            $this->load->model('delegations_model');
+            $leave = $this->leaves_model->getLeaves($tab[$i]);
+            if (empty($leave)) {
+                $not_found = true;
+                break;
+            }
+            $employee = $this->users_model->getUsers($leave['employee']);
+            $is_delegate = $this->delegations_model->isDelegateOfManager($this->user_id, $employee['manager']);
+            if (($this->user_id == $employee['manager']) || ($this->is_hr) || ($is_delegate)) {
+                $this->leaves_model->switchStatus($tab[$i], LMS_REJECTED);
+                $this->sendMail($tab[$i], LMS_REQUESTED_REJECTED);
+                $error = false;
+            } else {
+                $error = true;
+                break;
+            }
+        }
+        if ($not_found) {
+            redirect('notfound');
+        } else {
+            if ($error) {
+                log_message('error', 'User #' . $this->user_id . ' illegally tried to accept leave #' . json_encode($tab));
+                $this->session->set_flashdata('msg', lang('requests_accept_flash_msg_error'));
+                redirect('leaves');
+            } else {
+                if (count($tab) > 1) {
+                    $this->session->set_flashdata('msg', lang('requests_rejected_multi_flash_msg_success'));
+                } else {
+                    $this->session->set_flashdata('msg', lang('requests_reject_flash_msg_success'));
+                }
+                if (isset($_GET['source'])) {
+                    redirect($_GET['source']);
+                } else {
+                    redirect('requests');
+                }
+            }
+        }
+
+    }
+
     /**
      * Reject the cancellation of a leave request
      * @param int $id leave request identifier
-     * @author Benjamin BALET <benjamin.balet@gmail.com>
+     * @author Benjamin BALET
+     *     <benjamin.balet@gmail.com>
      */
-    public function rejectCancellation($id) {
+    public function rejectCancellation($id)
+    {
         $this->auth->checkIfOperationIsAllowed('reject_requests');
         $this->load->model('users_model');
         $this->load->model('delegations_model');
@@ -173,12 +383,12 @@ class Requests extends CI_Controller {
         }
         $employee = $this->users_model->getUsers($leave['employee']);
         $is_delegate = $this->delegations_model->isDelegateOfManager($this->user_id, $employee['manager']);
-        if (($this->user_id == $employee['manager']) || ($this->is_hr)  || ($is_delegate)) {
+        if (($this->user_id == $employee['manager']) || ($this->is_hr) || ($is_delegate)) {
             //$this->leaves_model->switchStatus($id, LMS_ACCEPTED);
-            if(isset($_POST['comment'])){
-              $this->leaves_model->switchStatusAndComment($id, LMS_ACCEPTED, $_POST['comment']);
+            if (isset($_POST['comment'])) {
+                $this->leaves_model->switchStatusAndComment($id, LMS_ACCEPTED, $_POST['comment']);
             } else {
-              $this->leaves_model->switchStatus($id, LMS_ACCEPTED);
+                $this->leaves_model->switchStatus($id, LMS_ACCEPTED);
             }
             $this->sendMail($id, LMS_CANCELLATION_REQUESTED);
             $this->session->set_flashdata('msg', lang('requests_cancellation_reject_flash_msg_success'));
@@ -195,10 +405,13 @@ class Requests extends CI_Controller {
     }
 
     /**
-     * Display the list of all requests submitted to the line manager (Status is submitted)
-     * @author Benjamin BALET <benjamin.balet@gmail.com>
+     * Display the list of all requests submitted
+     * to the line manager (Status is submitted)
+     * @author Benjamin BALET
+     *     <benjamin.balet@gmail.com>
      */
-    public function collaborators() {
+    public function collaborators()
+    {
         $this->auth->checkIfOperationIsAllowed('list_collaborators');
         $data = getUserContext($this);
         $this->lang->load('datatable', $this->language);
@@ -207,6 +420,8 @@ class Requests extends CI_Controller {
         $this->load->model('users_model');
         $data['collaborators'] = $this->users_model->getCollaboratorsOfManager($this->user_id);
         $data['flash_partial_view'] = $this->load->view('templates/flash', $data, TRUE);
+        $userEl = $this->users_model->getUsers($this->session->userdata('id'));
+        $data['contract'] = $userEl['contract'];
         $this->load->view('templates/header', $data);
         $this->load->view('menu/index', $data);
         $this->load->view('requests/collaborators', $data);
@@ -231,6 +446,8 @@ class Requests extends CI_Controller {
             $data['id'] = $id;
             $this->load->model('delegations_model');
             $data['delegations'] = $this->delegations_model->listDelegationsForManager($id);
+            $userEl = $this->users_model->getUsers($this->session->userdata('id'));
+            $data['contract'] = $userEl['contract'];
             $this->load->view('templates/header', $data);
             $this->load->view('menu/index', $data);
             $this->load->view('requests/delegations', $data);
@@ -330,6 +547,8 @@ class Requests extends CI_Controller {
                 $data['types'] = $leaveTypesDetails->types;
                 $this->load->model('users_model');
                 $data['name'] = $this->users_model->getName($id);
+                $userEl = $this->users_model->getUsers($this->session->userdata('id'));
+                $data['contract'] = $userEl['contract'];
                 $this->load->view('templates/header', $data);
                 $this->load->view('menu/index', $data);
                 $this->load->view('hr/createleave');
@@ -482,14 +701,15 @@ class Requests extends CI_Controller {
             }
 
             $summary = $this->leaves_model->getLeaveBalanceForEmployee($user['id'], TRUE, $refDate);
-            if (count($summary) > 0 ) {
+            if (count($summary) > 0) {
                 foreach ($summary as $key => $value) {
                     $result[$user['id']][$key] = round($value[1] - $value[0], 3, PHP_ROUND_HALF_DOWN);
                 }
             }
         }
         $data['result'] = $result;
-
+        $userEl = $this->users_model->getUsers($this->session->userdata('id'));
+        $data['contract'] = $userEl['contract'];
         $this->load->view('templates/header', $data);
         $this->load->view('menu/index', $data);
         $this->load->view('requests/balance', $data);

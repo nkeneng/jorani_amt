@@ -14,6 +14,7 @@ $lang['leavetypes_type_thead_id'] = 'N°';
 $lang['leavetypes_type_thead_acronym'] = 'Acronyme';
 $lang['leavetypes_type_thead_name'] = 'Nom';
 $lang['leavetypes_type_thead_deduct'] = 'Décompter les jours non travaillés';
+$lang['auto_confirm'] = 'Confirmation automatique';
 $lang['leavetypes_type_thead_tip_delete'] = 'supprimer';
 $lang['leavetypes_type_thead_tip_edit'] = 'modifier';
 $lang['leavetypes_type_button_export'] = 'Exporter cette liste';

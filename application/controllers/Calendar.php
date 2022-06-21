@@ -21,6 +21,7 @@ class Calendar extends CI_Controller {
      */
     public function __construct() {
         parent::__construct();
+        $this->load->model('users_model');
         //This controller differs from the others, because some calendars can be public
     }
 
@@ -73,10 +74,14 @@ class Calendar extends CI_Controller {
             lang('November') => $this->leaves_model->linear($employee, 11, $year, TRUE, TRUE, TRUE, TRUE),
             lang('December') => $this->leaves_model->linear($employee, 12, $year, TRUE, TRUE, TRUE, TRUE),
         );
+        $userEl = $this->users_model->getUsers($this->session->userdata('id'));
+        $data['contract'] = $userEl['contract'];
         $data['months'] = $months;
         $data['year'] = $year;
         $data['title'] = lang('calendar_year_title');
         $data['help'] = $this->help->create_help_link('global_link_doc_page_calendar_yearly');
+        $userEl = $this->users_model->getUsers($this->session->userdata('id'));
+        $data['contract'] = $userEl['contract'];
         $this->load->view('templates/header', $data);
         $this->load->view('menu/index', $data);
         $this->load->view('calendar/year', $data);
@@ -84,11 +89,15 @@ class Calendar extends CI_Controller {
     }
 
     /**
-     * Display the page of the individual calendar (of the connected user)
-     * Data (calendar events) is retrieved by AJAX from leaves' controller
-     * @author Benjamin BALET <benjamin.balet@gmail.com>
+     * Display the page of the individual
+     * calendar (of the connected user) Data
+     * (calendar events) is retrieved by AJAX
+     * from leaves' controller
+     * @author Benjamin BALET
+     *     <benjamin.balet@gmail.com>
      */
-    public function individual() {
+    public function individual()
+    {
         setUserContext($this);
         $this->lang->load('calendar', $this->language);
         $this->auth->checkIfOperationIsAllowed('individual_calendar');
@@ -98,6 +107,8 @@ class Calendar extends CI_Controller {
         $data['googleApi'] = FALSE;
         $data['clientId'] = 'key';
         $data['apiKey'] = 'key';
+        $userEl = $this->users_model->getUsers($this->session->userdata('id'));
+        $data['contract'] = $userEl['contract'];
         $this->load->view('templates/header', $data);
         $this->load->view('menu/index', $data);
         $this->load->view('calendar/individual', $data);
@@ -105,18 +116,23 @@ class Calendar extends CI_Controller {
     }
 
     /**
-     * Display the page of the team calendar (users having the same manager
-     * than the connected user)
-     * Data (calendar events) is retrieved by AJAX from leaves' controller
-     * @author Benjamin BALET <benjamin.balet@gmail.com>
+     * Display the page of the team calendar
+     * (users having the same manager than the
+     * connected user) Data (calendar events) is
+     * retrieved by AJAX from leaves' controller
+     * @author Benjamin BALET
+     *     <benjamin.balet@gmail.com>
      */
-    public function workmates() {
+    public function workmates()
+    {
         setUserContext($this);
         $this->lang->load('calendar', $this->language);
         $this->auth->checkIfOperationIsAllowed('workmates_calendar');
         $data = getUserContext($this);
         $data['title'] = lang('calendar_workmates_title');
         $data['help'] = $this->help->create_help_link('global_link_doc_page_calendar_workmates');
+        $userEl = $this->users_model->getUsers($this->session->userdata('id'));
+        $data['contract'] = $userEl['contract'];
         $this->load->view('templates/header', $data);
         $this->load->view('menu/index', $data);
         $this->load->view('calendar/workmates', $data);
@@ -124,17 +140,23 @@ class Calendar extends CI_Controller {
     }
 
     /**
-     * Display the calendar of the employees managed by the connected user
-     * Data (calendar events) is retrieved by AJAX from leaves' controller
-     * @author Benjamin BALET <benjamin.balet@gmail.com>
+     * Display the calendar of the employees
+     * managed by the connected user Data
+     * (calendar events) is retrieved by AJAX
+     * from leaves' controller
+     * @author Benjamin BALET
+     *     <benjamin.balet@gmail.com>
      */
-    public function collaborators() {
+    public function collaborators()
+    {
         setUserContext($this);
         $this->lang->load('calendar', $this->language);
         $this->auth->checkIfOperationIsAllowed('collaborators_calendar');
         $data = getUserContext($this);
         $data['title'] = lang('calendar_collaborators_title');
         $data['help'] = $this->help->create_help_link('global_link_doc_page_calendar_collaborators');
+        $userEl = $this->users_model->getUsers($this->session->userdata('id'));
+        $data['contract'] = $userEl['contract'];
         $this->load->view('templates/header', $data);
         $this->load->view('menu/index', $data);
         $this->load->view('calendar/collaborators', $data);
@@ -160,6 +182,8 @@ class Calendar extends CI_Controller {
             $this->session->set_flashdata('msg', lang('calendar_department_msg_error'));
             redirect('leaves');
         } else {
+            $userEl = $this->users_model->getUsers($this->session->userdata('id'));
+            $data['contract'] = $userEl['contract'];
             $data['department'] = $department->name;
             $this->load->view('templates/header', $data);
             $this->load->view('menu/index', $data);
@@ -208,6 +232,8 @@ class Calendar extends CI_Controller {
             $data['title'] = lang('calendar_organization_title');
             $data['help'] = $this->help->create_help_link('global_link_doc_page_calendar_organization');
             $data['departmentName'] = $this->organization_model->getName(0);
+            $userEl = $this->users_model->getUsers($this->session->userdata('id'));
+            $data['contract'] = $userEl['contract'];
             $this->load->view('templates/header', $data);
             $this->load->view('menu/index', $data);
             $this->load->view('calendar/organization', $data);
@@ -308,6 +334,8 @@ class Calendar extends CI_Controller {
             $data['title'] = lang('calendar_tabular_title');
             $data['help'] = $this->help->create_help_link('global_link_doc_page_calendar_tabular');
             $data['tabularPartialView'] = $this->load->view('calendar/tabular_partial', $data, TRUE);
+            $userEl = $this->users_model->getUsers($this->session->userdata('id'));
+            $data['contract'] = $userEl['contract'];
             $this->load->view('templates/header', $data);
             $this->load->view('menu/index', $data);
             $this->load->view('calendar/tabular', $data);

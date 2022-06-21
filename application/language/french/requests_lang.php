@@ -9,6 +9,7 @@
 
 $lang['requests_index_title'] = 'Demandes d\'absence à valider';
 $lang['requests_index_description'] = 'Cet écran liste les demandes de congé qui m\'ont été soumises pour validation. Si vous n\'êtes pas un manager, cette liste sera vide.';
+$lang['requests_index_description_details'] = 'Cet écran liste les détails d`une demande de congé qui a été soumise pour validation. Si vous n\'êtes pas un manager, cette liste sera vide.';
 $lang['requests_index_thead_tip_view'] = 'voir';
 $lang['requests_index_thead_tip_accept'] = 'accepter';
 $lang['requests_index_thead_tip_reject'] = 'refuser';
@@ -19,6 +20,18 @@ $lang['requests_index_thead_startdate'] = 'Date début';
 $lang['requests_index_thead_enddate'] = 'Date fin';
 $lang['requests_index_thead_duration'] = 'Durée';
 $lang['requests_index_thead_type'] = 'Type';
+$lang['requests_index_thead_freeDay'] = 'Jour libre';
+$lang['monday'] = 'Lundi';
+$lang['tuesday'] = 'Mardi';
+$lang['wednesday'] = 'Mercredi';
+$lang['thursday'] = 'Jeudi';
+$lang['friday'] = 'Vendredi';
+$lang['selected'] = 'élement sélectionné';
+$lang['selecteds'] = 'élements sélectionnés';
+$lang['no_items_selected'] = 'No items selected';
+$lang['you_have_selected_all_the_elements_of_the_table'] = 'Attention, vous avez sélectionné tous les éléments du tableau.';
+$lang['prev'] = 'Retour';
+
 $lang['requests_index_thead_status'] = 'Statut';
 $lang['requests_index_thead_requested_date'] = 'Demandée le';
 $lang['requests_index_thead_last_change'] = 'Modifiée le';
@@ -48,9 +61,12 @@ $lang['requests_summary_button_list'] = 'Liste des collaborateurs';
 $lang['requests_index_button_export'] = 'Exporter cette liste';
 $lang['requests_index_button_show_all'] = 'Toutes les demandes';
 $lang['requests_index_button_show_pending'] = 'Demandes en cours';
+$lang['check_all'] = 'Tout cocher';
 
 $lang['requests_accept_flash_msg_error'] = 'Vous n\'êtes pas le supérieur hiérarchique de cet employé. Vous ne pouvez pas accepter sa demande.';
 $lang['requests_accept_flash_msg_success'] = 'La demande d\'absence a été acceptée avec succès.';
+$lang['requests_accept_multi_flash_msg_success'] = 'Les demandes d\'absence ont été acceptée avec succès.';
+$lang['requests_rejected_multi_flash_msg_success'] = 'Les demandes d\'absence ont été rejetée avec succès.';
 
 $lang['requests_reject_flash_msg_error'] = 'Vous n\'êtes pas le supérieur hiérarchique de cet employé. Vous ne pouvez pas refuser sa demande.';
 $lang['requests_reject_flash_msg_success'] = 'La demande d\'absence a été refusée avec succès.';
@@ -66,6 +82,9 @@ $lang['requests_export_thead_duration'] = 'Durée';
 $lang['requests_export_thead_type'] = 'Type';
 $lang['requests_export_thead_cause'] = 'Cause';
 $lang['requests_export_thead_status'] = 'Statut';
+$lang['details'] = 'Détails';
+$lang['treated'] = 'A traitée';
+$lang['treated_ok'] = 'Traitée';
 
 $lang['requests_delegations_title'] = 'Liste des délégations';
 $lang['requests_delegations_description'] = 'Liste des employés pouvant accepter ou refuser des demandes à votre place.';

@@ -24,6 +24,7 @@ class Overtime extends CI_Controller {
         $this->load->model('overtime_model');
         $this->lang->load('overtime', $this->language);
         $this->lang->load('global', $this->language);
+        $this->load->model('users_model');
     }
 
     /**
@@ -47,6 +48,8 @@ class Overtime extends CI_Controller {
         $data['help'] = $this->help->create_help_link('global_link_doc_page_overtime_list');
         $data['requests'] = $this->overtime_model->requests($this->user_id, $showAll);
         $data['flash_partial_view'] = $this->load->view('templates/flash', $data, TRUE);
+        $userEl = $this->users_model->getUsers($this->session->userdata('id'));
+        $data['contract'] = $userEl['contract'];
         $this->load->view('templates/header', $data);
         $this->load->view('menu/index', $data);
         $this->load->view('overtime/index', $data);

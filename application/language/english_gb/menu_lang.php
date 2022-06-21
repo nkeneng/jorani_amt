@@ -15,6 +15,7 @@ $lang['menu_banner_tip_reset'] = 'reset password';
 $lang['menu_password_popup_title'] = 'Change password';
 $lang['menu_password_popup_button_cancel'] = 'Cancel';
 $lang['menu_leaves_request_button'] = 'New request';
+$lang['menu_leaves_create_request_free_leave'] = 'Apply for a free day';
 
 $lang['menu_admin_title'] = 'Admin';
 $lang['menu_admin_list_users'] = 'List of users';

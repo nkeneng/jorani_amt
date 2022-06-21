@@ -23,19 +23,24 @@ class LeaveTypes extends CI_Controller {
         setUserContext($this);
         $this->load->model('types_model');
         $this->lang->load('leavetypes', $this->language);
+        $this->load->model('users_model');
     }
 
     /**
      * Display the list of leave types
-     * @author Benjamin BALET <benjamin.balet@gmail.com>
+     * @author Benjamin BALET
+     *     <benjamin.balet@gmail.com>
      */
-    public function index() {
+    public function index()
+    {
         $this->auth->checkIfOperationIsAllowed('leavetypes_list');
         $data = getUserContext($this);
         $data['leavetypes'] = $this->types_model->getTypes();
         $data['title'] = lang('leavetypes_type_title');
         $data['help'] = $this->help->create_help_link('global_link_doc_page_edit_leave_type');
         $data['flash_partial_view'] = $this->load->view('templates/flash', $data, TRUE);
+        $userEl = $this->users_model->getUsers($this->session->userdata('id'));
+        $data['contract'] = $userEl['contract'];
         $this->load->view('templates/header', $data);
         $this->load->view('menu/index', $data);
         $this->load->view('leavetypes/index', $data);
@@ -86,9 +91,10 @@ class LeaveTypes extends CI_Controller {
             $this->load->view('leavetypes/edit', $data);
         } else {
             $this->types_model->updateTypes($id,
-                    $this->input->post('name'),
-                    $this->input->post('deduct_days_off'),
-                    $this->input->post('acronym'));
+                $this->input->post('name'),
+                $this->input->post('deduct_days_off'),
+                $this->input->post('acronym'),
+                $this->input->post('auto_confirm'));
             $this->session->set_flashdata('msg', lang('leavetypes_popup_update_flash_msg'));
             redirect('leavetypes');
         }

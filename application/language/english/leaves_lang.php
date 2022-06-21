@@ -22,6 +22,9 @@ $lang['leaves_summary_flash_msg_error'] = 'It appears that you have no contract.
 $lang['leaves_summary_date_field'] = 'Date of report';
 
 $lang['leaves_index_title'] = 'My leave requests';
+$lang['details'] = 'Details';
+$lang['treated'] = 'A treated';
+$lang['treated_ok'] = 'Treated';
 $lang['leaves_index_thead_tip_view'] = 'view';
 $lang['leaves_index_thead_tip_edit'] = 'edit';
 $lang['leaves_index_thead_tip_cancel'] = 'cancel';
@@ -38,6 +41,8 @@ $lang['leaves_index_thead_requested_date'] = 'Requested';
 $lang['leaves_index_thead_last_change'] = 'Last change';
 $lang['leaves_index_button_export'] = 'Export this list';
 $lang['leaves_index_button_create'] = 'New request';
+$lang['leaves_index_button_create_free_day'] = 'New free day request';
+$lang['leaves_index_button_create_day'] = 'New request for a available day';
 $lang['leaves_index_popup_delete_title'] = 'Delete leave request';
 $lang['leaves_index_popup_delete_message'] = 'You are about to delete one leave request, this procedure is irreversible.';
 $lang['leaves_index_popup_delete_question'] = 'Do you want to proceed?';
@@ -67,9 +72,22 @@ $lang['leaves_create_button_create'] = 'Request leave';
 $lang['leaves_create_button_cancel'] = 'Cancel';
 $lang['leaves_create_flash_msg_success'] = 'The leave request has been successfully created';
 $lang['leaves_create_flash_msg_error'] = 'The leave request has been successfully created or updated, but you don\'t have a manager.';
-
+$lang['dayFree'] = 'Free Day';
+$lang['requests_index_thead_freeDay'] = 'Free Day';
 $lang['leaves_flash_spn_list_days_off'] = '%s non-working days in the period';
 $lang['leaves_flash_msg_overlap_dayoff'] = 'Your leave request matches with a non-working day.';
+$lang['dayFree'] = 'Free day';
+$lang['monday'] = 'Monday';
+$lang['tuesday'] = 'Tuesday';
+$lang['wednesday'] = 'Wednesday';
+$lang['thursday'] = 'Thursday';
+$lang['friday'] = 'Friday';
+$lang['selected'] = 'selected item';
+$lang['selecteds'] = 'selected items';
+$lang['please_select_date'] = 'Please select start date and end date';
+$lang['prev'] = 'Back';
+$lang['choose_date_interval'] = 'The chosen start date must be a Monday and the chosen end date must be a Sunday';
+
 
 $lang['leaves_edit_html_title'] = 'Edit a leave request';
 $lang['leaves_edit_title'] = 'Edit leave request #';

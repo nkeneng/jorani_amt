@@ -13,30 +13,39 @@ if (!defined('BASEPATH')) {exit('No direct script access allowed');}
  * This class serve default and cutom pages.
  * Please note that a page can be the implementation of a custom report (see Controller Report)
  */
-class Pages extends CI_Controller {
-   
+class Pages extends CI_Controller
+{
+
     /**
      * Default constructor
-     * @author Benjamin BALET <benjamin.balet@gmail.com>
+     * @author Benjamin BALET
+     *     <benjamin.balet@gmail.com>
      */
-    public function __construct() {
+    public function __construct()
+    {
         parent::__construct();
         setUserContext($this);
+        $this->load->model('users_model');
     }
 
     /**
-     * Display a simple view indicating that the business object was not found.
-     * @author Benjamin BALET <benjamin.balet@gmail.com>
+     * Display a simple view indicating that the
+     * business object was not found.
+     * @author Benjamin BALET
+     *     <benjamin.balet@gmail.com>
      */
-    public function notfound() {
+    public function notfound()
+    {
         $data = getUserContext($this);
         $data['title'] = 'Error';
+        $userEl = $this->users_model->getUsers($this->session->userdata('id'));
+        $data['contract'] = $userEl['contract'];
         $this->load->view('templates/header', $data);
         $this->load->view('menu/index', $data);
         $this->load->view('pages/notfound', $data);
         $this->load->view('templates/footer', $data);
     }
-    
+
     /**
      * Display a page with this order of priority (based on the provided page name) :
      *  1. Does the page exist into local/pages/{lang}/ (this allows you to overwrite default pages)?
@@ -52,6 +61,8 @@ class Pages extends CI_Controller {
         $data['title'] = ucfirst(strtr($page, $trans)); // Capitalize the first letter
         //The page containing export in their name are returning another MIMETYPE
         if (strpos($page, 'export') === FALSE) {//Don't include header and menu
+            $userEl = $this->users_model->getUsers($this->session->userdata('id'));
+            $data['contract'] = $userEl['contract'];
             $this->load->view('templates/header', $data);
             $this->load->view('menu/index', $data);
         }

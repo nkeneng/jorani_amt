@@ -22,6 +22,23 @@ $lang['leavetypes_type_button_create'] = 'Neue Art erstellen';
 $lang['leavetypes_type_not_found'] = 'Keine Abwesenheitsart in Datenbank gefunden';
 $lang['leavetypes_js_unique_error_msg'] = 'Abwesenheitsart existiert bereits';
 $lang['leavetypes_popup_create_title'] = 'Abwesenheitsart hinzufügen';
+$lang['monday'] = 'Montag';
+$lang['tuesday'] = 'Dienstag';
+$lang['wednesday'] = 'der Mittwoch';
+$lang['thursday'] = 'Donnerstag';
+$lang['friday'] = 'Freitag';
+$lang['check_all'] = 'Tout cocher';
+$lang['requests_index_thead_freeDay'] = 'Freier Tag';
+
+$lang['selected'] = 'Ausgewähltes Objekt';
+$lang['selecteds'] = 'ausgewählte Artikel';
+$lang['no_items_selected'] = 'Keine Elemente ausgewählt';
+$lang['you_have_selected_all_the_elements_of_the_table'] = 'Achtung, Sie haben alle Elemente in der Tabelle ausgewählt.';
+$lang['requests_accept_multi_flash_msg_success'] = 'Abwesenheitsanträge wurden erfolgreich akzeptiert.';
+$lang['requests_rejected_multi_flash_msg_success'] = 'Abwesenheitsanträge wurden erfolgreich abgelehnt.';
+$lang['auto_confirm'] = 'Automatische Bestätigung';
+$lang['leaves_index_button_create_free_day'] = 'Neue Anfrage für einen kostenlosen Tag';
+
 $lang['leavetypes_popup_create_button_cancel'] = 'Abbrechen';
 $lang['leavetypes_popup_create_button_create'] = 'Erstellen';
 $lang['leavetypes_popup_create_button_suggest'] = 'Akronym vorschlagen';

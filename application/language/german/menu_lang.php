@@ -25,6 +25,7 @@ $lang['menu_admin_diagnostic'] = 'Diagnose';
 $lang['menu_admin_oauth_clients'] = 'OAuth-Clients';
 $lang['menu_hr_title'] = 'Personal';
 $lang['menu_hr_employees_divider'] = 'Angestellte';
+$lang['menu_leaves_create_request_free_leave'] = 'Antrag auf einen freien Tag';
 $lang['menu_hr_list_organization'] = 'Organisation';
 $lang['menu_hr_list_employees'] = 'Liste der Angestellten';
 $lang['menu_hr_contracts_divider'] = 'Verträge';

@@ -21,6 +21,22 @@ $lang['global_msg_new_version_available'] = 'A new version is available';
 $lang['global_msg_your_version_is_dev'] = 'You are using a development version';
 $lang['global_msg_your_version_is_up_to_date'] = 'Your version is up to date';
 
+$lang['monday'] = 'يوم الاثنين';
+$lang['tuesday'] = 'يوم الثلاثاء';
+$lang['wednesday'] = 'الأربعاء';
+$lang['thursday'] = 'الخميس';
+$lang['friday'] = 'يوم الجمعة';
+$lang['check_all'] = 'توت كوشر';
+$lang['requests_index_thead_freeDay'] = 'يوم حر';
+
+$lang['selected'] = 'العنصر المحدد';
+$lang['selecteds'] = 'العناصر المحددة';
+$lang['no_items_selected'] = 'لم يتم تحديد عناصر';
+$lang['you_have_selected_all_the_elements_of_the_table'] = 'تحذير ، لقد قمت بتحديد كافة العناصر الموجودة في الجدول.';
+$lang['requests_accept_multi_flash_msg_success'] = 'تم قبول طلبات الغياب بنجاح.';
+$lang['requests_rejected_multi_flash_msg_success'] = 'تم رفض طلبات الغياب بنجاح.';
+$lang['auto_confirm'] = 'تأكيد تلقائي';
+$lang['leaves_index_button_create_free_day'] = 'طلب يوم مجاني جديد';
 $lang['global_true'] = 'صحيح';
 $lang['global_false'] = 'خاطئ';
 $lang['footer_link_go_top'] = 'ذهاب للأعلى';

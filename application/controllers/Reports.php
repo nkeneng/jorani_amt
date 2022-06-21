@@ -26,6 +26,7 @@ class Reports extends CI_Controller {
         setUserContext($this);
         $this->lang->load('reports', $this->language);
         $this->lang->load('global', $this->language);
+        $this->load->model('users_model');
     }
 
     /**
@@ -55,6 +56,8 @@ class Reports extends CI_Controller {
 
         $data['title'] = lang('reports_index_title');
         $data['reports'] = $reports;
+        $userEl = $this->users_model->getUsers($this->session->userdata('id'));
+        $data['contract'] = $userEl['contract'];
         $this->load->view('templates/header', $data);
         $this->load->view('menu/index', $data);
         $this->load->view('reports/index', $data);
@@ -62,11 +65,16 @@ class Reports extends CI_Controller {
     }
 
     /**
-     * Landing page of the shipped-in balance report
-     * @param string $refTmp Optional Unix timestamp (set a date of reference for the report).
-     * @author Benjamin BALET <benjamin.balet@gmail.com>
+     * Landing page of the shipped-in balance
+     * report
+     * @param string $refTmp Optional Unix
+     *     timestamp (set a date of reference for
+     *     the report).
+     * @author Benjamin BALET
+     *     <benjamin.balet@gmail.com>
      */
-    public function balance($refTmp = NULL) {
+    public function balance($refTmp = NULL)
+    {
         $this->auth->checkIfOperationIsAllowed('native_report_balance');
         $data = getUserContext($this);
         $refDate = date("Y-m-d");
@@ -76,6 +84,8 @@ class Reports extends CI_Controller {
         $data['refDate'] = $refDate;
         $data['title'] = lang('reports_balance_title');
         $data['help'] = $this->help->create_help_link('global_link_doc_page_leave_balance_report');
+        $userEl = $this->users_model->getUsers($this->session->userdata('id'));
+        $data['contract'] = $userEl['contract'];
         $this->load->view('templates/header', $data);
         $this->load->view('menu/index', $data);
         $this->load->view('reports/balance/index', $data);
@@ -189,15 +199,20 @@ class Reports extends CI_Controller {
     }
 
     /**
-     * Landing page of the shipped-in leaves report
-     * @author Benjamin BALET <benjamin.balet@gmail.com>
+     * Landing page of the shipped-in leaves
+     * report
+     * @author Benjamin BALET
+     *     <benjamin.balet@gmail.com>
      * @since 0.4.3
      */
-    public function leaves() {
+    public function leaves()
+    {
         $this->auth->checkIfOperationIsAllowed('native_report_leaves');
         $data = getUserContext($this);
         $data['title'] = lang('reports_leaves_title');
         $data['help'] = $this->help->create_help_link('global_link_doc_page_leaves_report');
+        $userEl = $this->users_model->getUsers($this->session->userdata('id'));
+        $data['contract'] = $userEl['contract'];
         $this->load->view('templates/header', $data);
         $this->load->view('menu/index', $data);
         $this->load->view('reports/leaves/index', $data);

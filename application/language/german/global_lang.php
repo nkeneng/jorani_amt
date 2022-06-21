@@ -28,6 +28,23 @@ $lang['footer_copyright_notice'] = '&copy; 2014 Jorani Authors';
 $lang['Requested'] = 'Angefragt';
 $lang['Planned'] = 'Geplant';
 $lang['Accepted'] = 'Akzeptiert';
+$lang['monday'] = 'Montag';
+$lang['tuesday'] = 'Dienstag';
+$lang['wednesday'] = 'der Mittwoch';
+$lang['thursday'] = 'Donnerstag';
+$lang['friday'] = 'Freitag';
+$lang['check_all'] = 'Tout cocher';
+$lang['requests_index_thead_freeDay'] = 'Freier Tag';
+
+$lang['selected'] = 'Ausgewähltes Objekt';
+$lang['selecteds'] = 'ausgewählte Artikel';
+$lang['no_items_selected'] = 'Keine Elemente ausgewählt';
+$lang['you_have_selected_all_the_elements_of_the_table'] = 'Achtung, Sie haben alle Elemente in der Tabelle ausgewählt.';
+$lang['requests_accept_multi_flash_msg_success'] = 'Abwesenheitsanträge wurden erfolgreich akzeptiert.';
+$lang['requests_rejected_multi_flash_msg_success'] = 'Abwesenheitsanträge wurden erfolgreich abgelehnt.';
+$lang['auto_confirm'] = 'Automatische Bestätigung';
+$lang['leaves_index_button_create_free_day'] = 'Neue Anfrage für einen kostenlosen Tag';
+
 $lang['Rejected'] = 'Abgelehnt';
 $lang['Cancellation'] = 'Annullierung';
 $lang['Canceled'] = 'Annulliert';

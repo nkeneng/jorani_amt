@@ -25,13 +25,16 @@ class Positions extends CI_Controller {
         setUserContext($this);
         $this->load->model('positions_model');
         $this->lang->load('positions', $this->language);
+        $this->load->model('users_model');
     }
 
     /**
      * Display list of positions
-     * @author Benjamin BALET <benjamin.balet@gmail.com>
+     * @author Benjamin BALET
+     *     <benjamin.balet@gmail.com>
      */
-    public function index() {
+    public function index()
+    {
         $this->auth->checkIfOperationIsAllowed('list_positions');
         $data = getUserContext($this);
         $this->lang->load('datatable', $this->language);
@@ -39,6 +42,8 @@ class Positions extends CI_Controller {
         $data['title'] = lang('positions_index_title');
         $data['help'] = $this->help->create_help_link('global_link_doc_page_positions_list');
         $data['flash_partial_view'] = $this->load->view('templates/flash', $data, TRUE);
+        $userEl = $this->users_model->getUsers($this->session->userdata('id'));
+        $data['contract'] = $userEl['contract'];
         $this->load->view('templates/header', $data);
         $this->load->view('menu/index', $data);
         $this->load->view('positions/index', $data);
@@ -72,6 +77,8 @@ class Positions extends CI_Controller {
         $this->form_validation->set_rules('description', lang('positions_create_field_description'), 'strip_tags');
 
         if ($this->form_validation->run() === FALSE) {
+            $userEl = $this->users_model->getUsers($this->session->userdata('id'));
+            $data['contract'] = $userEl['contract'];
             $this->load->view('templates/header', $data);
             $this->load->view('menu/index', $data);
             $this->load->view('positions/create', $data);
@@ -103,6 +110,8 @@ class Positions extends CI_Controller {
         $this->form_validation->set_rules('description', lang('positions_edit_field_description'), 'strip_tags');
 
         if ($this->form_validation->run() === FALSE) {
+            $userEl = $this->users_model->getUsers($this->session->userdata('id'));
+            $data['contract'] = $userEl['contract'];
             $this->load->view('templates/header', $data);
             $this->load->view('menu/index', $data);
             $this->load->view('positions/edit', $data);

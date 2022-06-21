@@ -16,6 +16,11 @@ $lang['global_msg_not_found'] = 'Object not found. Maybe that you are trying to 
 $lang['global_date_format'] = 'd/m/Y';
 $lang['global_date_js_format'] = 'dd/mm/yy';
 $lang['global_date_momentjs_format'] = 'DD/MM/YYYY';
+$lang['monday'] = 'Lundi';
+$lang['tuesday'] = 'Mardi';
+$lang['wednesday'] = 'Mercredi';
+$lang['thursday'] = 'Jeudi';
+$lang['friday'] = 'Vendredi';
 
 $lang['global_msg_new_version_available'] = 'A new version is available.';
 $lang['global_msg_your_version_is_dev'] = 'You are using a development version.';

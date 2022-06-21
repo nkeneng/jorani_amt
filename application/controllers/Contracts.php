@@ -27,13 +27,17 @@ class Contracts extends CI_Controller {
         setUserContext($this);
         $this->lang->load('contract', $this->language);
         $this->load->model('contracts_model');
+        $this->load->model('users_model');
     }
 
     /**
-     * Display the list of all contracts defined in the system
-     * @author Benjamin BALET <benjamin.balet@gmail.com>
+     * Display the list of all contracts defined
+     * in the system
+     * @author Benjamin BALET
+     *     <benjamin.balet@gmail.com>
      */
-    public function index() {
+    public function index()
+    {
         $this->auth->checkIfOperationIsAllowed('list_contracts');
         $this->lang->load('datatable', $this->language);
         $data = getUserContext($this);
@@ -41,6 +45,8 @@ class Contracts extends CI_Controller {
         $data['help'] = $this->help->create_help_link('global_link_doc_page_contracts_list');
         $data['contracts'] = $this->contracts_model->getContracts();
         $data['flash_partial_view'] = $this->load->view('templates/flash', $data, TRUE);
+        $userEl = $this->users_model->getUsers($this->session->userdata('id'));
+        $data['contract'] = $userEl['contract'];
         $this->load->view('templates/header', $data);
         $this->load->view('menu/index', $data);
         $this->load->view('contracts/index', $data);
@@ -83,6 +89,8 @@ class Contracts extends CI_Controller {
                 $defaultType = $data['contract']['default_leave_type'];
             }
             $data['defaultType'] = $defaultType;
+            $userEl = $this->users_model->getUsers($this->session->userdata('id'));
+            $data['contract'] = $userEl['contract'];
             $this->load->view('templates/header', $data);
             $this->load->view('menu/index', $data);
             $this->load->view('contracts/edit', $data);
@@ -118,6 +126,8 @@ class Contracts extends CI_Controller {
             $defaultType = $this->config->item('default_leave_type');
             $defaultType = ($defaultType == FALSE) ? 0 : $defaultType;
             $data['defaultType'] = $defaultType;
+            $userEl = $this->users_model->getUsers($this->session->userdata('id'));
+            $data['contract'] = $userEl['contract'];
             $this->load->view('templates/header', $data);
             $this->load->view('menu/index', $data);
             $this->load->view('contracts/create', $data);
@@ -185,6 +195,8 @@ class Contracts extends CI_Controller {
         $this->load->model('dayoffs_model');
         $data['dayoffs'] = $this->dayoffs_model->getDaysOffForCivilYear($id, $data['year']);
         $data['flash_partial_view'] = $this->load->view('templates/flash', $data, TRUE);
+        $userEl = $this->users_model->getUsers($this->session->userdata('id'));
+        $data['contract'] = $userEl['contract'];
         $this->load->view('templates/header', $data);
         $this->load->view('menu/index', $data);
         $this->load->view('contracts/calendar', $data);
@@ -234,7 +246,8 @@ class Contracts extends CI_Controller {
         }
         $data['defaultType'] = $defaultType;
         $data['help'] = '';
-
+        $userEl = $this->users_model->getUsers($this->session->userdata('id'));
+        $data['contract'] = $userEl['contract'];
         $this->load->view('templates/header', $data);
         $this->load->view('menu/index', $data);
         $this->load->view('contracts/exclude_types', $data);

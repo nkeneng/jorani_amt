@@ -23,6 +23,7 @@ $lang['menu_admin_settings_divider'] = 'Settings';
 $lang['menu_admin_settings'] = 'Settings';
 $lang['menu_admin_diagnostic'] = 'Diagnose';
 $lang['menu_admin_oauth_clients'] = 'OAuth Clienten';
+$lang['menu_leaves_create_request_free_leave'] = 'Antrag auf einen freien Tag';
 $lang['menu_hr_title'] = 'HR';
 $lang['menu_hr_employees_divider'] = 'Werknemers';
 $lang['menu_hr_list_organization'] = 'Organisatie';

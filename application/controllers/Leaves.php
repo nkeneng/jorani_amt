@@ -28,23 +28,54 @@ class Leaves extends CI_Controller {
         setUserContext($this);
         $this->load->model('leaves_model');
         $this->load->model('types_model');
+        $this->load->model('status_model');
         $this->lang->load('leaves', $this->language);
         $this->lang->load('global', $this->language);
+        $this->load->model('users_model');
     }
 
     /**
-     * Display the list of the leave requests of the connected user
-     * @author Benjamin BALET <benjamin.balet@gmail.com>
+     * Display the list of the leave requests of
+     * the connected user
+     * @author Benjamin BALET
+     *     <benjamin.balet@gmail.com>
      */
-    public function index() {
+    public function index()
+    {
+        $this->load->model('users_model');
         $this->auth->checkIfOperationIsAllowed('list_leaves');
         $data = getUserContext($this);
         $this->lang->load('datatable', $this->language);
-        if ($this->config->item('enable_history') == TRUE){
-          $data['leaves'] = $this->leaves_model->getLeavesOfEmployeeWithHistory($this->session->userdata('id'));
+        if ($this->config->item('enable_history') == TRUE) {
+            $data['leaves'] = $this->leaves_model->getLeavesOfEmployeeWithHistory($this->session->userdata('id'));
         } else {
-          $data['leaves'] = $this->leaves_model->getLeavesOfEmployee($this->session->userdata('id'));
+            $data['leaves'] = $this->leaves_model->getLeavesOfEmployee($this->session->userdata('id'));
         }
+        $userEl = $this->users_model->getUsers($this->session->userdata('id'));
+
+        $data['types'] = $this->types_model->getTypes();
+        $data['title'] = lang('leaves_index_title');
+        $data['help'] = $this->help->create_help_link('global_link_doc_page_leave_requests_list');
+        $data['flash_partial_view'] = $this->load->view('templates/flash', $data, TRUE);
+        $data['contract'] = $userEl['contract'];
+        $this->load->view('templates/header', $data);
+        $this->load->view('menu/index', $data);
+        $this->load->view('leaves/index', $data);
+        $this->load->view('templates/footer');
+    }
+
+    public function indexfreeleave()
+    {
+        $this->auth->checkIfOperationIsAllowed('list_leaves');
+        $data = getUserContext($this);
+        $this->lang->load('datatable', $this->language);
+        if ($this->config->item('enable_history') == TRUE) {
+            $data['leaves'] = $this->leaves_model->getLeavesOfEmployeeWithHistory($this->session->userdata('id'));
+        } else {
+            $data['leaves'] = $this->leaves_model->getLeavesOfEmployee($this->session->userdata('id'));
+        }
+        $userEl = $this->users_model->getUsers($this->session->userdata('id'));
+        $data['contract'] = $userEl['contract'];
         $data['types'] = $this->types_model->getTypes();
         $data['title'] = lang('leaves_index_title');
         $data['help'] = $this->help->create_help_link('global_link_doc_page_leave_requests_list');
@@ -55,59 +86,8 @@ class Leaves extends CI_Controller {
         $this->load->view('templates/footer');
     }
 
-    /**
-     * Display the history of changes of a leave request
-     * @param int $id Identifier of the leave request
-     * @author Benjamin BALET <benjamin.balet@gmail.com>
-     */
-    public function history($id) {
-        $this->auth->checkIfOperationIsAllowed('list_leaves');
-        $data = getUserContext($this);
-        $this->lang->load('datatable', $this->language);
-        $data['leave'] = $this->leaves_model->getLeaves($id);
-        $this->load->model('history_model');
-        $data['events'] = $this->history_model->getLeaveRequestsHistory($id);
-        $this->load->view('leaves/history', $data);
-    }
-
-    /**
-     * Display the details of leaves taken/entitled for the connected user
-     * @param string $refDate Date (e.g. 2011-10-05)
-     * @author Benjamin BALET <benjamin.balet@gmail.com>
-     */
-    public function counters($refDate = NULL) {
-        $this->auth->checkIfOperationIsAllowed('counters_leaves');
-        $data = getUserContext($this);
-        $this->lang->load('datatable', $this->language);
-        if ($refDate != NULL) {
-            $data['isDefault'] = 0;
-        } else {
-            $refDate = date("Y-m-d");
-            $data['isDefault'] = 1;
-        }
-        $data['refDate'] = $refDate;
-        $data['summary'] = $this->leaves_model->getLeaveBalanceForEmployee($this->user_id, FALSE, $refDate);
-
-        if (!is_null($data['summary'])) {
-            $data['title'] = lang('leaves_summary_title');
-            $data['help'] = $this->help->create_help_link('global_link_doc_page_my_summary');
-            $this->load->view('templates/header', $data);
-            $this->load->view('menu/index', $data);
-            $this->load->view('leaves/counters', $data);
-            $this->load->view('templates/footer');
-        } else {
-            $this->session->set_flashdata('msg', lang('leaves_summary_flash_msg_error'));
-            redirect('leaves');
-        }
-    }
-
-    /**
-     * Display a leave request
-     * @param string $source Page source (leaves, requests) (self, manager)
-     * @param int $id identifier of the leave request
-     * @author Benjamin BALET <benjamin.balet@gmail.com>
-     */
-    public function view($source, $id) {
+    public function viewfreeleave($source, $id)
+    {
         $this->auth->checkIfOperationIsAllowed('view_leaves');
         $this->load->model('users_model');
         $this->load->model('status_model');
@@ -149,44 +129,429 @@ class Leaves extends CI_Controller {
         } else {
             $data['name'] = '';
         }
-        if (isset($data["leave"]["comments"])){
-          $last_comment = new stdClass();;
-          foreach ($data["leave"]["comments"]->comments as $comments_item) {
-            if($comments_item->type == "comment"){
-              $comments_item->author = $this->users_model->getName($comments_item->author);
-              $comments_item->in = "in";
-              $last_comment->in="";
-              $last_comment=$comments_item;
-            } else if($comments_item->type == "change"){
-              $comments_item->status = $this->status_model->getName($comments_item->status_number);
+        if (isset($data["leave"]["comments"])) {
+            $last_comment = new stdClass();;
+            foreach ($data["leave"]["comments"]->comments as $comments_item) {
+                if ($comments_item->type == "comment") {
+                    $comments_item->author = $this->users_model->getName($comments_item->author);
+                    $comments_item->in = "in";
+                    $last_comment->in = "";
+                    $last_comment = $comments_item;
+                } else if ($comments_item->type == "change") {
+                    $comments_item->status = $this->status_model->getName($comments_item->status_number);
+                }
             }
-          }
         }
+        $userEl = $this->users_model->getUsers($this->session->userdata('id'));
+        $data['contract'] = $userEl['contract'];
         $this->load->view('templates/header', $data);
         $this->load->view('menu/index', $data);
         $this->load->view('leaves/view', $data);
         $this->load->view('templates/footer');
     }
 
+    public function createfreeleave()
+    {
+        $this->load->model('users_model');
+        $userCurrent = $this->users_model->getUsers($this->session->userdata('id'));
+
+        if ($userCurrent['contract'] == 1) {
+
+            if (isset($_GET['source'])) {
+                redirect($_GET['source']);
+            } else {
+                redirect('leaves');
+            }
+        } else {
+            $this->auth->checkIfOperationIsAllowed('create_leaves');
+            $data = getUserContext($this);
+            $this->load->helper('form');
+            $this->load->library('form_validation');
+            $data['title'] = lang('leaves_create_title');
+            $data['help'] = $this->help->create_help_link('global_link_doc_page_request_leave');
+            $this->form_validation->set_rules('startdate', lang('leaves_create_field_start'), 'required|strip_tags');
+            $this->form_validation->set_rules('enddate', lang('leaves_create_field_end'), 'required|strip_tags');
+            $this->form_validation->set_rules('dayFree', lang('dayFree'), 'required|strip_tags');
+            $this->form_validation->set_rules('status', lang('leaves_create_field_status'), 'required|strip_tags');
+            if ($this->form_validation->run() === FALSE || $userCurrent['contract'] == 1) {
+                $this->load->model('contracts_model');
+                $leaveTypesDetails = $this->contracts_model->getLeaveTypesDetailsOTypesForUser($this->session->userdata('id'));
+                $data['defaultType'] = $leaveTypesDetails->defaultType;
+                $data['credit'] = $leaveTypesDetails->credit;
+                $data['types'] = $leaveTypesDetails->types;
+                $userEl = $this->users_model->getUsers($this->session->userdata('id'));
+                $data['contract'] = $userEl['contract'];
+                $this->load->view('templates/header', $data);
+                $this->load->view('menu/index', $data);
+                $this->load->view('leaves/createFreeLeave');
+                $this->load->view('templates/footer');
+            } else {
+                //Prevent thugs to auto validate their leave requests
+
+                if (!$this->is_hr && !$this->is_admin) {
+                    if ($this->input->post('status') > LMS_REQUESTED) {
+                        log_message('error', 'User #' . $this->session->userdata('id') .
+                            ' tried to submit a LR with an wrong status = ' . $this->input->post('status'));
+                        $_POST['status'] = LMS_REQUESTED;
+                    }
+                }
+
+                //Users must use an existing leave type, otherwise
+                //force leave type to default leave type
+                $this->load->model('contracts_model');
+                $leaveTypesDetails = $this->contracts_model->getLeaveTypesDetailsOTypesForUser($this->session->userdata('id'));
+
+                if (!array_key_exists($this->input->post('type'), $leaveTypesDetails->types)) {
+                    log_message('error', 'User #' . $this->session->userdata('id') . ' tried to submit an wrong LR type = ' .
+                        $this->input->post('type'));
+                    $_POST['type'] = $leaveTypesDetails->defaultType;
+                    log_message('debug', 'LR type forced to ' . $leaveTypesDetails->defaultType);
+                }
+
+                if (function_exists('triggerCreateLeaveRequest')) {
+                    triggerCreateLeaveRequest($this);
+                }
+                if (array_key_exists($this->input->post('type'), $leaveTypesDetails->types)) {
+                    $objType = $this->types_model->getTypes($this->input->post('type'));
+                    //verification of auto_confirm field
+                    if ($objType["auto_confirm"] == 1) {
+                        $statusCurrent = $this->status_model->getStatusByName("Accepted");
+                        if ($statusCurrent) {
+                            $d1 = strtotime($this->input->post('startdate'));
+                            $d2 = strtotime($this->input->post('enddate'));
+                            $dif = round(($d2 - $d1) / 60 / 60 / 24, 0);
+                            $leave_id = $dif > 6 ? $this->leaves_model->setLeavesFreeDay($this->session->userdata('id'), $statusCurrent['id'], true) : $this->leaves_model->setLeavesFreeDay($this->session->userdata('id'), $statusCurrent['id'], false);
+                            $startday = $this->input->post('startdate');
+                            $endday = $this->input->post('enddate');
+                            if ($dif > 6) {
+                                while ($endday > $startday) {
+                                    $this->leaves_model->setSubLeavesFreeDay($this->session->userdata('id'), null, $startday, date("Y-m-d", strtotime($startday . "+6 days")), $leave_id);
+                                    $startday = date("Y-m-d", strtotime($startday . "+7 days"));
+                                }
+                            }
+
+                            $this->session->set_flashdata('msg', lang('leaves_create_flash_msg_success'));
+                        } else {
+                            log_message('debug', 'Something error wrong');
+                        }
+                    } else {
+                        $d1 = strtotime($this->input->post('startdate'));
+                        $d2 = strtotime($this->input->post('enddate'));
+                        $dif = round(($d2 - $d1) / 60 / 60 / 24, 0);
+                        $leave_id = $dif > 6 ? $this->leaves_model->setLeavesFreeDay($this->session->userdata('id'), null, true) : $this->leaves_model->setLeavesFreeDay($this->session->userdata('id'), null);
+                        $startday = $this->input->post('startdate');
+                        $endday = $this->input->post('enddate');
+                        if ($dif > 6) {
+                            while ($endday > $startday) {
+                                $this->leaves_model->setSubLeavesFreeDay($this->session->userdata('id'), null, $startday, date("Y-m-d", strtotime($startday . "+6 days")), $leave_id);
+                                $startday = date("Y-m-d", strtotime($startday . "+7 days"));
+                            }
+                        }
+
+                        $this->session->set_flashdata('msg', lang('leaves_create_flash_msg_success'));
+                    }
+
+                }
+
+
+                //   //If the status is requested, send an email to the manager
+                if ($this->input->post('status') == LMS_REQUESTED) {
+                    $this->sendMailOnLeaveRequestCreation($leave_id);
+                }
+
+                if (isset($_GET['source'])) {
+                    redirect($_GET['source']);
+                } else {
+                    redirect('leaves');
+                }
+            }
+        }
+
+    }
+
+    public function editfreeleave($id)
+    {
+        $this->auth->checkIfOperationIsAllowed('edit_leaves');
+        $this->load->model('users_model');
+        $this->load->model('status_model');
+        $data = getUserContext($this);
+        $data['leave'] = $this->leaves_model->getLeaveWithComments($id);
+        //Check if exists
+        if (empty($data['leave'])) {
+            redirect('notfound');
+        }
+        //If the user is not its own manager and if the leave is
+        //already requested, the employee can't modify it
+        if (!$this->is_hr) {
+            if (($this->session->userdata('manager') != $this->user_id) &&
+                $data['leave']['status'] != LMS_PLANNED) {
+                if ($this->config->item('edit_rejected_requests') == FALSE ||
+                    $data['leave']['status'] != LMS_REJECTED) {//Configuration switch that allows editing the rejected leave requests
+                    log_message('error', 'User #' . $this->user_id . ' illegally tried to edit leave #' . $id);
+                    $this->session->set_flashdata('msg', lang('leaves_edit_flash_msg_error'));
+                    redirect('leaves');
+                }
+            }
+        } //Admin
+
+        $this->load->helper('form');
+        $this->load->library('form_validation');
+        $this->form_validation->set_rules('startdate', lang('leaves_edit_field_start'), 'required|strip_tags');
+        $this->form_validation->set_rules('startdatetype', 'Start Date type', 'required|strip_tags');
+        $this->form_validation->set_rules('enddate', lang('leaves_edit_field_end'), 'required|strip_tags');
+        $this->form_validation->set_rules('enddatetype', 'End Date type', 'required|strip_tags');
+        $this->form_validation->set_rules('duration', lang('leaves_edit_field_duration'), 'required|strip_tags');
+        $this->form_validation->set_rules('type', lang('leaves_edit_field_type'), 'required|strip_tags');
+        $this->form_validation->set_rules('cause', lang('leaves_edit_field_cause'), 'strip_tags');
+        $this->form_validation->set_rules('status', lang('leaves_edit_field_status'), 'required|strip_tags');
+
+        if ($this->form_validation->run() === FALSE) {
+            $data['title'] = lang('leaves_edit_html_title');
+            $data['help'] = $this->help->create_help_link('global_link_doc_page_request_leave');
+            $data['id'] = $id;
+            $this->load->model('contracts_model');
+            $leaveTypesDetails = $this->contracts_model->getLeaveTypesDetailsOTypesForUser($data['leave']['employee'], $data['leave']['type']);
+            $data['defaultType'] = $leaveTypesDetails->defaultType;
+            $data['credit'] = $leaveTypesDetails->credit;
+            $data['types'] = $leaveTypesDetails->types;
+            $this->load->model('users_model');
+            $data['name'] = $this->users_model->getName($data['leave']['employee']);
+            if (isset($data["leave"]["comments"])) {
+                $last_comment = new stdClass();;
+                foreach ($data["leave"]["comments"]->comments as $comments_item) {
+                    if ($comments_item->type == "comment") {
+                        $comments_item->author = $this->users_model->getName($comments_item->author);
+                        $comments_item->in = "in";
+                        $last_comment->in = "";
+                        $last_comment = $comments_item;
+                    } else if ($comments_item->type == "change") {
+                        $comments_item->status = $this->status_model->getName($comments_item->status_number);
+                    }
+                }
+            }
+            $userEl = $this->users_model->getUsers($this->session->userdata('id'));
+            $data['contract'] = $userEl['contract'];
+            $this->load->view('templates/header', $data);
+            $this->load->view('menu/index', $data);
+            $this->load->view('leaves/edit', $data);
+            $this->load->view('templates/footer');
+        } else {
+            //Prevent thugs to auto validate their leave requests
+            if (!$this->is_hr && !$this->is_admin) {
+                if ($this->input->post('status') == LMS_ACCEPTED) {
+                    log_message('error', 'User #' . $this->session->userdata('id') .
+                        ' tried to submit a LR with an wrong status = ' . $this->input->post('status'));
+                    $_POST['status'] = LMS_REQUESTED;
+                }
+                if ($this->input->post('status') == LMS_CANCELED) {
+                    log_message('error', 'User #' . $this->session->userdata('id') .
+                        ' tried to submit a LR with an wrong status = ' . $this->input->post('status'));
+                    $_POST['status'] = LMS_CANCELLATION;
+
+                }
+            }
+
+            //Users must use an existing leave type, otherwise
+            //force leave type to default leave type
+            $this->load->model('contracts_model');
+            $leaveTypesDetails = $this->contracts_model->getLeaveTypesDetailsOTypesForUser($this->session->userdata('id'));
+            if (!array_key_exists($this->input->post('type'), $leaveTypesDetails->types)) {
+                log_message('error', 'User #' . $this->session->userdata('id') . ' tried to submit an wrong LR type = ' .
+                    $this->input->post('type'));
+                $_POST['type'] = $leaveTypesDetails->defaultType;
+                log_message('debug', 'LR type forced to ' . $leaveTypesDetails->defaultType);
+            }
+
+            $this->leaves_model->updateLeaves($id);       //We don't use the return value
+            $this->session->set_flashdata('msg', lang('leaves_edit_flash_msg_success'));
+            //If the status is requested or cancellation, send an email to the manager
+            if ($this->input->post('status') == LMS_REQUESTED) {
+                $this->sendMailOnLeaveRequestCreation($id);
+            }
+            if ($this->input->post('status') == LMS_CANCELLATION) {
+                $this->sendMailOnLeaveRequestCreation($id);
+            }
+            if (isset($_GET['source'])) {
+                redirect($_GET['source']);
+            } else {
+                redirect('leaves');
+            }
+        }
+    }
+
     /**
-     * Create a new comment or append a comment to the comments
-     * on a leave request
-     * @param int $id Id of the leave request
-     * @param string $source Page where we redirect after posting
-     * @author Emilien NICOLAS <milihhard1996@gmail.com>
+     * Display the history of changes of a leave
+     * request
+     * @param int $id Identifier of the leave
+     *     request
+     * @author Benjamin BALET
+     *     <benjamin.balet@gmail.com>
      */
-    public function createComment($id, $source = "leaves/leaves"){
-      $this->auth->checkIfOperationIsAllowed('view_leaves');
-      $data = getUserContext($this);
-      $oldComment = $this->leaves_model->getCommentsLeave($id);
-      $newComment = new stdClass;
-      $newComment->type = "comment";
-      $newComment->author = $this->session->userdata('id');
-      $newComment->value = $this->input->post('comment');
-      $newComment->date = date("Y-n-j");
-      if ($oldComment != NULL){
-        array_push($oldComment->comments, $newComment);
-      }else {
+    public function history($id)
+    {
+        $this->auth->checkIfOperationIsAllowed('list_leaves');
+        $data = getUserContext($this);
+        $this->lang->load('datatable', $this->language);
+        $data['leave'] = $this->leaves_model->getLeaves($id);
+        $this->load->model('history_model');
+        $data['events'] = $this->history_model->getLeaveRequestsHistory($id);
+        $this->load->view('leaves/history', $data);
+    }
+
+    /**
+     * Display the details of leaves taken/entitled for the connected user
+     * @param string $refDate Date (e.g. 2011-10-05)
+     * @author Benjamin BALET <benjamin.balet@gmail.com>
+     */
+    public function counters($refDate = NULL) {
+        $this->auth->checkIfOperationIsAllowed('counters_leaves');
+        $data = getUserContext($this);
+        $this->lang->load('datatable', $this->language);
+        if ($refDate != NULL) {
+            $data['isDefault'] = 0;
+        } else {
+            $refDate = date("Y-m-d");
+            $data['isDefault'] = 1;
+        }
+        $data['refDate'] = $refDate;
+        $data['summary'] = $this->leaves_model->getLeaveBalanceForEmployee($this->user_id, FALSE, $refDate);
+
+        if (!is_null($data['summary'])) {
+            $data['title'] = lang('leaves_summary_title');
+            $data['help'] = $this->help->create_help_link('global_link_doc_page_my_summary');
+            $userEl = $this->users_model->getUsers($this->session->userdata('id'));
+            $data['contract'] = $userEl['contract'];
+            $this->load->view('templates/header', $data);
+            $this->load->view('menu/index', $data);
+            $this->load->view('leaves/counters', $data);
+            $this->load->view('templates/footer');
+        } else {
+            $this->session->set_flashdata('msg', lang('leaves_summary_flash_msg_error'));
+            redirect('leaves');
+        }
+    }
+
+    /**
+     * Display a leave request
+     * @param string $source Page source (leaves,
+     *     requests) (self, manager)
+     * @param int $id identifier of the leave
+     *     request
+     * @author Benjamin BALET
+     *     <benjamin.balet@gmail.com>
+     */
+    public function view($source, $id)
+    {
+        $this->auth->checkIfOperationIsAllowed('view_leaves');
+        $this->load->model('users_model');
+        $this->load->model('status_model');
+        $this->load->helper('form');
+        $this->auth->checkIfOperationIsAllowed('list_leaves');
+        $data = getUserContext($this);
+        $this->lang->load('datatable', $this->language);
+        if ($this->config->item('enable_history') == TRUE) {
+            $data['leaves'] = $this->leaves_model->getSubLeavesOfEmployeeWithHistory($this->session->userdata('id'), $id);
+        } else {
+            $data['leaves'] = $this->leaves_model->getSubLeavesOfEmployee($this->session->userdata('id'), $id);
+        }
+        if ($data['leaves']) {
+
+            $userEl = $this->users_model->getUsers($this->session->userdata('id'));
+
+            $data['types'] = $this->types_model->getTypes();
+            $data['title'] = lang('leaves_index_title');
+            $data['help'] = $this->help->create_help_link('global_link_doc_page_leave_requests_list');
+            $data['flash_partial_view'] = $this->load->view('templates/flash', $data, TRUE);
+            $data['contract'] = $userEl['contract'];
+            $userEl = $this->users_model->getUsers($this->session->userdata('id'));
+            $data['contract'] = $userEl['contract'];
+            $this->load->view('templates/header', $data);
+            $this->load->view('menu/index', $data);
+            $this->load->view('leaves/view_sub_leave', $data);
+            $this->load->view('templates/footer');
+        } else {
+            $data = getUserContext($this);
+            $data['leave'] = $this->leaves_model->getLeaveWithComments($id);
+            if (empty($data['leave'])) {
+                redirect('notfound');
+            }
+            //If the user is not its not HR, not manager and not the creator of the leave
+            //the employee can't see it, redirect to LR list
+            if ($data['leave']['employee'] != $this->user_id) {
+                if ((!$this->is_hr)) {
+                    $this->load->model('users_model');
+                    $employee = $this->users_model->getUsers($data['leave']['employee']);
+                    if ($employee['manager'] != $this->user_id) {
+                        $this->load->model('delegations_model');
+                        if (!$this->delegations_model->isDelegateOfManager($this->user_id, $employee['manager'])) {
+                            log_message('error', 'User #' . $this->user_id . ' illegally tried to view leave #' . $id);
+                            redirect('leaves');
+                        }
+                    }
+                } //Admin
+            } //Current employee
+            $data['source'] = $source;
+            //overwrite source (for taking into account the tabular calendar)
+            if ($this->input->get('source') != NULL) {
+                $data['source'] = urldecode($this->input->get('source'));
+            }
+
+            $data['title'] = lang('leaves_view_html_title');
+            if ($source == 'requests') {
+                if (empty($employee)) {
+                    $this->load->model('users_model');
+                    $data['name'] = $this->users_model->getName($data['leave']['employee']);
+            } else {
+                $data['name'] = $employee['firstname'] . ' ' . $employee['lastname'];
+            }
+        } else {
+            $data['name'] = '';
+        }
+        if (isset($data["leave"]["comments"])){
+          $last_comment = new stdClass();;
+          foreach ($data["leave"]["comments"]->comments as $comments_item) {
+              if ($comments_item->type == "comment") {
+                  $comments_item->author = $this->users_model->getName($comments_item->author);
+                  $comments_item->in = "in";
+                  $last_comment->in = "";
+                  $last_comment = $comments_item;
+              } else if ($comments_item->type == "change") {
+                  $comments_item->status = $this->status_model->getName($comments_item->status_number);
+              }
+          }
+        }
+            $userEl = $this->users_model->getUsers($this->session->userdata('id'));
+            $data['contract'] = $userEl['contract'];
+            $this->load->view('templates/header', $data);
+            $this->load->view('menu/index', $data);
+            $this->load->view('leaves/view', $data);
+            $this->load->view('templates/footer');
+        }
+
+    }
+
+    /**
+     * Create a new comment or append a comment
+     * to the comments on a leave request
+     * @param int $id Id of the leave request
+     * @param string $source Page where we
+     *     redirect after posting
+     * @author Emilien NICOLAS
+     *     <milihhard1996@gmail.com>
+     */
+    public function createComment($id, $source = "leaves/leaves")
+    {
+        $this->auth->checkIfOperationIsAllowed('view_leaves');
+        $data = getUserContext($this);
+        $oldComment = $this->leaves_model->getCommentsLeave($id);
+        $newComment = new stdClass;
+        $newComment->type = "comment";
+        $newComment->author = $this->session->userdata('id');
+        $newComment->value = $this->input->post('comment');
+        $newComment->date = date("Y-n-j");
+        if ($oldComment != NULL) {
+            array_push($oldComment->comments, $newComment);
+        } else {
         $oldComment = new stdClass;
         $oldComment->comments = array($newComment);
       }
@@ -225,6 +590,8 @@ class Leaves extends CI_Controller {
             $data['defaultType'] = $leaveTypesDetails->defaultType;
             $data['credit'] = $leaveTypesDetails->credit;
             $data['types'] = $leaveTypesDetails->types;
+            $userEl = $this->users_model->getUsers($this->session->userdata('id'));
+            $data['contract'] = $userEl['contract'];
             $this->load->view('templates/header', $data);
             $this->load->view('menu/index', $data);
             $this->load->view('leaves/create');
@@ -233,38 +600,51 @@ class Leaves extends CI_Controller {
           //Prevent thugs to auto validate their leave requests
           if (!$this->is_hr && !$this->is_admin) {
             if ($this->input->post('status') > LMS_REQUESTED) {
-                log_message('error', 'User #' . $this->session->userdata('id') . 
+                log_message('error', 'User #' . $this->session->userdata('id') .
                     ' tried to submit a LR with an wrong status = ' . $this->input->post('status'));
                 $_POST['status'] = LMS_REQUESTED;
             }
+
           }
-          
+
             //Users must use an existing leave type, otherwise
             //force leave type to default leave type
             $this->load->model('contracts_model');
             $leaveTypesDetails = $this->contracts_model->getLeaveTypesDetailsOTypesForUser($this->session->userdata('id'));
+
             if (!array_key_exists($this->input->post('type'), $leaveTypesDetails->types)) {
-                log_message('error', 'User #' . $this->session->userdata('id') . ' tried to submit an wrong LR type = ' . 
-                $this->input->post('type'));
+                log_message('error', 'User #' . $this->session->userdata('id') . ' tried to submit an wrong LR type = ' .
+                    $this->input->post('type'));
                 $_POST['type'] = $leaveTypesDetails->defaultType;
-                log_message('debug', 'LR type forced to ' . $leaveTypesDetails->defaultType); 
+                log_message('debug', 'LR type forced to ' . $leaveTypesDetails->defaultType);
             }
 
-          if (function_exists('triggerCreateLeaveRequest')) {
-              triggerCreateLeaveRequest($this);
-          }
-          $leave_id = $this->leaves_model->setLeaves($this->session->userdata('id'));
-          $this->session->set_flashdata('msg', lang('leaves_create_flash_msg_success'));
+            if (function_exists('triggerCreateLeaveRequest')) {
+                triggerCreateLeaveRequest($this);
+            }
+            if (array_key_exists($this->input->post('type'), $leaveTypesDetails->types)) {
+                $objType = $this->types_model->getTypes($this->input->post('type'));
+                if ($objType["auto_confirm"] == 1) {
+                    $leave_id = $this->leaves_model->setLeaves($this->session->userdata('id'), LMS_ACCEPTED);
+                    $this->session->set_flashdata('msg', lang('leaves_create_flash_msg_success'));
+                } else {
+                    $leave_id = $this->leaves_model->setLeaves($this->session->userdata('id'));
+                    $this->session->set_flashdata('msg', lang('leaves_create_flash_msg_success'));
+                }
 
-          //If the status is requested, send an email to the manager
-          if ($this->input->post('status') == LMS_REQUESTED) {
-              $this->sendMailOnLeaveRequestCreation($leave_id);
-          }
-          if (isset($_GET['source'])) {
-              redirect($_GET['source']);
-          } else {
-              redirect('leaves');
-          }
+            }
+
+
+            //If the status is requested, send an email to the manager
+            if ($this->input->post('status') == LMS_REQUESTED) {
+                $this->sendMailOnLeaveRequestCreation($leave_id);
+            }
+
+            if (isset($_GET['source'])) {
+                redirect($_GET['source']);
+            } else {
+                redirect('leaves');
+            }
         }
     }
 
@@ -293,7 +673,7 @@ class Leaves extends CI_Controller {
                     log_message('error', 'User #' . $this->user_id . ' illegally tried to edit leave #' . $id);
                     $this->session->set_flashdata('msg', lang('leaves_edit_flash_msg_error'));
                     redirect('leaves');
-                 }
+                }
             }
         } //Admin
 
@@ -322,16 +702,18 @@ class Leaves extends CI_Controller {
             if (isset($data["leave"]["comments"])){
               $last_comment = new stdClass();;
               foreach ($data["leave"]["comments"]->comments as $comments_item) {
-                if($comments_item->type == "comment"){
-                  $comments_item->author = $this->users_model->getName($comments_item->author);
-                  $comments_item->in = "in";
-                  $last_comment->in="";
-                  $last_comment=$comments_item;
-                } else if($comments_item->type == "change"){
-                  $comments_item->status = $this->status_model->getName($comments_item->status_number);
-                }
+                  if ($comments_item->type == "comment") {
+                      $comments_item->author = $this->users_model->getName($comments_item->author);
+                      $comments_item->in = "in";
+                      $last_comment->in = "";
+                      $last_comment = $comments_item;
+                  } else if ($comments_item->type == "change") {
+                      $comments_item->status = $this->status_model->getName($comments_item->status_number);
+                  }
               }
             }
+            $userEl = $this->users_model->getUsers($this->session->userdata('id'));
+            $data['contract'] = $userEl['contract'];
             $this->load->view('templates/header', $data);
             $this->load->view('menu/index', $data);
             $this->load->view('leaves/edit', $data);
@@ -340,14 +722,15 @@ class Leaves extends CI_Controller {
           //Prevent thugs to auto validate their leave requests
           if (!$this->is_hr && !$this->is_admin) {
             if ($this->input->post('status') == LMS_ACCEPTED) {
-                log_message('error', 'User #' . $this->session->userdata('id') . 
+                log_message('error', 'User #' . $this->session->userdata('id') .
                     ' tried to submit a LR with an wrong status = ' . $this->input->post('status'));
                 $_POST['status'] = LMS_REQUESTED;
             }
             if ($this->input->post('status') == LMS_CANCELED) {
-                log_message('error', 'User #' . $this->session->userdata('id') . 
+                log_message('error', 'User #' . $this->session->userdata('id') .
                     ' tried to submit a LR with an wrong status = ' . $this->input->post('status'));
                 $_POST['status'] = LMS_CANCELLATION;
+
             }
           }
 
@@ -356,10 +739,10 @@ class Leaves extends CI_Controller {
             $this->load->model('contracts_model');
             $leaveTypesDetails = $this->contracts_model->getLeaveTypesDetailsOTypesForUser($this->session->userdata('id'));
             if (!array_key_exists($this->input->post('type'), $leaveTypesDetails->types)) {
-                log_message('error', 'User #' . $this->session->userdata('id') . ' tried to submit an wrong LR type = ' . 
-                $this->input->post('type'));
+                log_message('error', 'User #' . $this->session->userdata('id') . ' tried to submit an wrong LR type = ' .
+                    $this->input->post('type'));
                 $_POST['type'] = $leaveTypesDetails->defaultType;
-                log_message('debug', 'LR type forced to ' . $leaveTypesDetails->defaultType); 
+                log_message('debug', 'LR type forced to ' . $leaveTypesDetails->defaultType);
             }
 
             $this->leaves_model->updateLeaves($id);       //We don't use the return value
@@ -394,6 +777,7 @@ class Leaves extends CI_Controller {
                $this->session->set_flashdata('msg', lang('leaves_cancellation_flash_msg_error'));
                redirect('leaves');
            }
+
            //We can cancel a leave request only with a status 'Accepted'
            if ($leave['status'] == LMS_PLANNED) {
                $this->leaves_model->switchStatus($id, LMS_REQUESTED);
@@ -714,9 +1098,18 @@ class Leaves extends CI_Controller {
             }
             //We can cancel a leave request only with a status 'Requested'
             if ($leave['status'] == LMS_REQUESTED) {
+
                 $this->leaves_model->switchStatus($id, LMS_CANCELED);
                 $this->sendMailOnLeaveRequestCanceled($id);
                 $this->session->set_flashdata('msg', lang('requests_cancellation_accept_flash_msg_success'));
+                if (!$leave['parent_leave_id']) {
+                    if ($leave['sub_leaves_treated'] == 0) {
+                        $otherLeaves = $this->leaves_model->getOtherSubLeavesExists($leave['id']);
+                        foreach ($otherLeaves as $value) {
+                            $this->leaves_model->switchStatus($value->id, LMS_CANCELED);
+                        }
+                    }
+                }
                 redirect('leaves');
             } else {
                 $this->session->set_flashdata('msg', lang('leaves_cancellation_flash_msg_error'));

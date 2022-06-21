@@ -26,6 +26,7 @@ class Hr extends CI_Controller {
         $this->load->model('leaves_model');
         $this->lang->load('hr', $this->language);
         $this->lang->load('global', $this->language);
+        $this->load->model('users_model');
     }
 
     /**
@@ -45,6 +46,8 @@ class Hr extends CI_Controller {
         $this->load->model('types_model');
         $data['types'] = $this->types_model->getTypes();
         $data['flash_partial_view'] = $this->load->view('templates/flash', $data, TRUE);
+        $userEl = $this->users_model->getUsers($this->session->userdata('id'));
+        $data['contract'] = $userEl['contract'];
         $this->load->view('templates/header', $data);
         $this->load->view('menu/index', $data);
         $this->load->view('hr/employees', $data);
@@ -242,6 +245,8 @@ class Hr extends CI_Controller {
             $data['deletedLeaves'] = $this->history_model->getDeletedLeaveRequests($id);
         }
         $data['flash_partial_view'] = $this->load->view('templates/flash', $data, TRUE);
+        $userEl = $this->users_model->getUsers($this->session->userdata('id'));
+        $data['contract'] = $userEl['contract'];
         $this->load->view('templates/header', $data);
         $this->load->view('menu/index', $data);
         $this->load->view('hr/leaves', $data);
@@ -268,6 +273,8 @@ class Hr extends CI_Controller {
         $this->load->model('overtime_model');
         $data['extras'] = $this->overtime_model->getExtrasOfEmployee($id);
         $data['flash_partial_view'] = $this->load->view('templates/flash', $data, TRUE);
+        $userEl = $this->users_model->getUsers($this->session->userdata('id'));
+        $data['contract'] = $userEl['contract'];
         $this->load->view('templates/header', $data);
         $this->load->view('menu/index', $data);
         $this->load->view('hr/overtime', $data);
@@ -315,6 +322,8 @@ class Hr extends CI_Controller {
             $data['entitleddaysemployee'] = $this->entitleddays_model->getEntitledDaysForEmployee($id);
             $data['title'] = lang('hr_summary_title');
             $data['help'] = $this->help->create_help_link('global_link_doc_page_leave_balance_employee');
+            $userEl = $this->users_model->getUsers($this->session->userdata('id'));
+            $data['contract'] = $userEl['contract'];
             $this->load->view('templates/header', $data);
             $this->load->view('menu/index', $data);
             $this->load->view('hr/counters', $data);
@@ -358,6 +367,8 @@ class Hr extends CI_Controller {
             $data['types'] = $leaveTypesDetails->types;
             $this->load->model('users_model');
             $data['name'] = $this->users_model->getName($id);
+            $userEl = $this->users_model->getUsers($this->session->userdata('id'));
+            $data['contract'] = $userEl['contract'];
             $this->load->view('templates/header', $data);
             $this->load->view('menu/index', $data);
             $this->load->view('hr/createleave');
@@ -444,7 +455,8 @@ class Hr extends CI_Controller {
         $refDate = new DateTime($end);
         $data['refDate'] = $refDate->format(lang('global_date_format'));
         $data['summary'] = $this->leaves_model->getLeaveBalanceForEmployee($id, FALSE, $end);
-
+        $userEl = $this->users_model->getUsers($this->session->userdata('id'));
+        $data['contract'] = $userEl['contract'];
         $this->load->view('templates/header', $data);
         $this->load->view('menu/index', $data);
         $this->load->view('hr/presence', $data);

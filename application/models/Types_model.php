@@ -19,7 +19,7 @@ class Types_model extends CI_Model {
      * @author Benjamin BALET <benjamin.balet@gmail.com>
      */
     public function __construct() {
-        
+
     }
 
     /**
@@ -36,7 +36,7 @@ class Types_model extends CI_Model {
         $query = $this->db->get_where('types', array('id' => $id));
         return $query->row_array();
     }
-    
+
     /**
      * Get the list of types or one type
      * @param string $name type name
@@ -47,7 +47,7 @@ class Types_model extends CI_Model {
         $query = $this->db->get_where('types', array('name' => $name));
         return $query->row_array();
     }
-    
+
     /**
      * Get the list of types as an ordered associative array
      * @return array Associative array of types (id, name)
@@ -63,33 +63,39 @@ class Types_model extends CI_Model {
         }
         return $listOfTypes;
     }
-    
+
     /**
      * Get the name of a given type id
      * @param int $id ID of the type
      * @return string label of the type
      * @author Benjamin BALET <benjamin.balet@gmail.com>
      */
-    public function getName($id) {
+    public function getName($id)
+    {
         $type = $this->getTypes($id);
         return $type['name'];
     }
-    
+
     /**
-     * Insert a new leave type. Data are taken from HTML form.
+     * Insert a new leave type. Data are taken
+     * from HTML form.
      * @return int number of affected rows
-     * @author Benjamin BALET <benjamin.balet@gmail.com>
+     * @author Benjamin BALET
+     *     <benjamin.balet@gmail.com>
      */
-    public function setTypes() {
-        $deduct = ($this->input->post('deduct_days_off') == 'on')?TRUE:FALSE;
+    public function setTypes()
+    {
+        $deduct = ($this->input->post('deduct_days_off') == 'on') ? TRUE : FALSE;
+        $confirm = ($this->input->post('auto_confirm') == 'on') ? TRUE : FALSE;
         $data = array(
             'acronym' => $this->input->post('acronym'),
             'name' => $this->input->post('name'),
-            'deduct_days_off' => $deduct
+            'deduct_days_off' => $deduct,
+            'auto_confirm' => $confirm
         );
         return $this->db->insert('types', $data);
     }
-    
+
     /**
      * Delete a leave type from the database
      * @param int $id identifier of the leave type
@@ -98,27 +104,33 @@ class Types_model extends CI_Model {
     public function deleteType($id) {
         $this->db->delete('types', array('id' => $id));
     }
-    
+
     /**
      * Update a given leave type in the database.
-     * @param int $id identifier of the leave type
+     * @param int $id identifier of the leave
+     *     type
      * @param string $name name of the type
      * @param bool $deduct Deduct days off
-     * @param string $acronym Acronym of leave type
+     * @param string $acronym Acronym of leave
+     *     type
      * @return int number of affected rows
-     * @author Benjamin BALET <benjamin.balet@gmail.com>
+     * @author Benjamin BALET
+     *     <benjamin.balet@gmail.com>
      */
-    public function updateTypes($id, $name, $deduct, $acronym) {
-        $deduct = ($deduct == 'on')?TRUE:FALSE;
+    public function updateTypes($id, $name, $deduct, $acronym, $confirm)
+    {
+        $deduct = ($deduct == 'on') ? TRUE : FALSE;
+        $confirm = ($confirm == 'on') ? TRUE : FALSE;
         $data = array(
             'acronym' => $acronym,
             'name' => $name,
-            'deduct_days_off' => $deduct
+            'deduct_days_off' => $deduct,
+            'auto_confirm' => $confirm
         );
         $this->db->where('id', $id);
         return $this->db->update('types', $data);
     }
-    
+
     /**
      * Count the number of time a leave type is used into the database
      * @param int $id identifier of the leave type record

@@ -16,7 +16,7 @@
  * moditifed_type
  * modified_by      (if 0, system or init)
  * change_date
- * 
+ *
  * Of course, the PK is no more the identifier of the object but modification_id.
  * Modification types are :
  *     0 - not used
@@ -30,9 +30,9 @@ class History_model extends CI_Model {
      * Default constructor
      */
     public function __construct() {
-        
+
     }
-    
+
     /**
      * Get the list of changes into the 'leaves' table
      * @param int $leaveId Identifier of the leave request
@@ -47,13 +47,13 @@ class History_model extends CI_Model {
         $this->db->join('types', 'leaves_history.type = types.id');
         $this->db->join('status', 'leaves_history.status = status.id');
         $this->db->where('leaves_history.id', $leaveId);
-        $this->db->order_by('change_id', 'asc'); 
+        $this->db->order_by('change_id', 'asc');
         $query = $this->db->get('leaves_history');
         $results = $query->result_array();
         return $results;
     }
-    
-    
+
+
     /**
      * Get the list of deleted leave requests
      * @param int $userId Identifier of the user
@@ -74,7 +74,7 @@ class History_model extends CI_Model {
         $results = $query->result_array();
         return $results;
     }
-    
+
     /**
      * Get the details of a modification
      * @param string $table Table modified
@@ -86,7 +86,7 @@ class History_model extends CI_Model {
         $query = $this->db->get_where($table . '_history', array('modification_id' => $id));
         return $query->row_array();
     }
-    
+
     /**
      * Insert a modification into the history table of the modified object (source table)
      * @param int $type Type of modification (1 - create, 2 - update, 3 - delete)
@@ -103,13 +103,15 @@ class History_model extends CI_Model {
         $sql .= ', NOW() FROM ' . $table . ' WHERE id = ' . $id;
         $this->db->query($sql);
     }
-    
+
     /**
-     * Purge the table by deleting the records prior $toDate
+     * Purge the table by deleting the records
+     * prior $toDate
      * @param string $table Source Table
-     * @param date $toDate 
+     * @param date $toDate
      * @return int number of affected rows
-     * @author Benjamin BALET <benjamin.balet@gmail.com>
+     * @author Benjamin BALET
+     *     <benjamin.balet@gmail.com>
      */
     public function purgeHistory($table, $toDate) {
         $this->db->where('change_date <= ', $toDate);
@@ -128,7 +130,7 @@ class History_model extends CI_Model {
         $result = $this->db->get();
         return $result->row()->number;
     }
-    
+
     //TODO:cascade delete on user delete
 }
 ?>

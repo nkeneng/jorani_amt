@@ -29,13 +29,17 @@ class Extra extends CI_Controller {
         $this->load->model('overtime_model');
         $this->lang->load('extra', $this->language);
         $this->lang->load('global', $this->language);
+        $this->load->model('users_model');
     }
 
     /**
-     * Display the list of the overtime requests by the connected employee
-     * @author Benjamin BALET <benjamin.balet@gmail.com>
+     * Display the list of the overtime requests
+     * by the connected employee
+     * @author Benjamin BALET
+     *     <benjamin.balet@gmail.com>
      */
-    public function index() {
+    public function index()
+    {
         $this->auth->checkIfOperationIsAllowed('list_extra');
         $data = getUserContext($this);
         $this->lang->load('datatable', $this->language);
@@ -43,6 +47,8 @@ class Extra extends CI_Controller {
         $data['title'] = lang('extra_index_title');
         $data['help'] = $this->help->create_help_link('global_link_doc_page_extra_list');
         $data['flash_partial_view'] = $this->load->view('templates/flash', $data, TRUE);
+        $userEl = $this->users_model->getUsers($this->session->userdata('id'));
+        $data['contract'] = $userEl['contract'];
         $this->load->view('templates/header', $data);
         $this->load->view('menu/index', $data);
         $this->load->view('extra/index', $data);
@@ -91,6 +97,8 @@ class Extra extends CI_Controller {
         } else {
             $data['name'] = '';
         }
+        $userEl = $this->users_model->getUsers($this->session->userdata('id'));
+        $data['contract'] = $userEl['contract'];
         $this->load->view('templates/header', $data);
         $this->load->view('menu/index', $data);
         $this->load->view('extra/view', $data);
@@ -115,6 +123,8 @@ class Extra extends CI_Controller {
         if ($this->form_validation->run() === FALSE) {
             $data['title'] = lang('extra_create_title');
             $data['help'] = $this->help->create_help_link('global_link_doc_page_create_overtime');
+            $userEl = $this->users_model->getUsers($this->session->userdata('id'));
+            $data['contract'] = $userEl['contract'];
             $this->load->view('templates/header', $data);
             $this->load->view('menu/index', $data);
             $this->load->view('extra/create');
@@ -180,6 +190,8 @@ class Extra extends CI_Controller {
             $data['id'] = $id;
             $this->load->model('users_model');
             $data['name'] = $this->users_model->getName($data['extra']['employee']);
+            $userEl = $this->users_model->getUsers($this->session->userdata('id'));
+            $data['contract'] = $userEl['contract'];
             $this->load->view('templates/header', $data);
             $this->load->view('menu/index', $data);
             $this->load->view('extra/edit', $data);

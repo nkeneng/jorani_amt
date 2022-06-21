@@ -39,6 +39,8 @@ class Users extends CI_Controller {
         $data['title'] = lang('users_index_title');
         $data['help'] = $this->help->create_help_link('global_link_doc_page_list_users');
         $data['flash_partial_view'] = $this->load->view('templates/flash', $data, TRUE);
+        $userEl = $this->users_model->getUsers($this->session->userdata('id'));
+        $data['contract'] = $userEl['contract'];
         $this->load->view('templates/header', $data);
         $this->load->view('menu/index', $data);
         $this->load->view('users/index', $data);
@@ -129,6 +131,8 @@ class Users extends CI_Controller {
         $data['position_label'] = $this->positions_model->getName($data['user']['position']);
         $data['organization_label'] = $this->organization_model->getName($data['user']['organization']);
         $data['apps'] = $this->oauthclients_model->listOAuthApps($this->user_id);
+        $userEl = $this->users_model->getUsers($this->session->userdata('id'));
+        $data['contract'] = $userEl['contract'];
         $this->load->view('templates/header', $data);
         $this->load->view('menu/index', $data);
         $this->load->view('users/myprofile', $data);
@@ -179,6 +183,8 @@ class Users extends CI_Controller {
             $data['position_label'] = $this->positions_model->getName($data['users_item']['position']);
             $data['organization_label'] = $this->organization_model->getName($data['users_item']['organization']);
             $data['roles'] = $this->roles_model->getRoles();
+            $userEl = $this->users_model->getUsers($this->session->userdata('id'));
+            $data['contract'] = $userEl['contract'];
             $this->load->view('templates/header', $data);
             $this->load->view('menu/index', $data);
             $this->load->view('users/edit', $data);
@@ -320,11 +326,14 @@ class Users extends CI_Controller {
         if ($this->config->item('ldap_basedn_db')) $this->form_validation->set_rules('ldap_path', lang('users_create_field_ldap_path'), 'strip_tags');
 
         if ($this->form_validation->run() === FALSE) {
+            $userEl = $this->users_model->getUsers($this->session->userdata('id'));
+            $data['contract'] = $userEl['contract'];
             $this->load->view('templates/header', $data);
             $this->load->view('menu/index', $data);
             $this->load->view('users/create', $data);
             $this->load->view('templates/footer');
         } else {
+
             $password = $this->users_model->setUsers();
 
             //Send an e-mail to the user so as to inform that its account has been created

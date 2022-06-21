@@ -1,14 +1,17 @@
 <?php
 /**
- * This view displays the list of leave requests created by an employee.
- * @copyright  Copyright (c) 2014-2019 Benjamin BALET
- * @license      http://opensource.org/licenses/AGPL-3.0 AGPL-3.0
+ * This view displays the list of leave requests
+ * created by an employee.
+ * @copyright  Copyright (c) 2014-2019 Benjamin
+ *     BALET
+ * @license      http://opensource.org/licenses/AGPL-3.0
+ *     AGPL-3.0
  * @link            https://github.com/bbalet/jorani
  * @since         0.1.0
  */
 ?>
 
-<h2><?php echo lang('leaves_index_title'); ?>
+<h2><?php echo lang('details'); ?>
     &nbsp;<?php echo $help; ?></h2>
 
 <?php echo $flash_partial_view; ?>
@@ -43,11 +46,6 @@
                     type="checkbox" checked
                     id="chkRequested"
                     class="filterStatus"> &nbsp;<?php echo lang('Requested'); ?></span>
-        &nbsp;
-        <span class="label label-info"><input
-                    type="checkbox" checked
-                    id="chkTreated"
-                    class="filterStatus"> &nbsp;<?php echo lang('treated_ok'); ?></span>
         &nbsp;
         <span class="label label-important"
               style="background-color: #ff0000;"><input
@@ -116,8 +114,6 @@
                 $lastchangedate = $datetimelastChanged->format(lang('global_date_format'));
             }
         } ?>
-        <?php if (!$leave['parent_leave_id']) : ?>
-
 
         <tr style="<?php echo $leave['free_day'] ? 'background:#D9FCD8' : ''; ?>">
             <td data-order="<?php echo $leave['id']; ?>">
@@ -143,28 +139,30 @@
                     if ($leave['status'] == LMS_ACCEPTED) {
                         $showCancel = TRUE;
                     }
-                //Delete rules
-                if ($leave['status'] == LMS_PLANNED) {
-                    $showDelete = TRUE;
-                }
-                if (($leave['status'] == LMS_REJECTED) &&
+                    //Delete rules
+                    if ($leave['status'] == LMS_PLANNED) {
+                        $showDelete = TRUE;
+                    }
+                    if (($leave['status'] == LMS_REJECTED) &&
                         ($this->config->item('delete_rejected_requests') === TRUE)) {
-                    $showDelete = TRUE;
-                }
-                //Reminder rules
-                if (($leave['status'] == LMS_REQUESTED) ||
+                        $showDelete = TRUE;
+                    }
+                    //Reminder rules
+                    if (($leave['status'] == LMS_REQUESTED) ||
                         ($leave['status'] == LMS_CANCELLATION)) {
-                    $showReminder = TRUE;
-                }
-                //Direct cancelation by the employee
-                if (($leave['status'] == LMS_REQUESTED)) {
-                    $showCancelByUser = TRUE;
-                }
-                ?>
-                <?php if ($showEdit == TRUE) { ?>
-                <a href="<?php echo base_url();?>leaves/edit/<?php echo $leave['id']; ?>" title="<?php echo lang('leaves_index_thead_tip_edit');?>"><i class="mdi mdi-pencil nolink"></i></a>
-                    &nbsp;
-                <?php } ?>
+                        $showReminder = TRUE;
+                    }
+                    //Direct cancelation by the employee
+                    if (($leave['status'] == LMS_REQUESTED)) {
+                        $showCancelByUser = TRUE;
+                    }
+                    ?>
+                    <?php if ($showEdit == TRUE) { ?>
+                        <a href="<?php echo base_url(); ?>leaves/edit/<?php echo $leave['id']; ?>"
+                           title="<?php echo lang('leaves_index_thead_tip_edit'); ?>"><i
+                                    class="mdi mdi-pencil nolink"></i></a>
+                        &nbsp;
+                    <?php } ?>
                     <?php if ($showDelete == TRUE) { ?>
                         <a href="#"
                            class="confirm-delete"
@@ -212,42 +210,20 @@
             <td><?php echo $leave['duration']; ?></td>
             <td><?php echo $leave['type_name']; ?></td>
             <?php
-            if ($leave['parent_leave'] == 1) {
-                if ($leave['sub_leaves_treated'] == 1) {
-                    echo "<td><span class='label label-info'>" . lang('treated_ok') . "</span></td>";
-                } else {
-                    switch ($leave['status']) {
-                        case 1:
-                            echo "<td><span class='label'>" . lang($leave['status_name']) . "</span></td>";
-                            break;
-                        case 2:
-                            echo "<td><span class='label label-warning'>" . lang($leave['status_name']) . "</span></td>";
-                            break;
-                        case 3:
-                            echo "<td><span class='label label-success'>" . lang($leave['status_name']) . "</span></td>";
-                            break;
-                        default:
-                            echo "<td><span class='label label-important' style='background-color: #ff0000;'>" . lang($leave['status_name']) . "</span></td>";
-                            break;
-                    }
-                }
-            } else {
-                switch ($leave['status']) {
-                    case 1:
-                        echo "<td><span class='label'>" . lang($leave['status_name']) . "</span></td>";
-                        break;
-                    case 2:
-                        echo "<td><span class='label label-warning'>" . lang($leave['status_name']) . "</span></td>";
-                        break;
-                    case 3:
-                        echo "<td><span class='label label-success'>" . lang($leave['status_name']) . "</span></td>";
-                        break;
-                    default:
-                        echo "<td><span class='label label-important' style='background-color: #ff0000;'>" . lang($leave['status_name']) . "</span></td>";
-                        break;
-                }
-            }
-            ?>
+            switch ($leave['status']) {
+                case 1:
+                    echo "<td><span class='label'>" . lang($leave['status_name']) . "</span></td>";
+                    break;
+                case 2:
+                    echo "<td><span class='label label-warning'>" . lang($leave['status_name']) . "</span></td>";
+                    break;
+                case 3:
+                    echo "<td><span class='label label-success'>" . lang($leave['status_name']) . "</span></td>";
+                    break;
+                default:
+                    echo "<td><span class='label label-important' style='background-color: #ff0000;'>" . lang($leave['status_name']) . "</span></td>";
+                    break;
+            } ?>
             <?php
             if ($this->config->item('enable_history') == TRUE) {
                 echo "<td data-order='" . $tmpRequestDate . "'>" . $requestdate . "</td>";
@@ -255,7 +231,6 @@
             }
             ?>
         </tr>
-    <?php endif; ?>
     <?php endforeach ?>
     </tbody>
 </table>
@@ -267,9 +242,11 @@
 
 <div class="row-fluid">
     <div class="span12">
-        <a href="<?php echo base_url(); ?>leaves/export"
-           class="btn btn-primary"><i
-                    class="mdi mdi-download"></i>&nbsp; <?php echo lang('leaves_index_button_export'); ?>
+        <!-- <a href="<? //php echo base_url();?>leaves/export" class="btn btn-primary"><i class="mdi mdi-download"></i>&nbsp; <?php echo lang('leaves_index_button_export'); ?></a>
+      &nbsp;&nbsp; -->
+        <a href="<?php echo base_url(); ?>leaves"
+           class="btn btn-secondary"><i
+                    class="mdi mdi-chevron-left"></i>&nbsp; <?php echo lang('prev'); ?>
         </a>
         &nbsp;&nbsp;
         <a href="<?php echo base_url(); ?>leaves/create"
@@ -316,36 +293,55 @@
 </div>
 
 <div id="frmShowHistory" class="modal hide fade">
-    <div class="modal-body" id="frmShowHistoryBody">
-        <img src="<?php echo base_url();?>assets/images/loading.gif">
+    <div class="modal-body"
+         id="frmShowHistoryBody">
+        <img src="<?php echo base_url(); ?>assets/images/loading.gif">
     </div>
     <div class="modal-footer">
-        <a href="#" onclick="$('#frmShowHistory').modal('hide');" class="btn"><?php echo lang('OK');?></a>
+        <a href="#"
+           onclick="$('#frmShowHistory').modal('hide');"
+           class="btn"><?php echo lang('OK'); ?></a>
     </div>
 </div>
 
 <div id="frmLinkICS" class="modal hide fade">
     <div class="modal-header">
-        <h3>ICS<a href="#" onclick="$('#frmLinkICS').modal('hide');" class="close">&times;</a></h3>
+        <h3>ICS<a href="#"
+                  onclick="$('#frmLinkICS').modal('hide');"
+                  class="close">&times;</a></h3>
     </div>
-    <div class="modal-body" id="frmSelectDelegateBody">
+    <div class="modal-body"
+         id="frmSelectDelegateBody">
         <div class='input-append'>
-        <?php $icsUrl = base_url() . 'ics/individual/' . $user_id . '?token=' . $this->session->userdata('random_hash');?>
-            <input type="text" class="input-xlarge" id="txtIcsUrl" onfocus="this.select();" onmouseup="return false;"
-                value="<?php echo $icsUrl;?>" />
-                <button id="cmdCopy" class="btn" data-clipboard-text="<?php echo $icsUrl;?>">
-                    <i class="mdi mdi-content-copy"></i>
-                </button>
-            <a href="#" id="tipCopied" data-toggle="tooltip" title="<?php echo lang('copied');?>" data-placement="right" data-container="#cmdCopy"></a>
+            <?php $icsUrl = base_url() . 'ics/individual/' . $user_id . '?token=' . $this->session->userdata('random_hash'); ?>
+            <input type="text"
+                   class="input-xlarge"
+                   id="txtIcsUrl"
+                   onfocus="this.select();"
+                   onmouseup="return false;"
+                   value="<?php echo $icsUrl; ?>"/>
+            <button id="cmdCopy" class="btn"
+                    data-clipboard-text="<?php echo $icsUrl; ?>">
+                <i class="mdi mdi-content-copy"></i>
+            </button>
+            <a href="#" id="tipCopied"
+               data-toggle="tooltip"
+               title="<?php echo lang('copied'); ?>"
+               data-placement="right"
+               data-container="#cmdCopy"></a>
         </div>
     </div>
     <div class="modal-footer">
-        <a href="#" onclick="$('#frmLinkICS').modal('hide');" class="btn btn-primary"><?php echo lang('OK');?></a>
+        <a href="#"
+           onclick="$('#frmLinkICS').modal('hide');"
+           class="btn btn-primary"><?php echo lang('OK'); ?></a>
     </div>
 </div>
 
-<link href="<?php echo base_url();?>assets/datatable/DataTables-1.10.11/css/jquery.dataTables.min.css" rel="stylesheet">
-<script type="text/javascript" src="<?php echo base_url();?>assets/datatable/DataTables-1.10.11/js/jquery.dataTables.min.js"></script>
+<link href="<?php echo base_url(); ?>assets/datatable/DataTables-1.10.11/css/jquery.dataTables.min.css"
+      rel="stylesheet">
+<script type="text/javascript"
+        src="<?php echo base_url(); ?>assets/datatable/DataTables-1.10.11/js/jquery.dataTables.min.js"></script>
 <script type="text/javascript"
         src="<?php echo base_url(); ?>assets/js/bootbox.min.js"></script>
 
@@ -363,7 +359,6 @@
         if ($('#chkPlanned').prop('checked')) filter += "<?php echo lang('Planned');?>|";
         if ($('#chkAccepted').prop('checked')) filter += "<?php echo lang('Accepted');?>|";
         if ($('#chkRequested').prop('checked')) filter += "<?php echo lang('Requested');?>|";
-        if ($('#chkTreated').prop('checked')) filter += "<?php echo lang('treated_ok');?>|";
         if ($('#chkRejected').prop('checked')) filter += "<?php echo lang('Rejected');?>|";
         if ($('#chkCancellation').prop('checked')) filter += "<?php echo lang('Cancellation');?>|";
         if ($('#chkCanceled').prop('checked')) filter += "<?php echo lang('Canceled');?>|";
@@ -400,46 +395,46 @@
                     sortAscending: "<?php echo lang('datatable_sSortAscending');?>",
                     sortDescending: "<?php echo lang('datatable_sSortDescending');?>"
                 }
-        }
-    });
-
-    //On showing the confirmation pop-up, add the user id at the end of the delete url action
-    $('#frmDeleteLeaveRequest').on('show', function() {
-        var link = "<?php echo base_url();?>leaves/delete/" + $(this).data('id');
-        $("#lnkDeleteUser").attr('href', link);
-    })
-
-    //Display a modal pop-up so as to confirm if a leave request has to be deleted or not
-    //We build a complex selector because datatable does horrible things on DOM...
-    //a simplier selector doesn't work when the delete is on page >1
-    $("#leaves tbody").on('click', '.confirm-delete',  function(){
-        var id = $(this).data('id');
-        $('#frmDeleteLeaveRequest').data('id', id).modal('show');
-    });
-
-    //Prevent to load always the same content (refreshed each time)
-    $('#frmDeleteLeaveRequest').on('hidden', function() {
-        $(this).removeData('modal');
-    });
-    <?php if ($this->config->item('enable_history') === TRUE) { ?>
-    $('#frmShowHistory').on('hidden', function() {
-        $("#frmShowHistoryBody").html('<img src="<?php echo base_url();?>assets/images/loading.gif">');
-    });
-
-    //Popup show history
-    $("#leaves tbody").on('click', '.show-history',  function(){
-        $("#frmShowHistory").modal('show');
-        $("#frmShowHistoryBody").load('<?php echo base_url();?>leaves/' + $(this).data('id') +'/history', function(response, status, xhr) {
-            if (xhr.status == 401) {
-                $("#frmShowHistory").modal('hide');
-                bootbox.alert("<?php echo lang('global_ajax_timeout');?>", function() {
-                    //After the login page, we'll be redirected to the current page
-                   location.reload();
-                });
             }
-          });
-    });
-    <?php } ?>
+        });
+
+        //On showing the confirmation pop-up, add the user id at the end of the delete url action
+        $('#frmDeleteLeaveRequest').on('show', function () {
+            var link = "<?php echo base_url();?>leaves/delete/" + $(this).data('id');
+            $("#lnkDeleteUser").attr('href', link);
+        })
+
+        //Display a modal pop-up so as to confirm if a leave request has to be deleted or not
+        //We build a complex selector because datatable does horrible things on DOM...
+        //a simplier selector doesn't work when the delete is on page >1
+        $("#leaves tbody").on('click', '.confirm-delete', function () {
+            var id = $(this).data('id');
+            $('#frmDeleteLeaveRequest').data('id', id).modal('show');
+        });
+
+        //Prevent to load always the same content (refreshed each time)
+        $('#frmDeleteLeaveRequest').on('hidden', function () {
+            $(this).removeData('modal');
+        });
+        <?php if ($this->config->item('enable_history') === TRUE) { ?>
+        $('#frmShowHistory').on('hidden', function () {
+            $("#frmShowHistoryBody").html('<img src="<?php echo base_url();?>assets/images/loading.gif">');
+        });
+
+        //Popup show history
+        $("#leaves tbody").on('click', '.show-history', function () {
+            $("#frmShowHistory").modal('show');
+            $("#frmShowHistoryBody").load('<?php echo base_url();?>leaves/' + $(this).data('id') + '/history', function (response, status, xhr) {
+                if (xhr.status == 401) {
+                    $("#frmShowHistory").modal('hide');
+                    bootbox.alert("<?php echo lang('global_ajax_timeout');?>", function () {
+                        //After the login page, we'll be redirected to the current page
+                        location.reload();
+                    });
+                }
+            });
+        });
+        <?php } ?>
 
         //Copy/Paste ICS Feed
         var client = new ClipboardJS("#cmdCopy");

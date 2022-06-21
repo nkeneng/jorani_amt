@@ -59,15 +59,31 @@ class Leaves_model extends CI_Model {
         return $this->db->get()->result_array();
     }
 
+    public function getSubLeavesOfEmployee($employee, $id)
+    {
+        $this->db->select('leaves.*');
+        $this->db->select('status.id as status, status.name as status_name');
+        $this->db->select('types.name as type_name');
+        $this->db->from('leaves');
+        $this->db->join('status', 'leaves.status = status.id');
+        $this->db->join('types', 'leaves.type = types.id');
+        $this->db->where('leaves.employee', $employee);
+        $this->db->where('leaves.parent_leave_id', $id);
+        $this->db->order_by('leaves.id', 'desc');
+        return $this->db->get()->result_array();
+    }
+
     /**
      * Get the list of history of an employee
      * @param int $employee Id of the employee
      * @return array list of records
-     * @author Emilien NICOLAS <milihhard1996@gmail.com>
+     * @author Emilien NICOLAS
+     *     <milihhard1996@gmail.com>
      */
-    public function getLeavesOfEmployeeWithHistory($employee){
-      $employee = intval($employee);
-      return $this->db->query("SELECT leaves.*, status.name as status_name, types.name as type_name, lastchange.date as change_date, requested.date as request_date
+    public function getLeavesOfEmployeeWithHistory($employee)
+    {
+        $employee = intval($employee);
+        return $this->db->query("SELECT leaves.*, status.name as status_name, types.name as type_name, lastchange.date as change_date, requested.date as request_date
         FROM `leaves`
         inner join status ON leaves.status = status.id
         inner join types ON leaves.type = types.id
@@ -85,14 +101,38 @@ class Leaves_model extends CI_Model {
         WHERE leaves.employee = $employee")->result_array();
     }
 
+    public function getSubLeavesOfEmployeeWithHistory($employee, $id)
+    {
+        $employee = intval($employee);
+        return $this->db->query("SELECT leaves.*, status.name as status_name, types.name as type_name, lastchange.date as change_date, requested.date as request_date
+          FROM `leaves`
+          inner join status ON leaves.status = status.id
+          inner join types ON leaves.type = types.id
+          left outer join (
+            SELECT id, MAX(change_date) as date
+            FROM leaves_history
+            GROUP BY id
+          ) lastchange ON leaves.id = lastchange.id
+          left outer join (
+            SELECT id, MIN(change_date) as date
+            FROM leaves_history
+            WHERE leaves_history.status = 2
+            GROUP BY id
+          ) requested ON leaves.id = requested.id
+          WHERE (leaves.employee = $employee AND leaves.parent_leave_id = $id)")->result_array();
+    }
+
     /**
-     * Return a list of Accepted leaves between two dates and for a given employee
+     * Return a list of Accepted leaves between
+     * two dates and for a given employee
      * @param int $employee ID of the employee
      * @param string $start Start date
      * @param string $end End date
-     * @author Benjamin BALET <benjamin.balet@gmail.com>
+     * @author Benjamin BALET
+     *     <benjamin.balet@gmail.com>
      */
-    public function getAcceptedLeavesBetweenDates($employee, $start, $end) {
+    public function getAcceptedLeavesBetweenDates($employee, $start, $end)
+    {
         $this->db->select('leaves.*, types.name as type');
         $this->db->from('leaves');
         $this->db->join('status', 'leaves.status = status.id');
@@ -317,7 +357,7 @@ class Leaves_model extends CI_Model {
                 $summary[$entitlement['type_name']][3] = $entitlement['type_id'];
                 $summary[$entitlement['type_name']][1] = (float) $entitlement['entitled'];
             }
-            
+
             //List all planned leaves in a third column
             //planned leave requests are not deducted from credit
             foreach ($entitlements as $entitlement) {
@@ -452,11 +492,15 @@ class Leaves_model extends CI_Model {
 
     /**
      * Create a leave request
-     * @param int $employeeId Identifier of the employee
-     * @return int id of the newly created leave request into the db
-     * @author Benjamin BALET <benjamin.balet@gmail.com>
+     * @param int $employeeId Identifier of the
+     *     employee
+     * @return int id of the newly created leave
+     *     request into the db
+     * @author Benjamin BALET
+     *     <benjamin.balet@gmail.com>
      */
-    public function setLeaves($employeeId) {
+    public function setLeaves($employeeId, $idStatus = null)
+    {
         $data = array(
             'startdate' => $this->input->post('startdate'),
             'startdatetype' => $this->input->post('startdatetype'),
@@ -465,7 +509,7 @@ class Leaves_model extends CI_Model {
             'duration' => abs($this->input->post('duration')),
             'type' => $this->input->post('type'),
             'cause' => $this->input->post('cause'),
-            'status' => $this->input->post('status'),
+            'status' => $idStatus ? $idStatus : $this->input->post('status'),
             'employee' => $employeeId
         );
         $this->db->insert('leaves', $data);
@@ -479,6 +523,55 @@ class Leaves_model extends CI_Model {
 
         return $newId;
     }
+
+    public function setLeavesFreeDay($employeeId, $idStatus = null, $parentBoolean = false)
+    {
+        $data = array(
+            'startdate' => $this->input->post('startdate'),
+            'enddate' => $this->input->post('enddate'),
+            'type' => 9,
+            'duration' => 1.000,
+            'free_day' => $this->input->post('dayFree'),
+            'status' => (!empty($idStatus)) ? $idStatus : $this->input->post('status'),
+            'employee' => $employeeId,
+            'parent_leave' => $parentBoolean ? 1 : 0
+        );
+        $this->db->insert('leaves', $data);
+        $newId = $this->db->insert_id();
+
+        //Trace the modification if the feature is enabled
+        if ($this->config->item('enable_history') === TRUE) {
+            $this->load->model('history_model');
+            $this->history_model->setHistory(1, 'leaves', $newId, $employeeId);
+        }
+
+        return $newId;
+    }
+
+    public function setSubLeavesFreeDay($employeeId, $idStatus = null, $startDate = null, $endDate = null, $idLeave = null)
+    {
+        $data = array(
+            'startdate' => $startDate,
+            'enddate' => $endDate,
+            'type' => 9,
+            'duration' => 1.000,
+            'free_day' => $this->input->post('dayFree'),
+            'status' => (!empty($idStatus)) ? $idStatus : $this->input->post('status'),
+            'employee' => $employeeId,
+            'parent_leave_id' => $idLeave ? $idLeave : null
+        );
+        $this->db->insert('leaves', $data);
+        $newId = $this->db->insert_id();
+
+        //Trace the modification if the feature is enabled
+        if ($this->config->item('enable_history') === TRUE) {
+            $this->load->model('history_model');
+            $this->history_model->setHistory(1, 'leaves', $newId, $employeeId);
+        }
+
+        return $newId;
+    }
+
 
     /**
      * Create the same leave request for a list of employees
@@ -661,34 +754,85 @@ class Leaves_model extends CI_Model {
         }
     }
 
+    public function closeRequestTreated($id)
+    {
+        $data = array(
+            'sub_leaves_treated' => 1
+        );
+        $this->db->where('id', $id);
+        $this->db->update('leaves', $data);
+
+        //Trace the modification if the feature is enabled
+        if ($this->config->item('enable_history') === TRUE) {
+            $this->load->model('history_model');
+            $this->history_model->setHistory(2, 'leaves', $id, $this->session->userdata('id'));
+        }
+    }
+
+    public function verifySubLeavesExists($id)
+    {
+        $this->db->select('leaves.*');
+        //$this->db->join('types', 'leaves.type = types.id');
+        $this->db->where('leaves.parent_leave_id', $id);
+        $this->db->where('leaves.status', 2);
+        $this->db->order_by('startdate', 'desc');
+        $this->db->limit(1024);  //Security limit
+        $events = $this->db->get('leaves')->result();
+        if (empty($events)) {
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+    public function getOtherSubLeavesExists($id)
+    {
+        $this->db->select('leaves.*');
+        //$this->db->join('types', 'leaves.type = types.id');
+        $this->db->where('leaves.parent_leave_id', $id);
+        $this->db->where('leaves.status', 2);
+        $this->db->order_by('startdate', 'desc');
+        $this->db->limit(1024);  //Security limit
+        $events = $this->db->get('leaves')->result();
+        return $events;
+    }
+
     /**
-     * Switch the status of a leave request and a comment. You may use one of the constants
+     * Switch the status of a leave request and a
+     * comment. You may use one of the constants
      * listed into config/constants.php
      * @param int $id leave request identifier
      * @param int $status Next Status
      * @param int $comment New comment
-     * @author Emilien NICOLAS <milihhard1996@gmail.com>
+     * @author Emilien NICOLAS
+     *     <milihhard1996@gmail.com>
      */
-    public function switchStatusAndComment($id, $status, $comment) {
+    public function switchStatusAndComment($id, $status, $comment)
+    {
         $json_parsed = $this->getCommentsLeave($id);
         $commentObject = new stdClass;
         $commentObject->type = "comment";
         $commentObject->author = $this->session->userdata('id');
         $commentObject->value = $comment;
         $commentObject->date = date("Y-n-j");
-        if (isset($json_parsed)){
-          array_push($json_parsed->comments, $commentObject);
-        }else {
-          $json_parsed->comments = array($commentObject);
+        if (isset($json_parsed)) {
+            array_push($json_parsed->comments, $commentObject);
+        } else {
+            if ($json_parsed == null) {
+                $json_parsed = new stdClass();
+                $json_parsed->comments = array($commentObject);
+            } else {
+                $json_parsed->comments = array($commentObject);
+            }
         }
         $comment_change = new stdClass;
         $comment_change->type = "change";
         $comment_change->status_number = $status;
         $comment_change->date = date("Y-n-j");
-        if (isset($json_parsed)){
-          array_push($json_parsed->comments, $comment_change);
-        }else {
-          $json_parsed->comments = array($comment_change);
+        if (isset($json_parsed)) {
+            array_push($json_parsed->comments, $comment_change);
+        } else {
+            $json_parsed->comments = array($comment_change);
         }
         $json = json_encode($json_parsed);
         $data = array(
@@ -1206,17 +1350,98 @@ class Leaves_model extends CI_Model {
         return $query->result_array();
     }
 
+    public function getSubLeavesRequestedToManager($manager, $all = FALSE, $id)
+    {
+        $this->load->model('delegations_model');
+        $ids = $this->delegations_model->listManagersGivingDelegation($manager);
+        $this->db->select('leaves.id as leave_id, users.*, leaves.*, types.name as type_label');
+        $this->db->select('status.name as status_name, types.name as type_name');
+        $this->db->join('status', 'leaves.status = status.id');
+        $this->db->join('types', 'leaves.type = types.id');
+        $this->db->join('users', 'users.id = leaves.employee');
+
+        if (count($ids) > 0) {
+            array_push($ids, $manager);
+            $this->db->where_in('users.manager', $ids);
+        } else {
+            $this->db->where('users.manager', $manager);
+        }
+        if ($all == FALSE) {
+            $this->db->where('leaves.status', LMS_REQUESTED);
+            $this->db->or_where('leaves.status', LMS_CANCELLATION);
+        }
+        $this->db->where('leaves.parent_leave_id', $id);
+        $this->db->order_by('leaves.startdate', 'desc');
+        $query = $this->db->get('leaves');
+        function array_filt($array, $filterValue)
+        {
+            $thisarray = array();
+            foreach ($array as $value)
+                if (
+                    $value['parent_leave_id'] == $filterValue
+                )
+                    $thisarray[] = $value;
+            return $thisarray;
+        }
+
+        $req = $query->result_array();
+        $tab = array_filt($req, $id);
+        return $tab;
+    }
+
+    public function getSubLeavesDetailsRequestedToManager($manager, $all = FALSE, $id)
+    {
+        $this->load->model('delegations_model');
+        $ids = $this->delegations_model->listManagersGivingDelegation($manager);
+        $this->db->select('leaves.id as leave_id, users.*, leaves.*, types.name as type_label');
+        $this->db->select('status.name as status_name, types.name as type_name');
+        $this->db->join('status', 'leaves.status = status.id');
+        $this->db->join('types', 'leaves.type = types.id');
+        $this->db->join('users', 'users.id = leaves.employee');
+
+        if (count($ids) > 0) {
+            array_push($ids, $manager);
+            $this->db->where_in('users.manager', $ids);
+        } else {
+            $this->db->where('users.manager', $manager);
+        }
+        if ($all == FALSE) {
+            $this->db->where('leaves.status', LMS_REQUESTED);
+            $this->db->or_where('leaves.status', LMS_CANCELLATION);
+        }
+        $this->db->where('leaves.parent_leave_id', $id);
+        $this->db->order_by('leaves.startdate', 'desc');
+        $query = $this->db->get('leaves');
+        function array_filt($array, $filterValue)
+        {
+            $thisarray = array();
+            foreach ($array as $value)
+                if (
+                    $value['parent_leave_id'] == $filterValue
+                )
+                    $thisarray[] = $value;
+            return $thisarray;
+        }
+
+        $req = $query->result_array();
+        $tab = array_filt($req, $id);
+        return $tab;
+    }
+
     /**
      * Get the list of history of an employee
      * @param int $manager Id of the employee
-     * @param bool $all TRUE all requests, FALSE otherwise
+     * @param bool $all TRUE all requests, FALSE
+     *     otherwise
      * @return array list of records
-     * @author Emilien NICOLAS <milihhard1996@gmail.com>
+     * @author Emilien NICOLAS
+     *     <milihhard1996@gmail.com>
      */
-    public function getLeavesRequestedToManagerWithHistory($manager, $all = FALSE){
-      $this->load->model('delegations_model');
-      $manager = intval($manager);
-      $query="SELECT leaves.id as leave_id, users.*, leaves.*, types.name as type_label, status.name as status_name, types.name as type_name, lastchange.date as change_date, requested.date as request_date
+    public function getLeavesRequestedToManagerWithHistory($manager, $all = FALSE)
+    {
+        $this->load->model('delegations_model');
+        $manager = intval($manager);
+        $query = "SELECT leaves.id as leave_id, users.*, leaves.*, types.name as type_label, status.name as status_name, types.name as type_name, lastchange.date as change_date, requested.date as request_date
         FROM `leaves`
         inner join status ON leaves.status = status.id
         inner join types ON leaves.type = types.id
@@ -1232,36 +1457,146 @@ class Leaves_model extends CI_Model {
           WHERE leaves_history.status = 2
           GROUP BY id
         ) requested ON leaves.id = requested.id";
-      //Case of manager having delegations
-      $ids = $this->delegations_model->listManagersGivingDelegation($manager);
-      if (count($ids) > 0) {
-        array_push($ids, $manager);
-        $query .= " WHERE users.manager IN (" . implode(",", $ids) . ")";
-      } else {
-        $query .= " WHERE users.manager = $manager";
-      }
-      if ($all == FALSE) {
-        $query .= " AND (leaves.status = " . LMS_REQUESTED .
+        //Case of manager having delegations
+        $ids = $this->delegations_model->listManagersGivingDelegation($manager);
+        if (count($ids) > 0) {
+            array_push($ids, $manager);
+            $query .= " WHERE users.manager IN (" . implode(",", $ids) . ")";
+        } else {
+            $query .= " WHERE users.manager = $manager";
+        }
+        if ($all == FALSE) {
+            $query .= " AND (leaves.status = " . LMS_REQUESTED .
                 " OR leaves.status = " . LMS_CANCELLATION . ")";
-      }
-      $query=$query . " order by leaves.startdate DESC;";
-      $this->db->query('SET SQL_BIG_SELECTS=1');
-      return $this->db->query($query)->result_array();
+        }
+        $query = $query . " order by leaves.startdate DESC;";
+        $this->db->query('SET SQL_BIG_SELECTS=1');
+        return $this->db->query($query)->result_array();
+    }
+
+    public function getSubLeavesRequestedToManagerWithHistory($manager, $all = FALSE, $id)
+    {
+
+        $this->load->model('delegations_model');
+        $manager = intval($manager);
+        $query = "SELECT leaves.id as leave_id, leaves.parent_leave_id as leave_parent, users.*, leaves.*, types.name as type_label, status.name as status_name, types.name as type_name, lastchange.date as change_date, requested.date as request_date
+          FROM `leaves`
+          inner join status ON leaves.status = status.id
+          inner join types ON leaves.type = types.id
+          inner join users ON users.id = leaves.employee
+          left outer join (
+            SELECT id, MAX(change_date) as date
+            FROM leaves_history
+            GROUP BY id
+          ) lastchange ON leaves.id = lastchange.id
+          left outer join (
+            SELECT id, MIN(change_date) as date
+            FROM leaves_history
+            WHERE leaves_history.status = 2
+            GROUP BY id
+          ) requested ON leaves.id = requested.id";
+        //Case of manager having delegations
+        //$query .= " WHERE leave_parent = $id";
+        $ids = $this->delegations_model->listManagersGivingDelegation($manager);
+        if (count($ids) > 0) {
+            array_push($ids, $manager);
+            $query .= " WHERE users.manager IN (" . implode(",", $ids) . ")";
+        } else {
+            $query .= " WHERE users.manager = $manager";
+        }
+        if ($all == FALSE) {
+            $query .= " AND (leaves.status = " . LMS_REQUESTED .
+                " OR leaves.status = " . LMS_CANCELLATION . ")";
+        }
+        //$query .= " AND WHERE (leaves.parent_leave_id = $id)";
+        $query = $query . " order by leaves.startdate DESC;";
+        $this->db->query('SET SQL_BIG_SELECTS=1');
+        function array_filt($array, $filterValue)
+        {
+            $thisarray = array();
+            foreach ($array as $value)
+                if (
+                    $value['parent_leave_id'] == $filterValue
+                )
+                    $thisarray[] = $value;
+            return $thisarray;
+        }
+
+        $req = $this->db->query($query)->result_array();
+        $tab = array_filt($req, $id);
+        return $tab;
+    }
+
+    public function getSubLeavesDetailsRequestedToManagerWithHistory($manager, $all = FALSE, $id)
+    {
+
+        $this->load->model('delegations_model');
+        $manager = intval($manager);
+        $query = "SELECT leaves.id as leave_id, leaves.parent_leave_id as leave_parent, users.*, leaves.*, types.name as type_label, status.name as status_name, types.name as type_name, lastchange.date as change_date, requested.date as request_date
+          FROM `leaves`
+          inner join status ON leaves.status = status.id
+          inner join types ON leaves.type = types.id
+          inner join users ON users.id = leaves.employee
+          left outer join (
+            SELECT id, MAX(change_date) as date
+            FROM leaves_history
+            GROUP BY id
+          ) lastchange ON leaves.id = lastchange.id
+          left outer join (
+            SELECT id, MIN(change_date) as date
+            FROM leaves_history
+            WHERE leaves_history.status = 2
+            GROUP BY id
+          ) requested ON leaves.id = requested.id";
+        //Case of manager having delegations
+        //$query .= " WHERE leave_parent = $id";
+        $ids = $this->delegations_model->listManagersGivingDelegation($manager);
+        if (count($ids) > 0) {
+            array_push($ids, $manager);
+            $query .= " WHERE users.manager IN (" . implode(",", $ids) . ")";
+        } else {
+            $query .= " WHERE users.manager = $manager";
+        }
+        if ($all == FALSE) {
+            $query .= " AND (leaves.status = " . LMS_ACCEPTED .
+                " OR leaves.status = " . LMS_REJECTED . ")";
+        }
+        //$query .= " AND WHERE (leaves.parent_leave_id = $id)";
+        $query = $query . " order by leaves.startdate DESC;";
+        $this->db->query('SET SQL_BIG_SELECTS=1');
+        function array_filt($array, $filterValue)
+        {
+            $thisarray = array();
+            foreach ($array as $value)
+                if (
+                    $value['parent_leave_id'] == $filterValue
+                )
+                    $thisarray[] = $value;
+            return $thisarray;
+        }
+
+        $req = $this->db->query($query)->result_array();
+        $tab = array_filt($req, $id);
+        return $tab;
     }
 
     /**
-     * Count leave requests submitted to the connected user (or if delegate of a manager)
+     * Count leave requests submitted to the
+     * connected user (or if delegate of a
+     * manager)
      * @param int $manager connected user
      * @return int number of requests
-     * @author Benjamin BALET <benjamin.balet@gmail.com>
+     * @author Benjamin BALET
+     *     <benjamin.balet@gmail.com>
      */
-    public function countLeavesRequestedToManager($manager) {
+    public function countLeavesRequestedToManager($manager)
+    {
         $this->load->model('delegations_model');
         $ids = $this->delegations_model->listManagersGivingDelegation($manager);
         $this->db->select('count(*) as number', FALSE);
         $this->db->join('users', 'users.id = leaves.employee');
         $this->db->where_in('leaves.status', array(LMS_REQUESTED, LMS_CANCELLATION));
-
+        $this->db->where('leaves.parent_leave', 0);
         if (count($ids) > 0) {
             array_push($ids, $manager);
             $this->db->where_in('users.manager', $ids);

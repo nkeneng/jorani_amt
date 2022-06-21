@@ -16,6 +16,11 @@ $lang['global_msg_not_found'] = 'Objet non trouvé. Il est possible que vous ten
 $lang['global_date_format'] = 'd/m/Y';
 $lang['global_date_js_format'] = 'dd/mm/yy';
 $lang['global_date_momentjs_format'] = 'DD/MM/YYYY';
+$lang['monday'] = 'Lundi';
+$lang['tuesday'] = 'Mardi';
+$lang['wednesday'] = 'Mercredi';
+$lang['thursday'] = 'Jeudi';
+$lang['friday'] = 'Vendredi';
 
 $lang['global_msg_new_version_available'] = 'Une nouvelle version est disponible.';
 $lang['global_msg_your_version_is_dev'] = 'Vous utilisez une version de développement.';

@@ -194,6 +194,7 @@ $route['leaves/counters'] = 'leaves/counters';
 $route['leaves/counters/(:num)'] = 'leaves/counters/$1';
 $route['leaves/export'] = 'leaves/export';
 $route['leaves/create'] = 'leaves/create';
+$route['leaves/createfreeleave'] = 'leaves/createfreeleave';
 $route['leaves/edit/(:num)'] = 'leaves/edit/$1';
 $route['leaves/request/(:num)'] = 'leaves/requestLeave/$1';
 $route['leaves/cancel/(:num)'] = 'leaves/cancel/$1';
@@ -212,6 +213,8 @@ $route['leaves'] = 'leaves';
 $route['requests/collaborators'] = 'requests/collaborators';
 $route['requests/balance'] = 'requests/balance';
 $route['requests/balance/(:num)'] = 'requests/balance/$1';
+$route['requests/listAccepted'] = 'requests/listAccepted';
+$route['requests/listRejected'] = 'requests/listRejected';
 $route['requests/createleave/(:num)'] = 'requests/createleave/$1';
 $route['requests/counters/(:num)'] = 'requests/counters/$1';
 $route['requests/counters/(:num)/(:num)'] = 'requests/counters/$1/$2';
@@ -225,6 +228,9 @@ $route['requests/delegations'] = 'requests/delegations';
 $route['requests/ajax/delegations/delete'] = 'requests/deleteDelegations';
 $route['requests/ajax/delegations/add'] = 'requests/addDelegations';
 $route['requests/(:any)'] = 'requests/index/$1';
+$route['requests/details/(:any)'] = 'requests/viewDetails/$1';
+$route['requests/details/filter/(:any)/(:any)'] = 'requests/viewDetailsFilter/$1/$2';
+$route['requests/details/(:any)/(:any)'] = 'requests/viewDetails/$1/$2';
 $route['requests'] = 'requests/index/requested';
 
 //_______________________________________________
