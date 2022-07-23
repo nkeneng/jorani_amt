@@ -1,8 +1,11 @@
 <?php
 /**
- * This view displays the list of leave requests submitted to a manager.
- * @copyright  Copyright (c) 2014-2019 Benjamin BALET
- * @license      http://opensource.org/licenses/AGPL-3.0 AGPL-3.0
+ * This view displays the list of leave requests
+ * submitted to a manager.
+ * @copyright  Copyright (c) 2014-2019 Benjamin
+ *     BALET
+ * @license      http://opensource.org/licenses/AGPL-3.0
+ *     AGPL-3.0
  * @link            https://github.com/bbalet/jorani
  * @since         0.1.0
  */
@@ -388,15 +391,22 @@
                     class="mdi mdi-filter-remove"></i>&nbsp; <?php echo lang('requests_index_button_show_all'); ?>
         </a>
         &nbsp;&nbsp;
-        <a href="<?php echo base_url();?>requests/requested" class="btn btn-primary"><i class="mdi mdi-filter"></i>&nbsp; <?php echo lang('requests_index_button_show_pending');?></a>
+        <a href="<?php echo base_url(); ?>requests/requested"
+           class="btn btn-primary"><i
+                    class="mdi mdi-filter"></i>&nbsp; <?php echo lang('requests_index_button_show_pending'); ?>
+        </a>
         &nbsp;&nbsp;
-        <?php if ($this->config->item('ics_enabled') == TRUE) {?>
-        <a id="lnkICS" href="#"><i class="mdi mdi-earth nolink"></i> ICS</a>
-        <?php }?>
+        <?php if ($this->config->item('ics_enabled') == TRUE) { ?>
+            <a id="lnkICS" href="#"><i
+                        class="mdi mdi-earth nolink"></i>
+                ICS</a>
+        <?php } ?>
     </div>
 </div>
 
-<div class="row-fluid"><div class="span12">&nbsp;</div></div>
+<div class="row-fluid">
+    <div class="span12">&nbsp;</div>
+</div>
 
 <div id="frmShowHistory" class="modal hide fade">
     <div class="modal-body" id="frmShowHistoryBody">
@@ -568,16 +578,16 @@
                             clicked = false;
                         }
                     });
-        }
-      });
-     $('#leaves').on('click', '.lnkCancellationAccept', function (event) {
-        event.preventDefault();
-        if (!clicked) {
-            clicked = true;
-            window.location.href = "<?php echo base_url();?>requests/cancellation/accept/" + $(this).data("id");
-        }
-     });
-     $("#leaves").on('click', '.lnkCancellationReject', function (event) {
+            }
+        });
+        $('#leaves').on('click', '.lnkCancellationAccept', function (event) {
+            event.preventDefault();
+            if (!clicked) {
+                clicked = true;
+                window.location.href = "<?php echo base_url();?>requests/cancellation/accept/" + $(this).data("id");
+            }
+        });
+        $("#leaves").on('click', '.lnkCancellationReject', function (event) {
         event.preventDefault();
         if (!clicked) {
             clicked = true;
@@ -678,16 +688,16 @@
         var id = parseInt(rejected)
         if (id != null && !isNaN(id)) {
             var validateUrl = "<?php echo base_url();?>requests/reject/" + id;
-      bootbox.prompt('<?php echo lang('requests_comment_reject_request_title');?>',
-        '<?php echo lang('requests_comment_reject_request_button_cancel');?>',
-        '<?php echo lang('requests_comment_reject_request_button_reject');?>',
-      function (result) {
-        if (result !== null){
-            <?php if ($this->config->item('mandatory_comment_on_reject') === TRUE) { ?>
-            if (result === "") return false;
-            <?php } ?>
-          $("#sendComment #frmRejectLeaveForm").attr("action", validateUrl);
-          $("#sendComment #frmRejectLeaveForm input#comment").attr("value", result);
+            bootbox.prompt('<?php echo lang('requests_comment_reject_request_title');?>',
+                '<?php echo lang('requests_comment_reject_request_button_cancel');?>',
+                '<?php echo lang('requests_comment_reject_request_button_reject');?>',
+                function (result) {
+                    if (result !== null) {
+                        <?php if ($this->config->item('mandatory_comment_on_reject') === TRUE) { ?>
+                        if (result === "") return false;
+                        <?php } ?>
+                        $("#sendComment #frmRejectLeaveForm").attr("action", validateUrl);
+                        $("#sendComment #frmRejectLeaveForm input#comment").attr("value", result);
           $("#sendComment #frmRejectLeaveForm").submit();
         }
       });

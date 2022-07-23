@@ -46,20 +46,20 @@
 <script src="<?php echo base_url();?>assets/js/bootbox.min.js"></script>
 <script type="text/javascript">
 $(document).ready(function() {
-    
+
     //Global Ajax error handling mainly used for session expiration
     $( document ).ajaxError(function(event, jqXHR, settings, errorThrown) {
         $('#frmModalAjaxWait').modal('hide');
         if (jqXHR.status == 401) {
-            bootbox.alert("<?php echo lang('global_ajax_timeout');?>", function() {
-                //After the login page, we'll be redirected to the current page 
-               location.reload();
+            bootbox.alert("<?php echo lang('global_ajax_timeout');?>", function () {
+                //After the login page, we'll be redirected to the current page
+                location.reload();
             });
         } else { //Oups
             bootbox.alert("<?php echo lang('global_ajax_error');?>");
         }
       });
-    
+
     //Create a calendar and fill it with AJAX events
     $('#calendar').fullCalendar({
         timeFormat: ' ', /*Trick to remove the start time of the event*/
@@ -69,24 +69,24 @@ $(document).ready(function() {
             right: ""
         },
         events: '<?php echo base_url();?>leaves/department',
-        loading: function(isLoading) {
+        loading: function (isLoading) {
             if (isLoading) { //Display/Hide a pop-up showing an animated icon during the Ajax query.
                 $('#frmModalAjaxWait').modal('show');
             } else {
                 $('#frmModalAjaxWait').modal('hide');
-            }    
+            }
         },
-        eventRender: function(event, element, view) {
-            if(event.imageurl){
+        eventRender: function (event, element, view) {
+            if (event.imageurl) {
                 $(element).find('span:first').prepend('<img src="' + event.imageurl + '" />');
             }
         },
-        eventAfterRender: function(event, element, view) {
+        eventAfterRender: function (event, element, view) {
             //Add tooltip to the element
             $(element).attr('title', event.title);
-            
+
             if (event.enddatetype == "Morning" || event.startdatetype == "Afternoon") {
-                var nb_days = event.end.diff(event.start, "days");
+                var nb_days = event.end !== null ? event.end.diff(event.start, "days") : null;
                 var duration = 0.5;
                 var halfday_length = 0;
                 var length = 0;
@@ -110,7 +110,7 @@ $(document).ready(function() {
                 }
             }
             $(element).css('width', length + "px");
-            
+
             //Starting afternoon : shift the position of event to the right
             if (event.startdatetype == "Afternoon") {
                 $(element).css('margin-left', halfday_length + "px");

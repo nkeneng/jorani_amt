@@ -85,44 +85,48 @@ $this->lang->load('menu', $language);?>
               <?php } ?>
 
              <?php if ($is_manager == TRUE) { ?>
-                <li class="dropdown">
-                  <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                      <?php echo lang('menu_validation_title');?>&nbsp;
-                      <?php if ($requests_count > 0) { ?>
-                      <span class="badge badge-warning"><?php echo $requests_count;?></span>
-                      <?php } ?>
-                      &nbsp;<b class="caret"></b>
-                  </a>
-                    <ul class="dropdown-menu">
-                        <li>
-                            <a href="<?php echo base_url(); ?>requests/delegations"><?php echo lang('menu_validation_delegations'); ?></a>
-                        </li>
-                        <li>
-                            <a href="<?php echo base_url(); ?>requests/collaborators"><?php echo lang('menu_validation_collaborators'); ?></a>
-                        </li>
-                        <li>
-                            <a href="<?php echo base_url(); ?>requests/balance"><?php echo lang('menu_hr_report_leave_balance'); ?></a>
-                        </li>
-                        <li class="divider"></li>
-                        <li class="nav-header"><?php echo lang('menu_validation_title'); ?></li>
-                        <li>
-                            <a href="<?php echo base_url(); ?>requests">
-                                <?php if ($requested_leaves_count > 0) { ?>
-                                    <span class="badge badge-info"><?php echo $requested_leaves_count; ?></span>
-                                <?php } ?>
-                                <?php echo lang('menu_validation_leaves'); ?>
-                            </a></li>
-                        <?php if ($this->config->item('disable_overtime') === FALSE) { ?>
-                            <li>
-                                <a href="<?php echo base_url(); ?>overtime">
-                                    <?php if ($requested_extra_count > 0) { ?>
-                                        <span class="badge badge-info"><?php echo $requested_extra_count; ?></span>
-                                    <?php } ?>
-                                    <?php echo lang('menu_validation_overtime'); ?>
-                                </a></li>
-                        <?php } ?>
-                    </ul>
-                </li>
+                 <li class="dropdown">
+                     <a href="#"
+                        class="dropdown-toggle"
+                        data-toggle="dropdown">
+                         <?php echo lang('menu_validation_title'); ?>
+                         &nbsp;
+                         <?php if ($requests_count > 0) { ?>
+                             <span class="badge badge-warning"><?php echo $requests_count; ?></span>
+                         <?php } ?>
+                         &nbsp;<b
+                                 class="caret"></b>
+                     </a>
+                     <ul class="dropdown-menu">
+                         <li>
+                             <a href="<?php echo base_url(); ?>requests/delegations"><?php echo lang('menu_validation_delegations'); ?></a>
+                         </li>
+                         <li>
+                             <a href="<?php echo base_url(); ?>requests/collaborators"><?php echo lang('menu_validation_collaborators'); ?></a>
+                         </li>
+                         <li>
+                             <a href="<?php echo base_url(); ?>requests/balance"><?php echo lang('menu_hr_report_leave_balance'); ?></a>
+                         </li>
+                         <li class="divider"></li>
+                         <li class="nav-header"><?php echo lang('menu_validation_title'); ?></li>
+                         <li>
+                             <a href="<?php echo base_url(); ?>requests">
+                                 <?php if ($requested_leaves_count > 0) { ?>
+                                     <span class="badge badge-info"><?php echo $requested_leaves_count; ?></span>
+                                 <?php } ?>
+                                 <?php echo lang('menu_validation_leaves'); ?>
+                             </a></li>
+                         <?php if ($this->config->item('disable_overtime') === FALSE) { ?>
+                             <li>
+                                 <a href="<?php echo base_url(); ?>overtime">
+                                     <?php if ($requested_extra_count > 0) { ?>
+                                         <span class="badge badge-info"><?php echo $requested_extra_count; ?></span>
+                                     <?php } ?>
+                                     <?php echo lang('menu_validation_overtime'); ?>
+                                 </a></li>
+                         <?php } ?>
+                     </ul>
+                 </li>
              <?php } ?>
 
                     <li class="dropdown">
@@ -190,21 +194,20 @@ $this->lang->load('menu', $language);?>
                                 <li>
                                     <a href="<?php echo base_url(); ?>calendar/organization"><?php echo lang('menu_calendar_organization'); ?></a>
                                 </li>
-                                <li>
-                                    <a href="<?php echo base_url(); ?>calendar/tabular"><?php echo lang('menu_calendar_tabular'); ?></a>
-                                </li>
+                                <!--                      <li><a href="--><?php //echo base_url();?><!--calendar/tabular">--><?php //echo lang('menu_calendar_tabular');?><!--</a></li>-->
                             <?php } ?>
                         </ul>
-                </li>
+                    </li>
 
-                <li>
-                    <form class="navbar-form pull-left">
-                        <a class="btn btn-warning" href="<?php echo base_url();?>leaves/create"><b><?php echo lang('menu_leaves_request_button');?></b></a>
-                    </form>
-                </li>
-              </ul>
+                    <li>
+                        <form class="navbar-form pull-left">
+                            <a class="btn btn-warning"
+                               href="<?php echo base_url(); ?>leaves/create"><b><?php echo lang('menu_leaves_request_button'); ?></b></a>
+                        </form>
+                    </li>
+                </ul>
 
-            <ul class="nav pull-right">
+                <ul class="nav pull-right">
                 <a href="<?php echo base_url();?>users/myprofile" class="brand"><?php echo $fullname;?></a>
                 <li><a href="<?php echo base_url();?>users/myprofile" title="<?php echo lang('menu_banner_tip_myprofile');?>"><i class="mdi mdi-account-box-outline"></i></a></li>
                 <?php if ($this->config->item('ldap_enabled') === FALSE && $this->config->item('saml_enabled') === FALSE) { ?>

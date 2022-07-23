@@ -12,7 +12,7 @@
 ?>
 <h2><?php echo lang('details'); ?><?php echo $help; ?></h2>
 
-<?php echo $flash_partial_view; ?>
+<?php //echo $flash_partial_view;?>
 
 <p><?php echo lang('requests_index_description_details'); ?></p>
 
@@ -67,6 +67,7 @@
                     class="filterStatus" <?php echo $disable; ?>> &nbsp;<?php echo lang('Canceled'); ?></span>
     </div>
 </div>
+
 <div class="">
     <div class=""
          style="float:left; padding-left:5%; padding-top:6px;"
@@ -184,9 +185,23 @@
                 </div>
             </td>
             <td><?php echo $request['firstname'] . ' ' . $request['lastname']; ?></td>
+            <?php if ($request['free_day']) {
+                $dateEndCurrent = new DateTime($request['enddate']);
+                $dateEndCurrent->modify('+1 day');
+                $period = new DatePeriod(
+                    new DateTime($request['startdate']),
+                    new DateInterval('P1D'),
+                    $dateEndCurrent
+                );
+                foreach ($period as $key => $value) {
+                    if (strtolower(date('l', strtotime($value->format('Y-m-d')))) == $request['free_day']) {
+                        $freeday = $value->format('d/m/Y');
+                    }
+                }
+            } ?>
             <td style="<?php echo $request['free_day'] ? 'background:#D9FCD8' : ''; ?>"
-                data-order="<?php echo $tmpStartDate; ?>"><?php echo $request['free_day'] ? $startdate : $startdate . ' (' . lang($request['startdatetype']) . ')'; ?></td>
-            <td data-order="<?php echo $tmpEndDate; ?>"><?php echo $request['free_day'] ? $enddate : $enddate . ' (' . lang($request['enddatetype']) . ')'; ?></td>
+                data-order="<?php echo $tmpStartDate; ?>"><?php echo $freeday; ?></td>
+            <td data-order="<?php echo $tmpEndDate; ?>"><?php echo $freeday; ?></td>
             <td class="text-center"><?php echo $request['free_day'] ? lang($request['free_day']) : 'x'; ?></td>
             <td class="text-center"><?php echo $request['free_day'] ? 'x' : $request['duration']; ?></td>
             <td><?php echo $request['type_name']; ?></td>
@@ -237,19 +252,7 @@
            class="btn btn-secondary"><i
                     class="mdi mdi-chevron-left"></i>&nbsp; <?php echo lang('prev'); ?>
         </a>
-        &nbsp;&nbsp;
-        <!-- <a href="<? //php echo base_url();?>requests/export/<?php //echo $filter; ?>" class="btn btn-primary"><i class="mdi mdi-download"></i>&nbsp; <? php// echo lang('requests_index_button_export');?></a>
-        &nbsp;&nbsp; -->
-        <a href="<?php echo base_url(); ?>requests/details/filter/<?php echo $id_parent_leave; ?>/all"
-           class="btn btn-primary"><i
-                    class="mdi mdi-filter-remove"></i>&nbsp; <?php echo lang('requests_index_button_show_all'); ?>
-        </a>
-        &nbsp;&nbsp;
-        <a href="<?php echo base_url(); ?>requests/details/<?php echo $id_parent_leave; ?>"
-           class="btn btn-primary"><i
-                    class="mdi mdi-filter"></i>&nbsp; <?php echo lang('requests_index_button_show_pending'); ?>
-        </a>
-        &nbsp;&nbsp;
+        &nbsp;&nbsp;&nbsp;&nbsp;
         <?php if ($this->config->item('ics_enabled') == TRUE) { ?>
             <a id="lnkICS" href="#"><i
                         class="mdi mdi-earth nolink"></i>
@@ -257,6 +260,7 @@
         <?php } ?>
     </div>
 </div>
+
 
 <div class="row-fluid">
     <div class="span12">&nbsp;</div>
@@ -273,6 +277,7 @@
            class="btn"><?php echo lang('OK'); ?></a>
     </div>
 </div>
+
 
 <div id="frmLinkICS" class="modal hide fade">
     <div class="modal-header">

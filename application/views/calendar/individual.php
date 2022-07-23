@@ -143,15 +143,15 @@ $(function () {
                 $('#frmModalAjaxWait').modal('hide');
             }
         },
-        eventRender: function(event, element, view) {
-            if(event.imageurl){
+        eventRender: function (event, element, view) {
+            if (event.imageurl) {
                 $(element).find('span:first').prepend('<img src="' + event.imageurl + '" />');
             }
         },
-        eventAfterRender: function(event, element, view) {
+        eventAfterRender: function (event, element, view) {
             //Add tooltip to the element
             $(element).attr('title', event.title);
-
+            //console.log(event);
             if (event.enddatetype == "Morning" || event.startdatetype == "Afternoon") {
                 var nb_days = event.end.diff(event.start, "days");
                 var duration = 0.5;
@@ -164,6 +164,7 @@ $(function () {
                     } else {
                         duration = nb_days;
                     }
+
                     nb_days++;
                     halfday_length = Math.round((width / nb_days) / 2);
                     if (event.startdatetype == "Afternoon" && event.enddatetype == "Morning") {
@@ -176,15 +177,15 @@ $(function () {
                     length = halfday_length;
                 }
             }
-            $(element).css('width', length + "px");
 
+            $(element).css('width', length + "px");
             //Starting afternoon : shift the position of event to the right
             if (event.startdatetype == "Afternoon") {
                 $(element).css('margin-left', halfday_length + "px");
             }
         },
-        windowResize: function(view) {
-            $('#calendar').fullCalendar( 'rerenderEvents' );
+        windowResize: function (view) {
+            $('#calendar').fullCalendar('rerenderEvents');
         }
     });
 

@@ -39,7 +39,8 @@ class History_model extends CI_Model {
      * @return result rows as array of arrays
      * @author Benjamin BALET <benjamin.balet@gmail.com>
      */
-    public function getLeaveRequestsHistory($leaveId) {
+    public function getLeaveRequestsHistory($leaveId)
+    {
         $this->db->select("CONCAT(users.firstname, ' ', users.lastname) as user_name", FALSE);
         $this->db->select('types.name as type_name, status.name as status_name');
         $this->db->select('leaves_history.*');

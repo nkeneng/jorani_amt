@@ -1,8 +1,11 @@
 <?php
 /**
- * This view allows an HR admin to create a new leave type.
- * @copyright  Copyright (c) 2014-2019 Benjamin BALET
- * @license      http://opensource.org/licenses/AGPL-3.0 AGPL-3.0
+ * This view allows an HR admin to create a new
+ * leave type.
+ * @copyright  Copyright (c) 2014-2019 Benjamin
+ *     BALET
+ * @license      http://opensource.org/licenses/AGPL-3.0
+ *     AGPL-3.0
  * @link            https://github.com/bbalet/jorani
  * @since         0.2.0
  */

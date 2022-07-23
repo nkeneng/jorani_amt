@@ -477,7 +477,7 @@ $config['requests_by_manager'] = TRUE;
 //Set this value to true if you want to force the manager to comment rejections
 $config['mandatory_comment_on_reject'] = FALSE;
 
-//Set this value to true if you want to forbid the employee to submit a leave request with a negative amount 
+//Set this value to true if you want to forbid the employee to submit a leave request with a negative amount
 $config['disallow_requests_without_credit'] = TRUE;
 
 //____________________________________________________________________________
@@ -518,7 +518,7 @@ $config['ga_send_userid'] = FALSE;
 
 //____________________________________________________________________________
 //LDAP configuration
-$config['ldap_enabled'] = FALSE;
+$config['ldap_enabled'] = TRUE;
 $config['ldap_host'] = '127.0.0.1';
 $config['ldap_port'] = 389;
 $config['ldap_basedn'] = 'uid=%s,ou=people,dc=company,dc=com';  //Change the pattern, but let %s that symbolizes the user identifier

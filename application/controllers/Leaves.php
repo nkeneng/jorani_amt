@@ -501,24 +501,24 @@ class Leaves extends CI_Controller {
                 if (empty($employee)) {
                     $this->load->model('users_model');
                     $data['name'] = $this->users_model->getName($data['leave']['employee']);
+                } else {
+                    $data['name'] = $employee['firstname'] . ' ' . $employee['lastname'];
+                }
             } else {
-                $data['name'] = $employee['firstname'] . ' ' . $employee['lastname'];
+                $data['name'] = '';
             }
-        } else {
-            $data['name'] = '';
-        }
-        if (isset($data["leave"]["comments"])){
-          $last_comment = new stdClass();;
-          foreach ($data["leave"]["comments"]->comments as $comments_item) {
-              if ($comments_item->type == "comment") {
-                  $comments_item->author = $this->users_model->getName($comments_item->author);
-                  $comments_item->in = "in";
-                  $last_comment->in = "";
-                  $last_comment = $comments_item;
-              } else if ($comments_item->type == "change") {
-                  $comments_item->status = $this->status_model->getName($comments_item->status_number);
-              }
-          }
+            if (isset($data["leave"]["comments"])) {
+                $last_comment = new stdClass();;
+                foreach ($data["leave"]["comments"]->comments as $comments_item) {
+                    if ($comments_item->type == "comment") {
+                        $comments_item->author = $this->users_model->getName($comments_item->author);
+                        $comments_item->in = "in";
+                        $last_comment->in = "";
+                        $last_comment = $comments_item;
+                    } else if ($comments_item->type == "change") {
+                        $comments_item->status = $this->status_model->getName($comments_item->status_number);
+                    }
+                }
         }
             $userEl = $this->users_model->getUsers($this->session->userdata('id'));
             $data['contract'] = $userEl['contract'];
@@ -552,15 +552,15 @@ class Leaves extends CI_Controller {
         if ($oldComment != NULL) {
             array_push($oldComment->comments, $newComment);
         } else {
-        $oldComment = new stdClass;
-        $oldComment->comments = array($newComment);
-      }
-      $json = json_encode($oldComment);
-      $this->leaves_model->addComments($id, $json);
-      if(isset($_GET['source'])){
-        $source = $_GET['source'];
-      }
-      redirect("/$source/$id");
+            $oldComment = new stdClass;
+            $oldComment->comments = array($newComment);
+        }
+        $json = json_encode($oldComment);
+        $this->leaves_model->addComments($id, $json);
+        if (isset($_GET['source'])) {
+            $source = $_GET['source'];
+        }
+        redirect("/$source/$id");
     }
 
     /**

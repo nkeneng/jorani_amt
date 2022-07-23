@@ -144,7 +144,7 @@
         //console.log(selectedEntity);
         $('#calendar').fullCalendar('removeEventSources');
           <?php if ($logged_in == TRUE) {?>
-          if(selectedEntity == true){
+        if (selectedEntity === true) {
             var source = '<?php echo base_url();?>leaves/organization/' + entity;
           } else {
             var source = '<?php echo base_url();?>leaves/list/' + listId;
@@ -221,44 +221,46 @@
         Cookies.set('listId', listId);
       }
 
-      //entity = 0;
-      //entityName = "test";
-      //$('#txtEntity').val(entityName);
-      //refresh_calendar();
-      $("#frmSelectList").modal('hide');
+        //entity = 0;
+        //entityName = "test";
+        //$('#txtEntity').val(entityName);
+        //refresh_calendar();
+        $("#frmSelectList").modal('hide');
 
     }
 
 
-    $(document).ready(function() {
+    $(document).ready(function () {
 
-      <?php if ($this->config->item('csrf_protection') == TRUE) {?>
-          $.ajaxSetup({
-              data: {
-                  <?php echo $this->security->get_csrf_token_name();?>: "<?php echo $this->security->get_csrf_hash();?>",
-              }
-          });
-      <?php }?>
+        <?php if ($this->config->item('csrf_protection') == TRUE) {?>
+        $.ajaxSetup({
+            data: {
+        <?php echo $this->security->get_csrf_token_name();?>:
+        "<?php echo $this->security->get_csrf_hash();?>",
+    }
+    })
+        ;
+        <?php }?>
         //Global Ajax error handling mainly used for session expiration
-        $( document ).ajaxError(function(event, jqXHR, settings, errorThrown) {
-            $('#frmModalAjaxWait').modal('hide');
-            if (jqXHR.status == 401) {
-                bootbox.alert("<?php echo lang('global_ajax_timeout');?>", function() {
-                    //After the login page, we'll be redirected to the current page
-                   location.reload();
-                });
-            } else { //Oups
-                bootbox.alert("<?php echo lang('global_ajax_error');?>");
-            }
-          });
+        //$( document ).ajaxError(function(event, jqXHR, settings, errorThrown) {
+        //    $('#frmModalAjaxWait').modal('hide');
+        //    if (jqXHR.status == 401) {
+        //        bootbox.alert("<?php //echo lang('global_ajax_timeout');?>//", function() {
+        //            //After the login page, we'll be redirected to the current page
+        //           location.reload();
+        //        });
+        //    } else { //Oups
+        //        bootbox.alert("<?php //echo lang('global_ajax_error');?>//");
+        //    }
+        //  });
 
         //Popup select entity
-        $("#cmdSelectEntity").click(function() {
+        $("#cmdSelectEntity").click(function () {
             $("#frmSelectEntity").modal('show');
             $("#frmSelectEntityBody").load('<?php echo base_url(); ?>organization/select');
         });
         //Popup select list
-        $("#cmdSelectList").click(function() {
+        $("#cmdSelectList").click(function () {
             $("#frmSelectList").modal('show');
             $("#frmSelectListBody").load('<?php echo base_url(); ?>organization/lists');
         });
@@ -439,14 +441,16 @@
             if (entity != -1) {
                 urlICS = '<?php echo base_url(); ?>ics/entity/<?php echo $user_id; ?>/' + entity + '/' + $('#chkIncludeChildren').prop('checked');
             }
-            urlICS += '?token=<?php echo $this->session->userdata('random_hash'); ?>'; 
+            urlICS += '?token=<?php echo $this->session->userdata('random_hash'); ?>';
             $("#frmLinkICS").modal('show');
             $('#txtIcsUrl').val(urlICS);
         });
         var client = new ClipboardJS("#cmdCopy");
-        client.on( "success", function() {
+        client.on("success", function () {
             $('#tipCopied').tooltip('show');
-            setTimeout(function() {$('#tipCopied').tooltip('hide')}, 1000);
+            setTimeout(function () {
+                $('#tipCopied').tooltip('hide')
+            }, 1000);
         });
         <?php } ?>;
     });

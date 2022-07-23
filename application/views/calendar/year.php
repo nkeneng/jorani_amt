@@ -55,6 +55,7 @@ $currentDay = (int)date('d');
 
   $monthNumber = 0;
   foreach ($months as $month_name => $month) {
+    //echo "<script>console.log('Debug Objects: " . json_encode($month) . "' );</script>";
     $monthNumber++;
     $isCurrentMonth = $currentMonth === $monthNumber;
 

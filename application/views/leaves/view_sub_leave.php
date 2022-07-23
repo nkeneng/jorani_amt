@@ -202,9 +202,23 @@
                     <?php } ?>
                 </div>
             </td>
+            <?php if ($leave['free_day']) {
+                $dateEndCurrent = new DateTime($leave['enddate']);
+                $dateEndCurrent->modify('+1 day');
+                $period = new DatePeriod(
+                    new DateTime($leave['startdate']),
+                    new DateInterval('P1D'),
+                    $dateEndCurrent
+                );
+                foreach ($period as $key => $value) {
+                    if (strtolower(date('l', strtotime($value->format('Y-m-d')))) == $leave['free_day']) {
+                        $freeday = $value->format('d/m/Y');
+                    }
+                }
+            } ?>
             <td style="<?php echo $leave['free_day'] ? 'background:#D9FCD8' : ''; ?>"
-                data-order="<?php echo $tmpStartDate; ?>"><?php echo $leave['free_day'] ? $startdate : $startdate . ' (' . lang($leave['startdatetype']) . ')'; ?></td>
-            <td data-order="<?php echo $tmpEndDate; ?>"><?php echo $leave['free_day'] ? $enddate : $enddate . ' (' . lang($leave['enddatetype']) . ')'; ?></td>
+                data-order="<?php echo $tmpStartDate; ?>"><?php echo $freeday; ?></td>
+            <td data-order="<?php echo $tmpEndDate; ?>"><?php echo $freeday; ?></td>
             <td class="text-center"><?php echo $leave['free_day'] ? lang($leave['free_day']) : 'x'; ?></td>
             <td><?php echo $leave['cause']; ?></td>
             <td><?php echo $leave['duration']; ?></td>

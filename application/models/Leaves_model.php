@@ -883,7 +883,7 @@ class Leaves_model extends CI_Model {
         $this->db->order_by('startdate', 'desc');
         $this->db->limit(1024);  //Security limit
         $events = $this->db->get('leaves')->result();
-
+        //"<script>console.log('Debug: " . json_encode($events) . "' );</script>";
         $jsonevents = array();
         foreach ($events as $entry) {
 
@@ -913,25 +913,60 @@ class Leaves_model extends CI_Model {
             }
 
             $color = '#ff0000';
-            switch ($entry->status)
-            {
-                case 1: $color = '#999'; break;     // Planned
-                case 2: $color = '#f89406'; break;  // Requested
-                case 3: $color = '#468847'; break;  // Accepted
-                case 4: $color = '#ff0000'; break;  // Rejected
+            switch ($entry->status) {
+                case 1:
+                    $color = '#999';
+                    break;     // Planned
+                case 2:
+                    $color = '#f89406';
+                    break;  // Requested
+                case 3:
+                    $color = '#468847';
+                    break;  // Accepted
+                case 4:
+                    $color = '#ff0000';
+                    break;  // Rejected
             }
-
-            $jsonevents[] = array(
-                'id' => $entry->id,
-                'title' => $entry->type,
-                'imageurl' => $imageUrl,
-                'start' => $startdate,
-                'color' => $color,
-                'allDay' => $allDay,
-                'end' => $enddate,
-                'startdatetype' => $startdatetype,
-                'enddatetype' => $enddatetype
-            );
+            if ($entry->free_day) {
+                $dateEndCurrent = new DateTime($enddate);
+                $dateEndCurrent->modify('+1 day');
+                $period = new DatePeriod(
+                    new DateTime($startdate),
+                    new DateInterval('P1D'),
+                    $dateEndCurrent
+                );
+                //echo "<script>console.log('Debug Objects: " . $period . "' );</script>";
+                foreach ($period as $key => $value) {
+                    if (strtolower(date('l', strtotime($value->format('Y-m-d')))) === $entry->free_day && $entry->parent_leave_id) {
+                        $jsonevents[] = array(
+                            'id' => $entry->id,
+                            'title' => $entry->type,
+                            'imageurl' => $imageUrl,
+                            'start' => $value->format('Y-m-d'),
+                            'color' => $color,
+                            'allDay' => $allDay,
+                            'end' => $value->format('Y-m-d'),
+                            'freeDay' => $entry->free_day,
+                            'startdatetype' => $startdatetype,
+                            'enddatetype' => $enddatetype
+                        );
+                        break;
+                    }
+                }
+            } else {
+                $jsonevents[] = array(
+                    'id' => $entry->id,
+                    'title' => $entry->type,
+                    'imageurl' => $imageUrl,
+                    'start' => $startdate,
+                    'color' => $color,
+                    'allDay' => $allDay,
+                    'end' => $enddate,
+                    'freeDay' => $entry->free_day,
+                    'startdatetype' => $startdatetype,
+                    'enddatetype' => $enddatetype
+                );
+            }
         }
         return json_encode($jsonevents);
     }
@@ -981,25 +1016,58 @@ class Leaves_model extends CI_Model {
             }
 
             $color = '#ff0000';
-            switch ($entry->status)
-            {
-                case 1: $color = '#999'; break;     // Planned
-                case 2: $color = '#f89406'; break;  // Requested
-                case 3: $color = '#468847'; break;  // Accepted
-                case 4: $color = '#ff0000'; break;  // Rejected
+            switch ($entry->status) {
+                case 1:
+                    $color = '#999';
+                    break;     // Planned
+                case 2:
+                    $color = '#f89406';
+                    break;  // Requested
+                case 3:
+                    $color = '#468847';
+                    break;  // Accepted
+                case 4:
+                    $color = '#ff0000';
+                    break;  // Rejected
             }
-
-            $jsonevents[] = array(
-                'id' => $entry->id,
-                'title' => $entry->firstname .' ' . $entry->lastname,
-                'imageurl' => $imageUrl,
-                'start' => $startdate,
-                'color' => $color,
-                'allDay' => $allDay,
-                'end' => $enddate,
-                'startdatetype' => $startdatetype,
-                'enddatetype' => $enddatetype
-            );
+            if ($entry->free_day) {
+                $dateEndCurrent = new DateTime($enddate);
+                $dateEndCurrent->modify('+1 day');
+                $period = new DatePeriod(
+                    new DateTime($startdate),
+                    new DateInterval('P1D'),
+                    $dateEndCurrent
+                );
+                foreach ($period as $key => $value) {
+                    if (strtolower(date('l', strtotime($value->format('Y-m-d')))) == $entry->free_day && $entry->parent_leave_id) {
+                        $jsonevents[] = array(
+                            'id' => $entry->id,
+                            'title' => $entry->firstname . ' ' . $entry->lastname,
+                            'imageurl' => $imageUrl,
+                            'start' => $value->format('Y-m-d'),
+                            'color' => $color,
+                            'allDay' => $allDay,
+                            'end' => $value->format('Y-m-d'),
+                            'freeDay' => $entry->free_day,
+                            'startdatetype' => $startdatetype,
+                            'enddatetype' => $enddatetype
+                        );
+                    }
+                }
+            } else {
+                $jsonevents[] = array(
+                    'id' => $entry->id,
+                    'title' => $entry->firstname . ' ' . $entry->lastname,
+                    'imageurl' => $imageUrl,
+                    'start' => $startdate,
+                    'color' => $color,
+                    'allDay' => $allDay,
+                    'end' => $enddate,
+                    'freeDay' => $entry->free_day,
+                    'startdatetype' => $startdatetype,
+                    'enddatetype' => $enddatetype
+                );
+            }
         }
         return json_encode($jsonevents);
     }
@@ -1048,25 +1116,57 @@ class Leaves_model extends CI_Model {
             }
 
             $color = '#ff0000';
-            switch ($entry->status)
-            {
-                case 1: $color = '#999'; break;     // Planned
-                case 2: $color = '#f89406'; break;  // Requested
-                case 3: $color = '#468847'; break;  // Accepted
-                case 4: $color = '#ff0000'; break;  // Rejected
+            switch ($entry->status) {
+                case 1:
+                    $color = '#999';
+                    break;     // Planned
+                case 2:
+                    $color = '#f89406';
+                    break;  // Requested
+                case 3:
+                    $color = '#468847';
+                    break;  // Accepted
+                case 4:
+                    $color = '#ff0000';
+                    break;  // Rejected
+            }
+            if ($entry->free_day) {
+                $dateEndCurrent = new DateTime($enddate);
+                $dateEndCurrent->modify('+1 day');
+                $period = new DatePeriod(
+                    new DateTime($startdate),
+                    new DateInterval('P1D'),
+                    $dateEndCurrent
+                );
+                foreach ($period as $key => $value) {
+                    if (strtolower(date('l', strtotime($value->format('Y-m-d')))) == $entry->free_day && $entry->parent_leave_id) {
+                        $jsonevents[] = array(
+                            'id' => $entry->id,
+                            'title' => $entry->firstname . ' ' . $entry->lastname,
+                            'imageurl' => $imageUrl,
+                            'start' => $value->format('Y-m-d'),
+                            'color' => $color,
+                            'allDay' => $allDay,
+                            'end' => $value->format('Y-m-d'),
+                            'startdatetype' => $startdatetype,
+                            'enddatetype' => $enddatetype
+                        );
+                    }
+                }
+            } else {
+                $jsonevents[] = array(
+                    'id' => $entry->id,
+                    'title' => $entry->firstname . ' ' . $entry->lastname,
+                    'imageurl' => $imageUrl,
+                    'start' => $startdate,
+                    'color' => $color,
+                    'allDay' => $allDay,
+                    'end' => $enddate,
+                    'startdatetype' => $startdatetype,
+                    'enddatetype' => $enddatetype
+                );
             }
 
-            $jsonevents[] = array(
-                'id' => $entry->id,
-                'title' => $entry->firstname .' ' . $entry->lastname,
-                'imageurl' => $imageUrl,
-                'start' => $startdate,
-                'color' => $color,
-                'allDay' => $allDay,
-                'end' => $enddate,
-                'startdatetype' => $startdatetype,
-                'enddatetype' => $enddatetype
-            );
         }
         return json_encode($jsonevents);
     }
@@ -1167,18 +1267,42 @@ class Leaves_model extends CI_Model {
             }
 
             //Create the JSON representation of the event
-            $jsonevents[] = array(
-                'id' => $entry->id,
-                'title' => $title,
-                'imageurl' => $imageUrl,
-                'start' => $startdate,
-                'color' => $color,
-                'allDay' => $allDay,
-                'end' => $enddate,
-                'startdatetype' => $startdatetype,
-                'enddatetype' => $enddatetype,
-                'url' => $url
-            );
+            if ($entry->free_day) {
+                $dateEndCurrent = new DateTime($enddate);
+                $dateEndCurrent->modify('+1 day');
+                $period = new DatePeriod(
+                    new DateTime($startdate),
+                    new DateInterval('P1D'),
+                    $dateEndCurrent
+                );
+                foreach ($period as $key => $value) {
+                    if (strtolower(date('l', strtotime($value->format('Y-m-d')))) == $entry->free_day && $entry->parent_leave_id) {
+                        $jsonevents[] = array(
+                            'id' => $entry->id,
+                            'title' => $title,
+                            'imageurl' => $imageUrl,
+                            'start' => $value->format('Y-m-d'),
+                            'color' => $color,
+                            'allDay' => $allDay,
+                            'end' => $value->format('Y-m-d'),
+                            'startdatetype' => $startdatetype,
+                            'enddatetype' => $enddatetype
+                        );
+                    }
+                }
+            } else {
+                $jsonevents[] = array(
+                    'id' => $entry->id,
+                    'title' => $title,
+                    'imageurl' => $imageUrl,
+                    'start' => $startdate,
+                    'color' => $color,
+                    'allDay' => $allDay,
+                    'end' => $enddate,
+                    'startdatetype' => $startdatetype,
+                    'enddatetype' => $enddatetype
+                );
+            }
         }
         return json_encode($jsonevents);
     }
@@ -1862,13 +1986,17 @@ class Leaves_model extends CI_Model {
         $floorDate = DateTime::createFromFormat('Y-m-d H:i:s', $start . ' 00:00:00');
 
         $this->load->model('dayoffs_model');
+
         foreach ($events as $entry) {
+            //$entry->startdate = null;
+            //$entry->enddate = null;
             //Hide forbidden entries in calendars
+            //echo "<script>console.log('Debug Objects: " . json_encode($entry) . "' );</script>";
             if ($calendar) {
                 //Don't display rejected and cancel* leave requests for other employees
                 if (($entry->employee != $this->session->userdata('id')) &&
                     ($entry->manager != $this->session->userdata('id')) &&
-                        ($this->session->userdata('is_hr') === FALSE)) {
+                    ($this->session->userdata('is_hr') === FALSE)) {
                     if ($entry->status > LMS_ACCEPTED) {
                         continue;
                     }
@@ -1877,17 +2005,32 @@ class Leaves_model extends CI_Model {
 
             //Note that $eventStartDate and $eventEndDate are related to the leave request event
             //But $startDate and $endDate are the first and last days being displayed on the calendar
-            $eventStartDate = DateTime::createFromFormat('Y-m-d H:i:s', $entry->startdate . ' 00:00:00');
+            if ($entry->free_day) {
+                $dateEndCurrent = new DateTime($entry->enddate);
+                $dateEndCurrent->modify('+1 day');
+                $period = new DatePeriod(
+                    new DateTime($entry->startdate),
+                    new DateInterval('P1D'),
+                    $dateEndCurrent
+                );
+                foreach ($period as $key => $value) {
+                    if (strtolower(date('l', strtotime($value->format('Y-m-d')))) == $entry->free_day) {
+                        $eventStartDate = DateTime::createFromFormat('Y-m-d H:i:s', $value->format('Y-m-d') . ' 00:00:00');
+                        $eventEndDate = DateTime::createFromFormat('Y-m-d H:i:s', $value->format('Y-m-d') . ' 00:00:00');
+                    }
+                }
+            } else {
+                $eventStartDate = DateTime::createFromFormat('Y-m-d H:i:s', $entry->startdate . ' 00:00:00');
+                $eventEndDate = DateTime::createFromFormat('Y-m-d H:i:s', $entry->enddate . ' 00:00:00');
+            }
+
             $startDate = clone $eventStartDate;
             if ($startDate < $floorDate) $startDate = $floorDate;
             $iDate = clone $startDate;
-            $eventEndDate = DateTime::createFromFormat('Y-m-d H:i:s', $entry->enddate . ' 00:00:00');
             $endDate = clone $eventEndDate;
             if ($endDate > $limitDate) $endDate = $limitDate;
-
             //Iteration between 2 dates
-            while ($iDate <= $endDate)
-            {
+            while ($iDate <= $endDate) {
                 if ($iDate > $limitDate) break;     //The calendar displays the leaves on one month
                 if ($iDate < $startDate) continue;  //The leave starts before the first day of the calendar
                 $dayNum = intval($iDate->format('d'));
@@ -1913,6 +2056,7 @@ class Leaves_model extends CI_Model {
 
                 //Length of leave request is one day long
                 if ($oneDay && $start_morning && $end_afternoon) $display = '1';
+                if ($oneDay && !$start_morning && !$end_afternoon) $display = '1';
                 if ($oneDay && $start_morning && $end_morning) $display = '2';
                 if ($oneDay && $start_afternoon && $end_afternoon) $display = '3';
                 if ($oneDay && $start_afternoon && $end_morning) $display = '9';
@@ -1946,17 +2090,19 @@ class Leaves_model extends CI_Model {
                     } else  {   //All day entry
                         $user->days[$dayNum]->id = $entry->id;
                         $user->days[$dayNum]->type = $entry->type;
-                        $user->days[$dayNum]->display = $display;
+                        $user->days[$dayNum]->display = isset($display) ? $display : null;
                         $user->days[$dayNum]->status = $entry->status;
                         $user->days[$dayNum]->acronym = $entry->acronym;
                     }
+
                 }
+
                 $iDate->modify('+1 day');   //Next day
             }
         }
+        //echo "<script>console.log('Debug Objects: " . json_encode($user) . "' );</script>";
         return $user;
     }
-
     /**
      * List all duplicated leave requests (exact same dates, status, etc.)
      * Note: this doesn't detect overlapping requests.

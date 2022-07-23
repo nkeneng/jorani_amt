@@ -1,8 +1,11 @@
 <?php
 /**
- * This view allows an HR admin to edit a leave type.
- * @copyright  Copyright (c) 2014-2019 Benjamin BALET
- * @license      http://opensource.org/licenses/AGPL-3.0 AGPL-3.0
+ * This view allows an HR admin to edit a leave
+ * type.
+ * @copyright  Copyright (c) 2014-2019 Benjamin
+ *     BALET
+ * @license      http://opensource.org/licenses/AGPL-3.0
+ *     AGPL-3.0
  * @link            https://github.com/bbalet/jorani
  * @since         0.2.0
  */
@@ -70,11 +73,11 @@ echo form_open('leavetypes/edit/' . $id, $attributes); ?>
         });
 
         //Suggest an acronym by using the first letters of the leave type name
-        $('#cmdSuggestAcronym').click(function() {
+        $('#cmdSuggestAcronym').click(function () {
             var toMatch = $('#name').val();
             var result = toMatch.replace(/(\w)\w*\W*/g, function (_, i) {
                 return i.toUpperCase();
-              });
+            });
             $('#acronym').val(result);
         });
     });

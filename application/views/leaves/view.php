@@ -120,14 +120,14 @@
                             class="mdi mdi-arrow-left-bold"></i>&nbsp;<?php echo lang('leaves_view_button_back_list'); ?>
                 </a>
 
+            </div>
+        </div>
     </div>
-</div>
-</div>
-<div class="span6">
+    <div class="span6">
 
-  <h4><?php echo lang('leaves_comment_title');?></h4>
-  <?php
-  if(isset($leave["comments"])){
+        <h4><?php echo lang('leaves_comment_title'); ?></h4>
+        <?php
+        if (isset($leave["comments"])) {
 
     echo "<div class='accordion' id='accordion'>";
     $i=1;

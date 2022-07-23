@@ -60,36 +60,36 @@ if ($this->config->item("enable_apm_rum")) {
 }
 ?>
 <?php if ($this->config->item("enable_apm_display")) { ?>
-<script type="text/javascript">
-    // Add a load event listener that display web timing
-    window.addEventListener("load", displayRUMInfo, false);
+    <script type="text/javascript">
+        // Add a load event listener that display web timing
+        window.addEventListener("load", displayRUMInfo, false);
 
-    function displayRUMInfo() {
-        var perfData = window.performance.timing;
-        var pageLoadTime = parseInt(perfData.domComplete - perfData.domLoading);
-        var networkLatency = parseInt(perfData.responseEnd - perfData.requestStart);
-        var ciElapsedTime = parseInt($("#ci_elapsed_time").val());
-        var ciDatabaseTime = parseInt($("#ci_database_time").val());
-        var total = ciDatabaseTime + ciElapsedTime + networkLatency + pageLoadTime;
-        var content = '<i class="mdi mdi-memory" aria-hidden="true" title="Memory"></i>&nbsp;';
-        content += $("#ci_memory_usage").val() + ' bytes ';
-        content += '<i class="mdi mdi-clock" aria-hidden="true" title="Total time for user"></i>&nbsp;';
-        content += total + ' ms ';
-        content += '&nbsp;&nbsp;&mdash;&nbsp;&nbsp;';
-        content += '<i class="mdi mdi-database" aria-hidden="true" title="SQL execution time (number of queries)"></i>&nbsp;';
-        content += ciDatabaseTime + ' ms (' + $("#ci_database_count").val() + ') ';
-        content += '&nbsp;';
-        content += '<i class="mdi mdi-code-string" aria-hidden="true" title="PHP Execution time"></i>&nbsp;';
-        content += ciElapsedTime + ' ms ';
-        content += '&nbsp;';
-        content += '<i class="mdi mdi-download" aria-hidden="true" title="Download time"></i>&nbsp;';
-        content += networkLatency + ' ms ';
-        content += '&nbsp;';
-        content += '<i class="mdi mdi-internet-explorer" aria-hidden="true" title="Client processing time"></i>&nbsp;';
-        content += pageLoadTime + ' ms ';
-        $("#rum_info").html(content);
-    }
-</script>
+        function displayRUMInfo() {
+            var perfData = window.performance.timing;
+            var pageLoadTime = parseInt(perfData.domComplete - perfData.domLoading);
+            var networkLatency = parseInt(perfData.responseEnd - perfData.requestStart);
+            var ciElapsedTime = parseInt($("#ci_elapsed_time").val());
+            var ciDatabaseTime = parseInt($("#ci_database_time").val());
+            var total = ciDatabaseTime + ciElapsedTime + networkLatency + pageLoadTime;
+            var content = '<i class="mdi mdi-memory" aria-hidden="true" title="Memory"></i>&nbsp;';
+            content += $("#ci_memory_usage").val() + ' bytes ';
+            content += '<i class="mdi mdi-clock" aria-hidden="true" title="Total time for user"></i>&nbsp;';
+            content += total + ' ms ';
+            content += '&nbsp;&nbsp;&mdash;&nbsp;&nbsp;';
+            content += '<i class="mdi mdi-database" aria-hidden="true" title="SQL execution time (number of queries)"></i>&nbsp;';
+            content += ciDatabaseTime + ' ms (' + $("#ci_database_count").val() + ') ';
+            content += '&nbsp;';
+            content += '<i class="mdi mdi-code-string" aria-hidden="true" title="PHP Execution time"></i>&nbsp;';
+            content += ciElapsedTime + ' ms ';
+            content += '&nbsp;';
+            content += '<i class="mdi mdi-download" aria-hidden="true" title="Download time"></i>&nbsp;';
+            content += networkLatency + ' ms ';
+            content += '&nbsp;';
+            content += '<i class="mdi mdi-internet-explorer" aria-hidden="true" title="Client processing time"></i>&nbsp;';
+            content += pageLoadTime + ' ms ';
+            $("#rum_info").html(content);
+        }
+    </script>
 <?php } ?>
 <script src="<?php echo base_url(); ?>assets/js/Toast.min.js"></script>
 </body>

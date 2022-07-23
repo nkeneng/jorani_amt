@@ -82,6 +82,7 @@ class Calendar extends CI_Controller {
         $data['help'] = $this->help->create_help_link('global_link_doc_page_calendar_yearly');
         $userEl = $this->users_model->getUsers($this->session->userdata('id'));
         $data['contract'] = $userEl['contract'];
+        //echo "<script>console.log('Debug Objects: " . json_encode($this->leaves_model->linear($employee, 6, $year, TRUE, TRUE, TRUE, TRUE)) . "' );</script>";
         $this->load->view('templates/header', $data);
         $this->load->view('menu/index', $data);
         $this->load->view('calendar/year', $data);

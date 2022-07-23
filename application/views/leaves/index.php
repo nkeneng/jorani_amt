@@ -1,8 +1,11 @@
 <?php
 /**
- * This view displays the list of leave requests created by an employee.
- * @copyright  Copyright (c) 2014-2019 Benjamin BALET
- * @license      http://opensource.org/licenses/AGPL-3.0 AGPL-3.0
+ * This view displays the list of leave requests
+ * created by an employee.
+ * @copyright  Copyright (c) 2014-2019 Benjamin
+ *     BALET
+ * @license      http://opensource.org/licenses/AGPL-3.0
+ *     AGPL-3.0
  * @link            https://github.com/bbalet/jorani
  * @since         0.1.0
  */
@@ -143,28 +146,30 @@
                     if ($leave['status'] == LMS_ACCEPTED) {
                         $showCancel = TRUE;
                     }
-                //Delete rules
-                if ($leave['status'] == LMS_PLANNED) {
-                    $showDelete = TRUE;
-                }
-                if (($leave['status'] == LMS_REJECTED) &&
+                    //Delete rules
+                    if ($leave['status'] == LMS_PLANNED) {
+                        $showDelete = TRUE;
+                    }
+                    if (($leave['status'] == LMS_REJECTED) &&
                         ($this->config->item('delete_rejected_requests') === TRUE)) {
-                    $showDelete = TRUE;
-                }
-                //Reminder rules
-                if (($leave['status'] == LMS_REQUESTED) ||
+                        $showDelete = TRUE;
+                    }
+                    //Reminder rules
+                    if (($leave['status'] == LMS_REQUESTED) ||
                         ($leave['status'] == LMS_CANCELLATION)) {
                     $showReminder = TRUE;
-                }
-                //Direct cancelation by the employee
-                if (($leave['status'] == LMS_REQUESTED)) {
-                    $showCancelByUser = TRUE;
-                }
-                ?>
-                <?php if ($showEdit == TRUE) { ?>
-                <a href="<?php echo base_url();?>leaves/edit/<?php echo $leave['id']; ?>" title="<?php echo lang('leaves_index_thead_tip_edit');?>"><i class="mdi mdi-pencil nolink"></i></a>
-                    &nbsp;
-                <?php } ?>
+                    }
+                    //Direct cancelation by the employee
+                    if (($leave['status'] == LMS_REQUESTED)) {
+                        $showCancelByUser = TRUE;
+                    }
+                    ?>
+                    <?php if ($showEdit == TRUE) { ?>
+                        <a href="<?php echo base_url(); ?>leaves/edit/<?php echo $leave['id']; ?>"
+                           title="<?php echo lang('leaves_index_thead_tip_edit'); ?>"><i
+                                    class="mdi mdi-pencil nolink"></i></a>
+                        &nbsp;
+                    <?php } ?>
                     <?php if ($showDelete == TRUE) { ?>
                         <a href="#"
                            class="confirm-delete"
@@ -316,11 +321,14 @@
 </div>
 
 <div id="frmShowHistory" class="modal hide fade">
-    <div class="modal-body" id="frmShowHistoryBody">
-        <img src="<?php echo base_url();?>assets/images/loading.gif">
+    <div class="modal-body"
+         id="frmShowHistoryBody">
+        <img src="<?php echo base_url(); ?>assets/images/loading.gif">
     </div>
     <div class="modal-footer">
-        <a href="#" onclick="$('#frmShowHistory').modal('hide');" class="btn"><?php echo lang('OK');?></a>
+        <a href="#"
+           onclick="$('#frmShowHistory').modal('hide');"
+           class="btn"><?php echo lang('OK'); ?></a>
     </div>
 </div>
 
@@ -336,16 +344,24 @@
                 <button id="cmdCopy" class="btn" data-clipboard-text="<?php echo $icsUrl;?>">
                     <i class="mdi mdi-content-copy"></i>
                 </button>
-            <a href="#" id="tipCopied" data-toggle="tooltip" title="<?php echo lang('copied');?>" data-placement="right" data-container="#cmdCopy"></a>
+            <a href="#" id="tipCopied"
+               data-toggle="tooltip"
+               title="<?php echo lang('copied'); ?>"
+               data-placement="right"
+               data-container="#cmdCopy"></a>
         </div>
     </div>
     <div class="modal-footer">
-        <a href="#" onclick="$('#frmLinkICS').modal('hide');" class="btn btn-primary"><?php echo lang('OK');?></a>
+        <a href="#"
+           onclick="$('#frmLinkICS').modal('hide');"
+           class="btn btn-primary"><?php echo lang('OK'); ?></a>
     </div>
 </div>
 
-<link href="<?php echo base_url();?>assets/datatable/DataTables-1.10.11/css/jquery.dataTables.min.css" rel="stylesheet">
-<script type="text/javascript" src="<?php echo base_url();?>assets/datatable/DataTables-1.10.11/js/jquery.dataTables.min.js"></script>
+<link href="<?php echo base_url(); ?>assets/datatable/DataTables-1.10.11/css/jquery.dataTables.min.css"
+      rel="stylesheet">
+<script type="text/javascript"
+        src="<?php echo base_url(); ?>assets/datatable/DataTables-1.10.11/js/jquery.dataTables.min.js"></script>
 <script type="text/javascript"
         src="<?php echo base_url(); ?>assets/js/bootbox.min.js"></script>
 
@@ -400,16 +416,16 @@
                     sortAscending: "<?php echo lang('datatable_sSortAscending');?>",
                     sortDescending: "<?php echo lang('datatable_sSortDescending');?>"
                 }
-        }
-    });
+            }
+        });
 
-    //On showing the confirmation pop-up, add the user id at the end of the delete url action
-    $('#frmDeleteLeaveRequest').on('show', function() {
-        var link = "<?php echo base_url();?>leaves/delete/" + $(this).data('id');
-        $("#lnkDeleteUser").attr('href', link);
-    })
+        //On showing the confirmation pop-up, add the user id at the end of the delete url action
+        $('#frmDeleteLeaveRequest').on('show', function () {
+            var link = "<?php echo base_url();?>leaves/delete/" + $(this).data('id');
+            $("#lnkDeleteUser").attr('href', link);
+        })
 
-    //Display a modal pop-up so as to confirm if a leave request has to be deleted or not
+        //Display a modal pop-up so as to confirm if a leave request has to be deleted or not
     //We build a complex selector because datatable does horrible things on DOM...
     //a simplier selector doesn't work when the delete is on page >1
     $("#leaves tbody").on('click', '.confirm-delete',  function(){

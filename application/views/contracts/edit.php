@@ -15,7 +15,6 @@
 <?php
 $attributes = array('id' => 'target');
 echo form_open('contracts/edit/' . $contract['id'], $attributes); ?>
-
     <input type="hidden" name="id" value="<?php echo $contract['id']; ?>" required />
 
     <label for="name"><?php echo lang('contract_edit_field_name');?></label>
