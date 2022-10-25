@@ -254,24 +254,27 @@
 
     </div>
     <div class="modal-footer">
-        <a href="#" onclick="createLeaveRequest();" class="btn"><?php echo lang('OK');?></a>
-        <a href="#" onclick="$('#frmCreateLeaveRequest').modal('hide');" class="btn"><?php echo lang('Cancel');?></a>
+        <a href="#" onclick="createLeaveRequest();" class="btn"><?php echo lang('OK'); ?></a>
+        <a href="#" onclick="$('#frmCreateLeaveRequest').modal('hide');" class="btn"><?php echo lang('Cancel'); ?></a>
     </div>
 </div>
 
 <div class="modal hide fade" id="frmContextMenu">
     <div class="modal-body">
-        <a class="context" href="<?php echo base_url();?>hr/leaves/create/{id}"><i class="mdi mdi-file-plus nolink"></i>&nbsp;<?php echo lang('hr_employees_thead_link_create_leave');?></a><br />
-        <a class="context" href="<?php echo base_url();?>users/edit/{id}?source=hr%2Femployees"><i class="mdi mdi-account-edit nolink"></i>&nbsp;<?php echo lang('hr_employees_thead_tip_edit');?></a><br />
-        <a class="context" href="<?php echo base_url();?>entitleddays/user/{id}"><i class="mdi mdi-pencil-box-outline nolink"></i>&nbsp;<?php echo lang('hr_employees_thead_tip_entitlment');?></a><br />
-        <a class="context" href="<?php echo base_url();?>hr/leaves/{id}"><i class="mdi mdi-format-list-bulleted nolink"></i>&nbsp;<?php echo lang('hr_employees_thead_link_leaves');?></a><br />
+        <a class="context" href="<?php echo base_url(); ?>hr/leaves/create/{id}"><i class="mdi mdi-file-plus nolink"></i>&nbsp;<?php echo lang('hr_employees_thead_link_create_leave'); ?></a><br/>
+        <a class="context" href="<?php echo base_url(); ?>hr/leaves/createfreeleave/{id}"><i class="mdi mdi-file-plus nolink"></i>&nbsp;<?php echo lang('hr_employees_thead_link_create_free_leave'); ?>
+        </a><br/>
+        <a class="context" href="<?php echo base_url(); ?>users/edit/{id}?source=hr%2Femployees"><i class="mdi mdi-account-edit nolink"></i>&nbsp;<?php echo lang('hr_employees_thead_tip_edit'); ?></a><br/>
+        <a class="context" href="<?php echo base_url(); ?>entitleddays/user/{id}"><i class="mdi mdi-pencil-box-outline nolink"></i>&nbsp;<?php echo lang('hr_employees_thead_tip_entitlment'); ?>
+        </a><br/>
+        <a class="context" href="<?php echo base_url(); ?>hr/leaves/{id}"><i class="mdi mdi-format-list-bulleted nolink"></i>&nbsp;<?php echo lang('hr_employees_thead_link_leaves'); ?></a><br/>
         <?php if ($this->config->item('disable_overtime') == FALSE) { ?>
-        <a class="context" href="<?php echo base_url();?>hr/overtime/{id}"><i class="mdi mdi-format-list-bulleted nolink"></i>&nbsp;<?php echo lang('hr_employees_thead_link_extra');?></a><br />
+            <a class="context" href="<?php echo base_url(); ?>hr/overtime/{id}"><i class="mdi mdi-format-list-bulleted nolink"></i>&nbsp;<?php echo lang('hr_employees_thead_link_extra'); ?></a><br/>
         <?php } ?>
-        <a class="context" href="<?php echo base_url();?>hr/counters/employees/{id}"><i class="mdi mdi-information-outline nolink"></i>&nbsp;<?php echo lang('hr_employees_thead_link_balance');?></a><br />
-        <a class="context" href="<?php echo base_url();?>hr/presence/employees/{id}"><i class="mdi mdi-chart-pie nolink"></i>&nbsp;<?php echo lang('hr_employees_thead_link_presence');?></a><br />
-        <a class="context" href="<?php echo base_url();?>calendar/year/{id}"><i class="mdi mdi-calendar-text nolink"></i>&nbsp;<?php echo lang('hr_employees_thead_link_calendar');?></a><br />
-        <a class="context" href="<?php echo base_url();?>requests/delegations/{id}"><i class="mdi mdi-share nolink"></i>&nbsp;<?php echo lang('hr_employees_thead_link_delegation');?></a>
+        <a class="context" href="<?php echo base_url(); ?>hr/counters/employees/{id}"><i class="mdi mdi-information-outline nolink"></i>&nbsp;<?php echo lang('hr_employees_thead_link_balance'); ?></a><br/>
+        <a class="context" href="<?php echo base_url(); ?>hr/presence/employees/{id}"><i class="mdi mdi-chart-pie nolink"></i>&nbsp;<?php echo lang('hr_employees_thead_link_presence'); ?></a><br/>
+        <a class="context" href="<?php echo base_url(); ?>calendar/year/{id}"><i class="mdi mdi-calendar-text nolink"></i>&nbsp;<?php echo lang('hr_employees_thead_link_calendar'); ?></a><br/>
+        <a class="context" href="<?php echo base_url(); ?>requests/delegations/{id}"><i class="mdi mdi-share nolink"></i>&nbsp;<?php echo lang('hr_employees_thead_link_delegation'); ?></a>
   </div>
 </div>
 
@@ -516,19 +519,19 @@ $(function () {
         } else { //Oups
             bootbox.alert("<?php echo lang('global_ajax_error');?>");
         }
-      });
+    });
 
     //Handle links clicked into the context menu popup
     function handleLinksInContextMenu(e) {
         id = $(e.target).closest("tr").find('td:eq(0)').text();
         $("#frmContextMenu").modal('show');
-        $('.context').each(function() {
-            action =  $(this).attr( 'href');
+        $('.context').each(function () {
+            action = $(this).attr('href');
             var url = action.replace("{id}", id.trim());
-            $(this).attr( 'href', url);
-        }); 
+            $(this).attr('href', url);
+        });
     }
-    
+
     //Long press on mobile, display contextual menu as a popup
     $(document).on('contextmenu', '.employees-area', function (e) {
         e.preventDefault();

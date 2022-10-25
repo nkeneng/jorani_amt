@@ -27,6 +27,7 @@ $lang['treated'] = 'Behandelt';
 $lang['treated_ok'] = 'Bearbeitet';
 $lang['leaves_index_thead_tip_view'] = 'anzeigen';
 $lang['leaves_index_thead_tip_edit'] = 'bearbeiten';
+
 $lang['monday'] = 'Montag';
 $lang['tuesday'] = 'Dienstag';
 $lang['wednesday'] = 'Der Mittwoch';

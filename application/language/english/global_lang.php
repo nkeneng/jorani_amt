@@ -80,6 +80,16 @@ $lang['Morning'] = 'Morning';
 $lang['Afternoon'] = 'Afternoon';
 $lang['today'] = 'today';
 
+$lang['dayFree'] = 'Free day';
+$lang['monday'] = 'Monday';
+$lang['tuesday'] = 'Tuesday';
+$lang['wednesday'] = 'Wednesday';
+$lang['thursday'] = 'Thursday';
+$lang['friday'] = 'Friday';
+$lang['selected'] = 'selected item';
+$lang['selecteds'] = 'selected items';
+$lang['please_select_date'] = 'Please select start date and end date';
+
 $lang['identifier'] = 'identifier';
 $lang['firstname'] = 'firstname';
 $lang['lastname'] = 'lastname';

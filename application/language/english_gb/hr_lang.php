@@ -14,6 +14,7 @@ $lang['hr_employees_thead_link_leaves'] = 'Leaves';
 $lang['hr_employees_thead_link_extra'] = 'OT Worked';
 $lang['hr_employees_thead_link_balance'] = 'Leave Balance';
 $lang['hr_employees_thead_link_create_leave'] = 'Create Leave Request';
+$lang['hr_employees_thead_link_create_free_leave'] = 'Create a free Leave Request';
 $lang['hr_employees_thead_link_calendar'] = 'Yearly calendar';
 $lang['hr_employees_thead_link_presence'] = 'Presence report';
 $lang['hr_employees_thead_link_delegation'] = 'Delegations';

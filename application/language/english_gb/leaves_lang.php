@@ -20,6 +20,7 @@ $lang['leaves_summary_thead_simulated'] = 'simulated';
 $lang['leaves_summary_tbody_empty'] = 'No entitled or taken days for this period. Please contact your HR Officer / Manager.';
 $lang['leaves_summary_flash_msg_error'] = 'It appears that you have no contract. Please contact your HR Officer / Manager.';
 $lang['leaves_summary_date_field'] = 'Date of report';
+
 $lang['requests_index_thead_freeDay'] = 'Free Day';
 $lang['dayFree'] = 'Free day';
 $lang['monday'] = 'Monday';
@@ -27,6 +28,7 @@ $lang['tuesday'] = 'Tuesday';
 $lang['wednesday'] = 'Wednesday';
 $lang['thursday'] = 'Thursday';
 $lang['friday'] = 'Friday';
+
 $lang['selected'] = 'selected item';
 $lang['selecteds'] = 'selected items';
 $lang['leaves_index_button_create_free_day'] = 'New free day request';

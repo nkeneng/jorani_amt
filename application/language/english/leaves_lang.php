@@ -76,6 +76,7 @@ $lang['dayFree'] = 'Free Day';
 $lang['requests_index_thead_freeDay'] = 'Free Day';
 $lang['leaves_flash_spn_list_days_off'] = '%s non-working days in the period';
 $lang['leaves_flash_msg_overlap_dayoff'] = 'Your leave request matches with a non-working day.';
+
 $lang['dayFree'] = 'Free day';
 $lang['monday'] = 'Monday';
 $lang['tuesday'] = 'Tuesday';
@@ -85,6 +86,7 @@ $lang['friday'] = 'Friday';
 $lang['selected'] = 'selected item';
 $lang['selecteds'] = 'selected items';
 $lang['please_select_date'] = 'Please select start date and end date';
+
 $lang['prev'] = 'Back';
 $lang['choose_date_interval'] = 'The chosen start date must be a Monday and the chosen end date must be a Sunday';
 

@@ -28,6 +28,7 @@ $lang['footer_copyright_notice'] = '&copy; 2014 Jorani Authors';
 $lang['Requested'] = 'Angefragt';
 $lang['Planned'] = 'Geplant';
 $lang['Accepted'] = 'Akzeptiert';
+
 $lang['monday'] = 'Montag';
 $lang['tuesday'] = 'Dienstag';
 $lang['wednesday'] = 'der Mittwoch';

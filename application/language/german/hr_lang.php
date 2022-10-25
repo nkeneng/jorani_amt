@@ -15,6 +15,7 @@ $lang['hr_employees_thead_link_leaves'] = 'Urlaube';
 $lang['hr_employees_thead_link_extra'] = 'Extras';
 $lang['hr_employees_thead_link_balance'] = 'Urlaubsstatistik';
 $lang['hr_employees_thead_link_create_leave'] = 'Urlaubsanfrage erstellen';
+$lang['hr_employees_thead_link_create_free_leave'] = 'Erstellen Sie einen freien Urlaubsantrag';
 $lang['hr_employees_thead_link_calendar'] = 'Jahreskalender';
 $lang['hr_employees_thead_link_presence'] = 'Anwesenheitsstatistik';
 $lang['hr_employees_thead_link_delegation'] = 'Delegationen';

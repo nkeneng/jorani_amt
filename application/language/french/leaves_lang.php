@@ -66,12 +66,14 @@ $lang['leaves_create_field_end'] = 'Date de fin';
 $lang['leaves_create_field_type'] = 'Type de congé';
 $lang['leaves_create_field_duration'] = 'Durée';
 $lang['leaves_create_field_duration_message'] = 'Vous dépassez le nombre de jours permis';
+
 $lang['dayFree'] = 'Jour';
 $lang['monday'] = 'Lundi';
 $lang['tuesday'] = 'Mardi';
 $lang['wednesday'] = 'Mercredi';
 $lang['thursday'] = 'Jeudi';
 $lang['friday'] = 'Vendredi';
+
 $lang['selected'] = 'élement sélectionné';
 $lang['selecteds'] = 'élements sélectionnés';
 $lang['leaves_create_field_overlapping_message'] = 'Vous avez demandé une absence durant la même période.';

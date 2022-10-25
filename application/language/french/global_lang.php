@@ -16,6 +16,8 @@ $lang['global_msg_not_found'] = 'Objet non trouvé. Il est possible que vous ten
 $lang['global_date_format'] = 'd/m/Y';
 $lang['global_date_js_format'] = 'dd/mm/yy';
 $lang['global_date_momentjs_format'] = 'DD/MM/YYYY';
+
+$lang['dayFree'] = 'Jour';
 $lang['monday'] = 'Lundi';
 $lang['tuesday'] = 'Mardi';
 $lang['wednesday'] = 'Mercredi';

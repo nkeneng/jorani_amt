@@ -82,6 +82,7 @@ $route['hr/counters/([^/]+)/(:num)/(:num)'] = 'hr/counters/$1/$2/$3';
 $route['hr/overtime/export/(:num)'] = 'hr/exportOvertime/$1';
 $route['hr/entitleddays/(:num)'] = 'hr/entitleddays/$1';
 $route['hr/leaves/create/(:num)'] = 'hr/createleave/$1';
+$route['hr/leaves/createfreeleave/(:num)'] = 'hr/createfreeleave/$1';
 $route['hr/presence/([^/]+)/(:num)'] = 'hr/presence/$1/$2';
 $route['hr/presence/([^/]+)/(:num)/(:num)/(:num)'] = 'hr/presence/$1/$2/$3/$4';
 $route['hr/presence/export/([^/]+)/(:num)/(:num)/(:num)'] = 'hr/exportPresence/$1/$2/$3/$4';
