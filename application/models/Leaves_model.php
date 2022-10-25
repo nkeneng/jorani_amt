@@ -525,6 +525,7 @@ class Leaves_model extends CI_Model
         $overlapping = FALSE;
         $this->db->where('employee', $id);
         $this->db->where('status != 4');
+        $this->db->where('type != 9');
         $this->db->where('(startdate <= DATE(\'' . $enddate . '\') AND enddate >= DATE(\'' . $startdate . '\'))');
         if (!is_null($leave_id)) {
             $this->db->where('id != ', $leave_id);
