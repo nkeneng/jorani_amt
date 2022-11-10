@@ -177,26 +177,27 @@ if (isset($_GET['source'])) {
 </form>
 
 <div class="modal hide" id="frmModalAjaxWait" data-backdrop="static" data-keyboard="false">
-        <div class="modal-header">
-            <h1><?php echo lang('global_msg_wait');?></h1>
-        </div>
-        <div class="modal-body">
-            <img src="<?php echo base_url();?>assets/images/loading.gif"  align="middle">
-        </div>
- </div>
+    <div class="modal-header">
+        <h1><?php echo lang('global_msg_wait'); ?></h1>
+    </div>
+    <div class="modal-body">
+        <img src="<?php echo base_url(); ?>assets/images/loading.gif" align="middle">
+    </div>
+</div>
 
-<link rel="stylesheet" href="<?php echo base_url();?>assets/css/flick/jquery-ui.custom.min.css">
-<script src="<?php echo base_url();?>assets/js/jquery-ui.custom.min.js"></script>
+<link rel="stylesheet" href="<?php echo base_url(); ?>assets/css/flick/jquery-ui.custom.min.css">
+<script src="<?php echo base_url(); ?>assets/js/jquery-ui.custom.min.js"></script>
+<?php if ($language_code == "en") $language_code = "en-GB" ?>
 <?php //Prevent HTTP-404 when localization isn't needed
 if ($language_code != 'en') { ?>
-<script src="<?php echo base_url();?>assets/js/i18n/jquery.ui.datepicker-<?php echo $language_code;?>.js"></script>
+    <script src="<?php echo base_url(); ?>assets/js/i18n/jquery.ui.datepicker-<?php echo $language_code; ?>.js"></script>
 <?php } ?>
-<script src="<?php echo base_url();?>assets/js/bootbox.min.js"></script>
+<script src="<?php echo base_url(); ?>assets/js/bootbox.min.js"></script>
 
 <?php require_once dirname(BASEPATH) . "/local/triggers/leave_view.php"; ?>
 
 <script>
-$(document).on("click", "#showNoneWorkedDay", function(e) {
+    $(document).on("click", "#showNoneWorkedDay", function (e) {
   showListDayOffHTML();
 });
 </script>

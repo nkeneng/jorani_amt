@@ -74,26 +74,27 @@
          <h3><?php echo lang('reports_leaves_popup_entity_title');?></h3>
     </div>
     <div class="modal-body" id="frmSelectEntityBody">
-        <img src="<?php echo base_url();?>assets/images/loading.gif">
+        <img src="<?php echo base_url(); ?>assets/images/loading.gif">
     </div>
     <div class="modal-footer">
-        <a href="#" onclick="select_entity();" class="btn"><?php echo lang('reports_leaves_popup_entity_button_ok');?></a>
-        <a href="#" onclick="$('#frmSelectEntity').modal('hide');" class="btn"><?php echo lang('reports_leaves_popup_entity_button_cancel');?></a>
+        <a href="#" onclick="select_entity();" class="btn"><?php echo lang('reports_leaves_popup_entity_button_ok'); ?></a>
+        <a href="#" onclick="$('#frmSelectEntity').modal('hide');" class="btn"><?php echo lang('reports_leaves_popup_entity_button_cancel'); ?></a>
     </div>
 </div>
 
-<link rel="stylesheet" href="<?php echo base_url();?>assets/css/flick/jquery-ui.custom.min.css">
-<script src="<?php echo base_url();?>assets/js/jquery-ui.custom.min.js"></script>
+<link rel="stylesheet" href="<?php echo base_url(); ?>assets/css/flick/jquery-ui.custom.min.css">
+<script src="<?php echo base_url(); ?>assets/js/jquery-ui.custom.min.js"></script>
+<?php if ($language_code == "en") $language_code = "en-GB" ?>
 <?php //Prevent HTTP-404 when localization isn't needed
 if ($language_code != 'en') { ?>
-<script src="<?php echo base_url();?>assets/js/i18n/jquery.ui.datepicker-<?php echo $language_code;?>.js"></script>
+    <script src="<?php echo base_url(); ?>assets/js/i18n/jquery.ui.datepicker-<?php echo $language_code; ?>.js"></script>
 <?php } ?>
 <script type="text/javascript">
 
-var entity = -1; //Id of the selected entity
-var entityName = ''; //Label of the selected entity
-var includeChildren = true;
-var leaveDetails = false;
+    var entity = -1; //Id of the selected entity
+    var entityName = ''; //Label of the selected entity
+    var includeChildren = true;
+    var leaveDetails = false;
 var month = <?php echo date('m');?>;
 var year = <?php echo date('Y');?>;
 
@@ -210,7 +211,7 @@ $(document).ready(function() {
         Cookies.set('rep_entity', entity);
         Cookies.set('rep_entityName', entityName);
         Cookies.set('rep_includeChildren', includeChildren);
-        Cookies.set('rep_leaveDetails', leaveDetails);        
+        Cookies.set('rep_leaveDetails', leaveDetails);
     }
 });
 </script>

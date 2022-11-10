@@ -298,23 +298,26 @@
     </div>
 </div>
 
-<div class="row-fluid"><div class="span12">&nbsp;</div></div>
+        <div class="row-fluid">
+            <div class="span12">&nbsp;</div>
+        </div>
 
     </div>
 </div>
 
-<link href="<?php echo base_url();?>assets/fullcalendar-2.8.0/fullcalendar.css" rel="stylesheet">
-<script type="text/javascript" src="<?php echo base_url();?>assets/fullcalendar-2.8.0/fullcalendar.min.js"></script>
-<?php if ($language_code != 'en') {?>
-<script type="text/javascript" src="<?php echo base_url();?>assets/fullcalendar-2.8.0/lang/<?php echo strtolower($language_code);?>.js"></script>
-<?php }?>
-<link href="<?php echo base_url();?>assets/datatable/DataTables-1.10.11/css/jquery.dataTables.min.css" rel="stylesheet">
-<script type="text/javascript" src="<?php echo base_url();?>assets/datatable/DataTables-1.10.11/js/jquery.dataTables.min.js"></script>
+<link href="<?php echo base_url(); ?>assets/fullcalendar-2.8.0/fullcalendar.css" rel="stylesheet">
+<script type="text/javascript" src="<?php echo base_url(); ?>assets/fullcalendar-2.8.0/fullcalendar.min.js"></script>
+<?php if ($language_code == "en") $language_code = "en-GB" ?>
+<?php if ($language_code != 'en') { ?>
+    <script type="text/javascript" src="<?php echo base_url(); ?>assets/fullcalendar-2.8.0/lang/<?php echo strtolower($language_code); ?>.js"></script>
+<?php } ?>
+<link href="<?php echo base_url(); ?>assets/datatable/DataTables-1.10.11/css/jquery.dataTables.min.css" rel="stylesheet">
+<script type="text/javascript" src="<?php echo base_url(); ?>assets/datatable/DataTables-1.10.11/js/jquery.dataTables.min.js"></script>
 
 <script type="text/javascript">
-var employee = <?php echo $user_id;?>;
+    var employee = <?php echo $user_id;?>;
 
-$(function () {
+    $(function () {
 
     //Transform the HTML tables into fancy datatables
     var oTable = $('#leaves').dataTable({

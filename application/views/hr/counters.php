@@ -15,7 +15,7 @@
         <p><?php echo lang('hr_summary_date_field');?>&nbsp;
             <input type="text" id="refdate" />
         </p>
-        
+
         <table id="counters" cellpadding="0" cellspacing="0" border="0" class="display" width="100%">
         <thead>
             <tr>
@@ -61,8 +61,8 @@
           </thead>
           <tbody>
           <?php foreach ($entitleddayscontract as $days) { ?>
-            <tr>    
-        <?php $startDate = new DateTime($days['startdate']);
+              <tr>
+                  <?php $startDate = new DateTime($days['startdate']);
         $endDate = new DateTime($days['enddate']);?>
               <td data-order="<?php echo $startDate->getTimestamp(); ?>"><?php echo $startDate->format(lang('global_date_format'));?></td>
               <td data-order="<?php echo $endDate->getTimestamp(); ?>"><?php echo $endDate->format(lang('global_date_format'));?></td>
@@ -95,19 +95,19 @@
           </thead>
           <tbody>
           <?php foreach ($entitleddaysemployee as $days) { ?>
-            <tr>
-              <td><?php 
-        $date = new DateTime($days['startdate']);
-        echo $date->format(lang('global_date_format'));
-        ?></td>
-              <td><?php 
-        $date = new DateTime($days['enddate']);
-        echo $date->format(lang('global_date_format'));
-        ?></td>
-              <td><?php echo $days['days']; ?></td>
-              <td><?php echo $days['type_name']; ?></td>
-              <td><?php echo $days['description']; ?></td>
-            </tr>
+              <tr>
+                  <td><?php
+                      $date = new DateTime($days['startdate']);
+                      echo $date->format(lang('global_date_format'));
+                      ?></td>
+                  <td><?php
+                      $date = new DateTime($days['enddate']);
+                      echo $date->format(lang('global_date_format'));
+                      ?></td>
+                  <td><?php echo $days['days']; ?></td>
+                  <td><?php echo $days['type_name']; ?></td>
+                  <td><?php echo $days['description']; ?></td>
+              </tr>
           <?php } ?>
           </tbody>
         </table>
@@ -125,22 +125,25 @@
     <div class="span9">&nbsp;</div>
 </div>
 
-<div class="row-fluid"><div class="span12">&nbsp;</div></div>
+<div class="row-fluid">
+    <div class="span12">&nbsp;</div>
+</div>
 
-<link href="<?php echo base_url();?>assets/datatable/DataTables-1.10.11/css/jquery.dataTables.min.css" rel="stylesheet">
-<script type="text/javascript" src="<?php echo base_url();?>assets/datatable/DataTables-1.10.11/js/jquery.dataTables.min.js"></script>
-<link rel="stylesheet" href="<?php echo base_url();?>assets/css/flick/jquery-ui.custom.min.css">
-<script src="<?php echo base_url();?>assets/js/jquery-ui.custom.min.js"></script>
+<link href="<?php echo base_url(); ?>assets/datatable/DataTables-1.10.11/css/jquery.dataTables.min.css" rel="stylesheet">
+<script type="text/javascript" src="<?php echo base_url(); ?>assets/datatable/DataTables-1.10.11/js/jquery.dataTables.min.js"></script>
+<link rel="stylesheet" href="<?php echo base_url(); ?>assets/css/flick/jquery-ui.custom.min.css">
+<script src="<?php echo base_url(); ?>assets/js/jquery-ui.custom.min.js"></script>
+<?php if ($language_code == "en") $language_code = "en-GB" ?>
 <?php //Prevent HTTP-404 when localization isn't needed
 if ($language_code != 'en') { ?>
-<script src="<?php echo base_url();?>assets/js/i18n/jquery.ui.datepicker-<?php echo $language_code;?>.js"></script>
+    <script src="<?php echo base_url(); ?>assets/js/i18n/jquery.ui.datepicker-<?php echo $language_code; ?>.js"></script>
 <?php } ?>
 
 <script type="text/javascript">
     $(function () {
         //Init datepicker widget (it is complicated because we cannot based it on UTC)
         isDefault = <?php echo $isDefault;?>;
-        moment.locale('<?php echo $language_code;?>', {longDateFormat : {L : '<?php echo lang('global_date_momentjs_format');?>'}});
+        moment.locale('<?php echo $language_code;?>', {longDateFormat: {L: '<?php echo lang('global_date_momentjs_format');?>'}});
         reportDate = '<?php $date = new DateTime($refDate); echo $date->format(lang('global_date_format'));?>';
         todayDate = moment().format('L');
         if (isDefault == 1) {
@@ -155,7 +158,7 @@ if ($language_code != 'en') { ?>
                     window.location = url;
             }
         });
-        
+
         //Transform the HTML tables into fancy datatables
         $('#counters').dataTable({
             order: [[ 0, "desc" ]],
@@ -183,7 +186,7 @@ if ($language_code != 'en') { ?>
                 }
             }
         });
-        
+
         $('#entitleddayscontract').dataTable({
             order: [[ 0, "desc" ]],
             language: {
@@ -210,7 +213,7 @@ if ($language_code != 'en') { ?>
                 }
             }
         });
-            
+
         $('#entitleddaysemployee').dataTable({
             order: [[ 0, "desc" ]],
             language: {

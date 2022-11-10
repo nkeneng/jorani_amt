@@ -103,23 +103,24 @@ $endDate = new DateTime($days['enddate']);?>
  </div>
 
 <div class="modal hide" id="frmModalAjaxWait" data-backdrop="static" data-keyboard="false">
-        <div class="modal-header">
-            <h1><?php echo lang('global_msg_wait');?></h1>
-        </div>
-        <div class="modal-body">
-            <img src="<?php echo base_url();?>assets/images/loading.gif"  align="middle">
-        </div>
- </div>
+    <div class="modal-header">
+        <h1><?php echo lang('global_msg_wait'); ?></h1>
+    </div>
+    <div class="modal-body">
+        <img src="<?php echo base_url(); ?>assets/images/loading.gif" align="middle">
+    </div>
+</div>
 
-<link rel="stylesheet" href="<?php echo base_url();?>assets/css/flick/jquery-ui.custom.min.css">
-<script src="<?php echo base_url();?>assets/js/jquery-ui.custom.min.js"></script>
+<link rel="stylesheet" href="<?php echo base_url(); ?>assets/css/flick/jquery-ui.custom.min.css">
+<script src="<?php echo base_url(); ?>assets/js/jquery-ui.custom.min.js"></script>
+<?php if ($language_code == "en") $language_code = "en-GB" ?>
 <?php //Prevent HTTP-404 when localization isn't needed
 if ($language_code != 'en') { ?>
-<script src="<?php echo base_url();?>assets/js/i18n/jquery.ui.datepicker-<?php echo $language_code;?>.js"></script>
+    <script src="<?php echo base_url(); ?>assets/js/i18n/jquery.ui.datepicker-<?php echo $language_code; ?>.js"></script>
 <?php } ?>
-<script type="text/javascript" src="<?php echo base_url();?>assets/js/bootbox.min.js"></script>
-<link href="<?php echo base_url();?>assets/datatable/DataTables-1.10.11/css/jquery.dataTables.min.css" rel="stylesheet">
-<script type="text/javascript" src="<?php echo base_url();?>assets/datatable/DataTables-1.10.11/js/jquery.dataTables.min.js"></script>
+<script type="text/javascript" src="<?php echo base_url(); ?>assets/js/bootbox.min.js"></script>
+<link href="<?php echo base_url(); ?>assets/datatable/DataTables-1.10.11/css/jquery.dataTables.min.css" rel="stylesheet">
+<script type="text/javascript" src="<?php echo base_url(); ?>assets/datatable/DataTables-1.10.11/js/jquery.dataTables.min.js"></script>
 
 <script type="text/javascript">
     //Current cell transformed in input box

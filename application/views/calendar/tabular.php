@@ -81,26 +81,26 @@
         <h3><?php echo lang('calendar_tabular_button_select_list');?></h3>
     </div>
     <div class="modal-body" id="frmSelectListBody">
-        <img src="<?php echo base_url();?>assets/images/loading.gif">
+        <img src="<?php echo base_url(); ?>assets/images/loading.gif">
     </div>
     <div class="modal-footer">
-        <button onclick="select_list();" data-dismiss="modal" class="btn"><?php echo lang('OK');?></button>
-        <button data-dismiss="modal" class="btn"><?php echo lang('Cancel');?></button>
+        <button onclick="select_list();" data-dismiss="modal" class="btn"><?php echo lang('OK'); ?></button>
+        <button data-dismiss="modal" class="btn"><?php echo lang('Cancel'); ?></button>
     </div>
 </div>
 
-<link rel="stylesheet" href="<?php echo base_url();?>assets/bootstrap-datepicker-1.8.0/css/bootstrap-datepicker.min.css">
-<script src="<?php echo base_url();?>assets/bootstrap-datepicker-1.8.0/js/bootstrap-datepicker.min.js"></script>
-<?php if ($language_code != 'en') {?>
-<script src="<?php echo base_url();?>assets/bootstrap-datepicker-1.8.0/locales/bootstrap-datepicker.<?php echo $language_code;?>.min.js"></script>
-<?php }?>
+<link rel="stylesheet" href="<?php echo base_url(); ?>assets/bootstrap-datepicker-1.8.0/css/bootstrap-datepicker.min.css">
+<script src="<?php echo base_url(); ?>assets/bootstrap-datepicker-1.8.0/js/bootstrap-datepicker.min.js"></script>
+<?php if ($language_code == "en") $language_code = "en-GB" ?>
+<?php if ($language_code != 'en') { ?>
+    <script src="<?php echo base_url(); ?>assets/bootstrap-datepicker-1.8.0/locales/bootstrap-datepicker.<?php echo $language_code; ?>.min.js"></script>
+<?php } ?>
 
 <style>
-#frmSelectList
-{
-    width: 700px;
-    margin-left:  -350px !important;
-}
+    #frmSelectList {
+        width: 700px;
+        margin-left: -350px !important;
+    }
 </style>
 
 <script src="<?php echo base_url();?>assets/js/bootbox.min.js"></script>
@@ -164,7 +164,7 @@
             return '0';
         }
     }
-    
+
     // Build the status filter based on the selected options
     function buildStatusesFilter() {
         statuses = "";
@@ -183,7 +183,7 @@
         children = includeChildren();
         displayTypes = displayLeaveTypes();
         statuses = buildStatusesFilter();
-        
+
         if (source == 'treeview') {
             url = '<?php echo base_url();?>calendar/tabular/partial/' +
                 entity + '/' + (month + 1) + '/' + year + '/' + children + '/' +
@@ -211,7 +211,7 @@
         fullDate = fullDate + ' ' + year;
         $("#txtMonthYear").val(fullDate);
     }
-    
+
     //Return a URL parameter identified by 'name'
     function getURLParameter(name) {
       return decodeURIComponent((new RegExp('[?|&]' + name + '=' + '([^&;]+?)(&|#|;|$)').exec(location.search) || [null, ''])[1].replace(/\+/g, '%20')) || null;

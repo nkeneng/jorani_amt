@@ -233,43 +233,44 @@ for ($mC = 1; $mC <= 12; $mC++) {
         </div>
     </div>
     <div class="modal-footer">
-        <a href="#" onclick="$('#frmLinkICS').modal('hide');" class="btn btn-primary"><?php echo lang('OK');?></a>
+        <a href="#" onclick="$('#frmLinkICS').modal('hide');" class="btn btn-primary"><?php echo lang('OK'); ?></a>
     </div>
 </div>
 
-<link rel="stylesheet" href="<?php echo base_url();?>assets/bootstrap-datepicker-1.8.0/css/bootstrap-datepicker.min.css">
-<script src="<?php echo base_url();?>assets/bootstrap-datepicker-1.8.0/js/bootstrap-datepicker.min.js"></script>
+<link rel="stylesheet" href="<?php echo base_url(); ?>assets/bootstrap-datepicker-1.8.0/css/bootstrap-datepicker.min.css">
+<script src="<?php echo base_url(); ?>assets/bootstrap-datepicker-1.8.0/js/bootstrap-datepicker.min.js"></script>
 <?php //Prevent HTTP-404 when localization isn't needed
-if ($language_code != 'en') { ?>
-<script src="<?php echo base_url();?>assets/bootstrap-datepicker-1.8.0/locales/bootstrap-datepicker.<?php echo $language_code;?>.min.js"></script>
+if ($language_code == "en") $language_code = "en-GB" ?>
+<?php if ($language_code != 'en') { ?>
+    <script src="<?php echo base_url(); ?>assets/bootstrap-datepicker-1.8.0/locales/bootstrap-datepicker.<?php echo $language_code; ?>.min.js"></script>
 <?php } ?>
 
-<script src="<?php echo base_url();?>assets/js/bootbox.min.js"></script>
+<script src="<?php echo base_url(); ?>assets/js/bootbox.min.js"></script>
 <script type="text/javascript">
-/**
- * Pointer to a day in the calendar, not really an actual date
- */
-var timestamp;
+    /**
+     * Pointer to a day in the calendar, not really an actual date
+     */
+    var timestamp;
 
-/**
- * Converts a local date to an ISO compliant string
- * Because toISOString converts to UTC causing one day
- * of shift in some zones
- * @param Date $d JavaScript native date object
- * @return String Date converted in the format YYYY-MM-DD
- */
-function toISODateLocal(d) {
-    var z = n => (n<10? '0':'')+n;
-    return d.getFullYear() + '-' + z(d.getMonth()+1) + '-' + z(d.getDate()); 
-}
+    /**
+     * Converts a local date to an ISO compliant string
+     * Because toISOString converts to UTC causing one day
+     * of shift in some zones
+     * @param Date $d JavaScript native date object
+     * @return String Date converted in the format YYYY-MM-DD
+     */
+    function toISODateLocal(d) {
+        var z = n => (n < 10 ? '0' : '') + n;
+        return d.getFullYear() + '-' + z(d.getMonth() + 1) + '-' + z(d.getDate());
+    }
 
-/**
- * Compute the end and start dates of the civil year being displayed
- * in the modal for editing a series of non working days
- * @return void
- */
-function setCurrentPeriod() {
-    var startEntDate = new Date('<?php echo $year;?>-01-01');
+    /**
+     * Compute the end and start dates of the civil year being displayed
+     * in the modal for editing a series of non working days
+     * @return void
+     */
+    function setCurrentPeriod() {
+        var startEntDate = new Date('<?php echo $year;?>-01-01');
     var endEntDate = new Date('<?php echo $year;?>-12-31');
     $("#viz_startdate").datepicker('setDate', startEntDate);
     $("#viz_enddate").datepicker('setDate', endEntDate);

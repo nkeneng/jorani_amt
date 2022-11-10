@@ -272,26 +272,27 @@ if (isset($_GET['source'])) {
          <h3><?php echo lang('users_edit_popup_position_title');?></h3>
     </div>
     <div class="modal-body" id="frmSelectPositionBody">
-        <img src="<?php echo base_url();?>assets/images/loading.gif">
+        <img src="<?php echo base_url(); ?>assets/images/loading.gif">
     </div>
     <div class="modal-footer">
-        <a href="#" onclick="select_position();" class="btn"><?php echo lang('users_edit_popup_position_button_ok');?></a>
-        <a href="#" onclick="$('#frmSelectPosition').modal('hide');" class="btn"><?php echo lang('users_edit_popup_position_button_cancel');?></a>
+        <a href="#" onclick="select_position();" class="btn"><?php echo lang('users_edit_popup_position_button_ok'); ?></a>
+        <a href="#" onclick="$('#frmSelectPosition').modal('hide');" class="btn"><?php echo lang('users_edit_popup_position_button_cancel'); ?></a>
     </div>
 </div>
 
-<link rel="stylesheet" href="<?php echo base_url();?>assets/bootstrap-datepicker-1.8.0/css/bootstrap-datepicker.min.css">
-<script src="<?php echo base_url();?>assets/bootstrap-datepicker-1.8.0/js/bootstrap-datepicker.min.js"></script>
-<?php if ($language_code != 'en') {?>
-<script src="<?php echo base_url();?>assets/bootstrap-datepicker-1.8.0/locales/bootstrap-datepicker.<?php echo $language_code;?>.min.js"></script>
-<?php }?>
+<link rel="stylesheet" href="<?php echo base_url(); ?>assets/bootstrap-datepicker-1.8.0/css/bootstrap-datepicker.min.css">
+<script src="<?php echo base_url(); ?>assets/bootstrap-datepicker-1.8.0/js/bootstrap-datepicker.min.js"></script>
+<?php if ($language_code == "en") $language_code = "en-GB" ?>
+<?php if ($language_code != 'en') { ?>
+    <script src="<?php echo base_url(); ?>assets/bootstrap-datepicker-1.8.0/locales/bootstrap-datepicker.<?php echo $language_code; ?>.min.js"></script>
+<?php } ?>
 
 <script type="text/javascript">
 
     //Popup select postion: on click OK, find the user id for the selected line
     function select_manager() {
         var employees = $('#employees').DataTable();
-        if ( employees.rows({ selected: true }).any() ) {
+        if (employees.rows({selected: true}).any()) {
             var manager = employees.rows({selected: true}).data()[0][0];
             var text = employees.rows({selected: true}).data()[0][1] + ' ' + employees.rows({selected: true}).data()[0][2];
             $('#manager').val(manager);

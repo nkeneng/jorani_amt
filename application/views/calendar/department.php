@@ -30,26 +30,27 @@
 </div>
 
 <div class="modal hide" id="frmModalAjaxWait" data-backdrop="static" data-keyboard="false">
-        <div class="modal-header">
-            <h1><?php echo lang('global_msg_wait');?></h1>
-        </div>
-        <div class="modal-body">
-            <img src="<?php echo base_url();?>assets/images/loading.gif"  align="middle">
-        </div>
- </div>
+    <div class="modal-header">
+        <h1><?php echo lang('global_msg_wait'); ?></h1>
+    </div>
+    <div class="modal-body">
+        <img src="<?php echo base_url(); ?>assets/images/loading.gif" align="middle">
+    </div>
+</div>
 
-<link href="<?php echo base_url();?>assets/fullcalendar-2.8.0/fullcalendar.css" rel="stylesheet">
-<script type="text/javascript" src="<?php echo base_url();?>assets/fullcalendar-2.8.0/fullcalendar.min.js"></script>
-<?php if ($language_code != 'en') {?>
-<script type="text/javascript" src="<?php echo base_url();?>assets/fullcalendar-2.8.0/lang/<?php echo strtolower($language_code);?>.js"></script>
-<?php }?>
-<script src="<?php echo base_url();?>assets/js/bootbox.min.js"></script>
+<link href="<?php echo base_url(); ?>assets/fullcalendar-2.8.0/fullcalendar.css" rel="stylesheet">
+<script type="text/javascript" src="<?php echo base_url(); ?>assets/fullcalendar-2.8.0/fullcalendar.min.js"></script>
+<?php if ($language_code == "en") $language_code = "en-GB" ?>
+<?php if ($language_code != 'en') { ?>
+    <script type="text/javascript" src="<?php echo base_url(); ?>assets/fullcalendar-2.8.0/lang/<?php echo strtolower($language_code); ?>.js"></script>
+<?php } ?>
+<script src="<?php echo base_url(); ?>assets/js/bootbox.min.js"></script>
 <script type="text/javascript">
-$(document).ready(function() {
+    $(document).ready(function () {
 
-    //Global Ajax error handling mainly used for session expiration
-    $( document ).ajaxError(function(event, jqXHR, settings, errorThrown) {
-        $('#frmModalAjaxWait').modal('hide');
+        //Global Ajax error handling mainly used for session expiration
+        $(document).ajaxError(function (event, jqXHR, settings, errorThrown) {
+            $('#frmModalAjaxWait').modal('hide');
         if (jqXHR.status == 401) {
             bootbox.alert("<?php echo lang('global_ajax_timeout');?>", function () {
                 //After the login page, we'll be redirected to the current page
