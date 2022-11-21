@@ -314,6 +314,19 @@ class Leaves_model extends CI_Model
         return array('length' => $length, 'daysoff' => $lengthDaysOff, 'overlapping' => $overlapDayOff);
     }
 
+    public function getFreeDaysBetweenDays($employee, $startDate, $endDate)
+    {
+        $this->db->select('*');
+        $this->db->from('leaves');
+        $this->db->where('employee', $employee);
+        $this->db->where('startdate >=', $startDate);
+        $this->db->where('startdate <=', $endDate);
+        $this->db->where('type =', 9);
+        $this->db->where('parent_leave <', 1);
+        $this->db->order_by('startdate');
+        return $this->db->get()->num_rows();
+    }
+
     /**
      * Get all entitled days applicable to the
      * reference date (to contract and employee)

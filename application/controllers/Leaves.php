@@ -624,7 +624,6 @@ class Leaves extends CI_Controller
                         ' tried to submit a LR with an wrong status = ' . $this->input->post('status'));
                     $_POST['status'] = LMS_REQUESTED;
                 }
-
             }
 
             //Users must use an existing leave type, otherwise
@@ -651,9 +650,7 @@ class Leaves extends CI_Controller
                     $leave_id = $this->leaves_model->setLeaves($this->session->userdata('id'));
                     $this->session->set_flashdata('msg', lang('leaves_create_flash_msg_success'));
                 }
-
             }
-
 
             //If the status is requested, send an email to the manager
             if ($this->input->post('status') == LMS_REQUESTED) {
@@ -1347,11 +1344,15 @@ class Leaves extends CI_Controller
         if (isset($id) && ($startdate != '') && ($enddate != '') && $hasContract === TRUE) {
             $this->load->model('dayoffs_model');
             $leaveValidator->listDaysOff = $this->dayoffs_model->listOfDaysOffBetweenDates($id, $startdate, $enddate);
+
             //Sum non-working days and overlapping with day off detection
             $result = $this->leaves_model->actualLengthAndDaysOff($id, $startdate, $enddate, $startdatetype, $enddatetype, $leaveValidator->listDaysOff, $deductDayOff);
+
+            $freeDays = $this->leaves_model->getFreeDaysBetweenDays($id, $startdate, $enddate) ?? 0;
+
             $leaveValidator->overlapDayOff = $result['overlapping'];
-            $leaveValidator->lengthDaysOff = $result['daysoff'];
-            $leaveValidator->length = $result['length'];
+            $leaveValidator->lengthDaysOff = $result['daysoff'] + $freeDays;
+            $leaveValidator->length = $result['length'] - $freeDays;
         }
         //If the user has no contract, simply compute a date difference between start and end dates
         if (isset($id) && isset($startdate) && isset($enddate) && $hasContract === FALSE) {

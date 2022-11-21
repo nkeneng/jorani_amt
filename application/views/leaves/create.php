@@ -13,40 +13,42 @@
 <div class="row-fluid">
     <div class="span8">
 
-<?php echo validation_errors(); ?>
+        <?php echo validation_errors(); ?>
 
-<?php
-$attributes = array('id' => 'frmLeaveForm');
-echo form_open('leaves/create', $attributes) ?>
+        <?php
+        $attributes = array('id' => 'frmLeaveForm');
+        echo form_open('leaves/create', $attributes) ?>
 
-    <label for="type">
-        <?php echo lang('leaves_create_field_type');?>
-        &nbsp;<span class="muted" id="lblCredit"><?php if (!is_null($credit)) { ?>(<?php echo $credit; ?>)<?php } ?></span>
-    </label>
-    <select class="input-xxlarge" name="type" id="type">
-    <?php foreach ($types as $typeId => $TypeName): ?>
-        <option value="<?php echo $typeId; ?>" <?php if ($typeId == $defaultType) echo "selected"; ?>><?php echo $TypeName; ?></option>
-    <?php endforeach ?>
-    </select>
+        <label for="type">
+            <?php echo lang('leaves_create_field_type'); ?>
+            &nbsp;<span class="muted" id="lblCredit"><?php if (!is_null($credit)) { ?>(<?php echo $credit; ?>)<?php } ?></span>
+        </label>
 
-    <label for="viz_startdate"><?php echo lang('leaves_create_field_start');?></label>
-    <input type="text" name="viz_startdate" id="viz_startdate" value="<?php echo set_value('startdate'); ?>" autocomplete="off" />
-    <input type="hidden" name="startdate" id="startdate" />
-    <select name="startdatetype" id="startdatetype">
-        <option value="Morning" selected><?php echo lang('Morning');?></option>
-        <option value="Afternoon"><?php echo lang('Afternoon');?></option>
-    </select><br />
+        <select class="input-xxlarge" name="type" id="type">
+            <?php foreach ($types as $typeId => $TypeName): ?>
+                <option value="<?php echo $typeId; ?>" <?php if ($typeId == $defaultType) echo "selected"; ?>><?php echo $TypeName; ?></option>
+            <?php endforeach ?>
+        </select>
 
-    <label for="viz_enddate"><?php echo lang('leaves_create_field_end');?></label>
-    <input type="text" name="viz_enddate" id="viz_enddate" value="<?php echo set_value('enddate'); ?>" autocomplete="off" />
-    <input type="hidden" name="enddate" id="enddate" />
-    <select name="enddatetype" id="enddatetype">
-        <option value="Morning"><?php echo lang('Morning');?></option>
-        <option value="Afternoon" selected><?php echo lang('Afternoon');?></option>
-    </select><br />
+        <label for="viz_startdate"><?php echo lang('leaves_create_field_start'); ?></label>
+        <input type="text" name="viz_startdate" id="viz_startdate" value="<?php echo set_value('startdate'); ?>" autocomplete="off"/>
+        <input type="hidden" name="startdate" id="startdate"/>
+        <select name="startdatetype" id="startdatetype">
+            <option value="Morning" selected><?php echo lang('Morning'); ?></option>
+            <option value="Afternoon"><?php echo lang('Afternoon'); ?></option>
+        </select><br/>
 
-    <label for="duration"><?php echo lang('leaves_create_field_duration');?> <span id="tooltipDayOff"></span></label>
-    <?php if ($this->config->item('disable_edit_leave_duration') == TRUE) { ?>
+        <label for="viz_enddate"><?php echo lang('leaves_create_field_end'); ?></label>
+        <input type="text" name="viz_enddate" id="viz_enddate" value="<?php echo set_value('enddate'); ?>" autocomplete="off"/>
+        <input type="hidden" name="enddate" id="enddate"/>
+
+        <select name="enddatetype" id="enddatetype">
+            <option value="Morning"><?php echo lang('Morning'); ?></option>
+            <option value="Afternoon" selected><?php echo lang('Afternoon'); ?></option>
+        </select><br/>
+
+        <label for="duration"><?php echo lang('leaves_create_field_duration'); ?> <span id="tooltipDayOff"></span></label>
+        <?php if ($this->config->item('disable_edit_leave_duration') == TRUE) { ?>
     <input type="text" name="duration" id="duration" value="<?php echo set_value('duration'); ?>" readonly />
     <?php } else { ?>
     <input type="text" name="duration" id="duration" value="<?php echo set_value('duration'); ?>" />
@@ -178,8 +180,8 @@ $(function () {
     $.ajaxSetup({
         data: {
             <?php echo $this->security->get_csrf_token_name();?>: "<?php echo $this->security->get_csrf_hash();?>",
-        }
-    });
+}
+})
 });
 <?php }?>
 </script>
