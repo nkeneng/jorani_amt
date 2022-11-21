@@ -458,6 +458,8 @@ $config['login_pattern'] = 'jdoe';            //(default) First letter of firstn
 //$config['login_pattern'] = 'john_doe';    //Firstname plus underscore plus lastname (up to field limit)
 //$config['login_pattern'] = '#email';       //Copy another field of the form (use an existing field name with the pound sign)
 
+$config['avatar_image_url'] = 'https://talk.ammonit.com/pep_avatar/';
+
 //____________________________________________________________________________
 //Set this value to TRUE if you want to create leaves at status requested instead of planned
 $config['leave_status_requested'] = FALSE;

@@ -36,6 +36,10 @@
     </div>
 </div>
 
+<script type="text/javascript" src="<?php echo base_url(); ?>assets/consistent_color_generation/hsluv-0.1.0.min.js"></script>
+<script type="text/javascript" src="<?php echo base_url(); ?>assets/consistent_color_generation/sha1.js"></script>
+<script type="text/javascript" src="<?php echo base_url(); ?>assets/consistent_color_generation/consistent_color_generation.js"></script>
+
 <link href="<?php echo base_url(); ?>assets/fullcalendar-2.8.0/fullcalendar.css" rel="stylesheet">
 <script type="text/javascript" src="<?php echo base_url(); ?>assets/fullcalendar-2.8.0/fullcalendar.min.js"></script>
 <?php if ($language_code == "en") $language_code = "en-GB" ?>
@@ -82,7 +86,10 @@
         },
         eventAfterRender: function (event, element, view) {
             //Add tooltip to the element
-            $(element).attr('title', event.title);
+            $(element).attr('title', event.cause);
+            if (typeof event.email === 'string' || event.email instanceof String) {
+                $(element).css('background-color', colourize(event.email));
+            }
 
             if (event.enddatetype == "Morning" || event.startdatetype == "Afternoon") {
                 var nb_days = event.end.diff(event.start, "days");

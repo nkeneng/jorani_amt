@@ -24,7 +24,7 @@ $lang['leavetypes_js_unique_error_msg'] = 'Abwesenheitsart existiert bereits';
 $lang['leavetypes_popup_create_title'] = 'Abwesenheitsart hinzufügen';
 $lang['monday'] = 'Montag';
 $lang['tuesday'] = 'Dienstag';
-$lang['wednesday'] = 'der Mittwoch';
+$lang['wednesday'] = 'Mittwoch';
 $lang['thursday'] = 'Donnerstag';
 $lang['friday'] = 'Freitag';
 $lang['check_all'] = 'Tout cocher';
@@ -37,7 +37,7 @@ $lang['you_have_selected_all_the_elements_of_the_table'] = 'Achtung, Sie haben a
 $lang['requests_accept_multi_flash_msg_success'] = 'Abwesenheitsanträge wurden erfolgreich akzeptiert.';
 $lang['requests_rejected_multi_flash_msg_success'] = 'Abwesenheitsanträge wurden erfolgreich abgelehnt.';
 $lang['auto_confirm'] = 'Automatische Bestätigung';
-$lang['leaves_index_button_create_free_day'] = 'Neue Anfrage für einen kostenlosen Tag';
+$lang['leaves_index_button_create_free_day'] = 'Neue Anfrage für einen freien Tag';
 
 $lang['leavetypes_popup_create_button_cancel'] = 'Abbrechen';
 $lang['leavetypes_popup_create_button_create'] = 'Erstellen';

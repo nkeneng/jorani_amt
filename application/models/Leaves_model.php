@@ -1075,6 +1075,7 @@ class Leaves_model extends CI_Model
                             'imageurl' => $imageUrl,
                             'start' => $value->format('Y-m-d'),
                             'color' => $color,
+                            'status' => $entry->status,
                             'allDay' => $allDay,
                             'end' => $value->format('Y-m-d'),
                             'freeDay' => $entry->free_day,
@@ -1091,6 +1092,7 @@ class Leaves_model extends CI_Model
                     'imageurl' => $imageUrl,
                     'start' => $startdate,
                     'color' => $color,
+                    'status' => $entry->status,
                     'allDay' => $allDay,
                     'end' => $enddate,
                     'freeDay' => $entry->free_day,
@@ -1181,9 +1183,12 @@ class Leaves_model extends CI_Model
                         $jsonevents[] = array(
                             'id' => $entry->id,
                             'title' => $entry->firstname . ' ' . $entry->lastname,
+                            'email' => $entry->email,
+                            'cause' => $entry->cause,
                             'imageurl' => $imageUrl,
                             'start' => $value->format('Y-m-d'),
                             'color' => $color,
+                            'status' => $entry->status,
                             'allDay' => $allDay,
                             'end' => $value->format('Y-m-d'),
                             'freeDay' => $entry->free_day,
@@ -1196,9 +1201,12 @@ class Leaves_model extends CI_Model
                 $jsonevents[] = array(
                     'id' => $entry->id,
                     'title' => $entry->firstname . ' ' . $entry->lastname,
+                    'email' => $entry->email,
+                    'cause' => $entry->cause,
                     'imageurl' => $imageUrl,
                     'start' => $startdate,
                     'color' => $color,
+                    'status' => $entry->status,
                     'allDay' => $allDay,
                     'end' => $enddate,
                     'freeDay' => $entry->free_day,
@@ -1288,9 +1296,12 @@ class Leaves_model extends CI_Model
                         $jsonevents[] = array(
                             'id' => $entry->id,
                             'title' => $entry->firstname . ' ' . $entry->lastname,
+                            'email' => $entry->email,
+                            'cause' => $entry->cause,
                             'imageurl' => $imageUrl,
                             'start' => $value->format('Y-m-d'),
                             'color' => $color,
+                            'status' => $entry->status,
                             'allDay' => $allDay,
                             'end' => $value->format('Y-m-d'),
                             'startdatetype' => $startdatetype,
@@ -1302,9 +1313,12 @@ class Leaves_model extends CI_Model
                 $jsonevents[] = array(
                     'id' => $entry->id,
                     'title' => $entry->firstname . ' ' . $entry->lastname,
+                    'email' => $entry->email,
+                    'cause' => $entry->cause,
                     'imageurl' => $imageUrl,
                     'start' => $startdate,
                     'color' => $color,
+                    'status' => $entry->status,
                     'allDay' => $allDay,
                     'end' => $enddate,
                     'startdatetype' => $startdatetype,
@@ -1337,7 +1351,7 @@ class Leaves_model extends CI_Model
      */
     public function department($entity_id, $start = "", $end = "", $children = FALSE, $statusFilter = NULL)
     {
-        $this->db->select('users.firstname, users.lastname, users.manager');
+        $this->db->select('users.firstname, users.lastname, users.manager, users.email');
         $this->db->select('leaves.*');
         $this->db->select('types.name as type, types.acronym as acronym');
         $this->db->from('organization');
@@ -1359,7 +1373,9 @@ class Leaves_model extends CI_Model
         } else {
             $this->db->where('organization.id', $entity_id);
         }
-        //$this->db->where('leaves.status != ', 4); //Exclude rejected requests
+        $this->db->where('leaves.status != ', 4); //Exclude rejected requests
+        $this->db->where('leaves.status != ', 5); //Exclude cancelling requests
+        $this->db->where('leaves.status != ', 6); //Exclude cancelled requests
         if ($statusFilter != NULL) {
             $statuses = explode('|', $statusFilter);
             $this->db->where_in('status', $statuses);
@@ -1444,9 +1460,12 @@ class Leaves_model extends CI_Model
                         $jsonevents[] = array(
                             'id' => $entry->id,
                             'title' => $title,
+                            'email' => $entry->email,
+                            'cause' => $entry->cause,
                             'imageurl' => $imageUrl,
                             'start' => $value->format('Y-m-d'),
                             'color' => $color,
+                            'status' => $entry->status,
                             'allDay' => $allDay,
                             'end' => $value->format('Y-m-d'),
                             'startdatetype' => $startdatetype,
@@ -1458,9 +1477,12 @@ class Leaves_model extends CI_Model
                 $jsonevents[] = array(
                     'id' => $entry->id,
                     'title' => $title,
+                    'email' => $entry->email,
+                    'cause' => $entry->cause,
                     'imageurl' => $imageUrl,
                     'start' => $startdate,
                     'color' => $color,
+                    'status' => $entry->status,
                     'allDay' => $allDay,
                     'end' => $enddate,
                     'startdatetype' => $startdatetype,
@@ -1580,9 +1602,12 @@ class Leaves_model extends CI_Model
             $jsonevents[] = array(
                 'id' => $entry->id,
                 'title' => $title,
+                'email' => $entry->email,
+                'cause' => $entry->cause,
                 'imageurl' => $imageUrl,
                 'start' => $startdate,
                 'color' => $color,
+                'status' => $entry->status,
                 'allDay' => $allDay,
                 'end' => $enddate,
                 'startdatetype' => $startdatetype,

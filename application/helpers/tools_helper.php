@@ -30,7 +30,7 @@ function setUserContext(CI_Controller $controller) {
         }
     }
     $controller->fullname = $controller->session->userdata('firstname') . ' ' .
-            $controller->session->userdata('lastname');
+        $controller->session->userdata('lastname');
     $controller->is_manager = $controller->session->userdata('is_manager');
     $controller->is_admin = $controller->session->userdata('is_admin');
     $controller->is_hr = $controller->session->userdata('is_hr');
@@ -38,6 +38,8 @@ function setUserContext(CI_Controller $controller) {
     $controller->manager = $controller->session->userdata('manager');
     $controller->language = $controller->session->userdata('language');
     $controller->language_code = $controller->session->userdata('language_code');
+    $controller->email = $controller->session->userdata('email');
+    $controller->login = $controller->session->userdata('login');
 }
 
 /**
@@ -66,6 +68,8 @@ function getUserContext(CI_Controller $controller)
         }
         $data['requests_count'] = $data['requested_leaves_count'] + $data['requested_extra_count'];
     }
+    $data['email'] = $controller->session->userdata('email');
+    $data['login'] = $controller->session->userdata('login');
     return $data;
 }
 

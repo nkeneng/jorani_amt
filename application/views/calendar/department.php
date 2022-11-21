@@ -11,20 +11,20 @@
 <div class="row-fluid">
     <div class="span12">
 
-<h2><?php echo lang('calendar_department_title');?> &nbsp;<?php echo $help;?></h2>
+        <h2><?php echo lang('calendar_department_title'); ?> &nbsp;<?php echo $help; ?></h2>
 
-<?php echo lang('calendar_department_description');?>
+        <?php echo lang('calendar_department_description'); ?>
 
-<h3><?php echo $department;?></h3>
+        <h3><?php echo $department; ?></h3>
 
-<div class="row-fluid">
-    <div class="span3"><span class="label"><?php echo lang('Planned');?></span></div>
-    <div class="span3"><span class="label label-success"><?php echo lang('Accepted');?></span></div>
-    <div class="span3"><span class="label label-warning"><?php echo lang('Requested');?></span></div>
-    <div class="span3">&nbsp;</div>
-</div>
+        <div class="row-fluid">
+            <div class="span3"><span style="border: 3px dashed #858888">🤔 <?php echo lang('Planned'); ?></span></div>
+            <div class="span3"><span style="border: 3px solid #c48531">'🙏 <?php echo lang('Requested'); ?></span></div>
+            <div class="span3"><span style="border: 3px solid #21482d">✅ <?php echo lang('Accepted'); ?></span></div>
+            <div class="span3">&nbsp;</div>
+        </div>
 
-<div id='calendar'></div>
+        <div id='calendar'></div>
 
     </div>
 </div>
@@ -37,6 +37,10 @@
         <img src="<?php echo base_url(); ?>assets/images/loading.gif" align="middle">
     </div>
 </div>
+
+<script type="text/javascript" src="<?php echo base_url(); ?>assets/consistent_color_generation/hsluv-0.1.0.min.js"></script>
+<script type="text/javascript" src="<?php echo base_url(); ?>assets/consistent_color_generation/sha1.js"></script>
+<script type="text/javascript" src="<?php echo base_url(); ?>assets/consistent_color_generation/consistent_color_generation.js"></script>
 
 <link href="<?php echo base_url(); ?>assets/fullcalendar-2.8.0/fullcalendar.css" rel="stylesheet">
 <script type="text/javascript" src="<?php echo base_url(); ?>assets/fullcalendar-2.8.0/fullcalendar.min.js"></script>
@@ -84,7 +88,27 @@
         },
         eventAfterRender: function (event, element, view) {
             //Add tooltip to the element
-            $(element).attr('title', event.title);
+            $(element).attr('title', event.cause);
+
+            if (typeof event.email === 'string' || event.email instanceof String) {
+                $(element).css('background-color', colourize(event.email));
+            }
+
+            if (typeof event.status === 'string' || event.status instanceof String) {
+                var colour = {
+                    '1': /* Planned */ 'dashed #858888' /* grey */,
+                    '2': /* Requested */ 'solid #c48531' /* orange? */,
+                    '3': /* Accepted */ 'solid #21482d' /* darkgreen */
+                }[event.status];
+                var emoji = {
+                    '1': /* Planned */ '🤔' /* grey */,
+                    '2': /* Requested */ '🙏' /* orange? */,
+                    '3': /* Accepted */ '✅' /* darkgreen */
+                }[event.status];
+                if (colour !== undefined) {
+                    $(element).css('border', '3px ' + colour).find("span").first().append(emoji);
+                }
+            }
 
             if (event.enddatetype == "Morning" || event.startdatetype == "Afternoon") {
                 var nb_days = event.end !== null ? event.end.diff(event.start, "days") : null;

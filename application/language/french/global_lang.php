@@ -13,10 +13,9 @@ $lang['global_msg_error_forbidden'] = 'L\'opération (%s) n\'est pas autorisée'
 $lang['global_msg_wait'] = 'Veuillez patienter';
 $lang['global_msg_old_browser'] = 'Internet Explorer 8 et inférieur n\'est pas supporté. Veuillez utiliser IE9 ou Firefox, Chrome, etc.';
 $lang['global_msg_not_found'] = 'Objet non trouvé. Il est possible que vous tentiez d\'accèder à un objet supprimé.';
-$lang['global_date_format'] = 'd/m/Y';
-$lang['global_date_js_format'] = 'dd/mm/yy';
-$lang['global_date_momentjs_format'] = 'DD/MM/YYYY';
-
+$lang['global_date_format'] = 'Y-m-d';
+$lang['global_date_js_format'] = 'yy-mm-dd';
+$lang['global_date_momentjs_format'] = 'YYYY-MM-DD';
 $lang['dayFree'] = 'Jour';
 $lang['monday'] = 'Lundi';
 $lang['tuesday'] = 'Mardi';

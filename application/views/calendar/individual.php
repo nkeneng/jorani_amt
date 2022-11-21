@@ -25,8 +25,6 @@
             </div>
             <div class="span6">
                 <div class="pull-right">
-                    <!--                    <button id="cmdDisplayDayOff" class="btn btn-primary"><i class="mdi mdi-calendar"></i>&nbsp;-->
-                    <?php //echo lang('calendar_individual_day_offs'); ?><!--</button>-->
                 </div>
             </div>
         </div>
@@ -137,7 +135,7 @@
                 /*defaultView: 'agendaWeek',*/
                 events: '<?php echo base_url();?>leaves/individual',
                 eventClick: function (calEvent, jsEvent, view) {
-                    if (calEvent.color != '#000000') {
+                    if (calEvent.color != '#000000') { /* WTF? */
                         var link = "<?php echo base_url();?>ics/ical/" + calEvent.id;
                         $("#lnkDownloadCalEvnt").attr('href', link);
                         $('#frmEvent').modal('show');

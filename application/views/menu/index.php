@@ -208,18 +208,19 @@ $this->lang->load('menu', $language);?>
                 </ul>
 
                 <ul class="nav pull-right">
-                <a href="<?php echo base_url();?>users/myprofile" class="brand"><?php echo $fullname;?></a>
-                <li><a href="<?php echo base_url();?>users/myprofile" title="<?php echo lang('menu_banner_tip_myprofile');?>"><i class="mdi mdi-account-box-outline"></i></a></li>
-                <?php if ($this->config->item('ldap_enabled') === FALSE && $this->config->item('saml_enabled') === FALSE) { ?>
-                <li><a href="#" id="cmdChangePassword" title="<?php echo lang('menu_banner_tip_reset');?>"><i class="mdi mdi-lock"></i></a></li>
-                <?php }
-                $urlLogout = 'session/logout';
-                if ($this->config->item('saml_enabled') === TRUE){
-                    $urlLogout = 'api/slo';
-                } ?>
-                <li><a href="<?php echo base_url() . $urlLogout;?>" title="<?php echo lang('menu_banner_logout');?>"><i class="mdi mdi-logout"></i></a></li>
-            </ul>
-        </div>
+                    <a href="<?php echo base_url(); ?>users/myprofile" class="brand"><?php echo $fullname; ?></a>
+                    <li><a href="<?php echo base_url(); ?>users/myprofile" title="<?php echo lang('menu_banner_tip_myprofile'); ?>"><img
+                                    src="<?php echo $this->config->item('avatar_image_url') . $login; ?>" alt="avatar image" width="24" height="24"></a></li>
+                    <?php if ($this->config->item('ldap_enabled') === FALSE && $this->config->item('saml_enabled') === FALSE) { ?>
+                        <li><a href="#" id="cmdChangePassword" title="<?php echo lang('menu_banner_tip_reset'); ?>"><i class="mdi mdi-lock"></i></a></li>
+                    <?php }
+                    $urlLogout = 'session/logout';
+                    if ($this->config->item('saml_enabled') === TRUE) {
+                        $urlLogout = 'api/slo';
+                    } ?>
+                    <li><a href="<?php echo base_url() . $urlLogout; ?>" title="<?php echo lang('menu_banner_logout'); ?>"><i class="mdi mdi-logout"></i></a></li>
+                </ul>
+            </div>
       </div>
     </div><!-- /.navbar -->
 

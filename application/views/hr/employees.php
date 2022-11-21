@@ -539,12 +539,6 @@ $(function () {
         handleLinksInContextMenu(e);
     });
 
-    //Long press on mobile, display contextual menu as a popup
-    var hammer = new Hammer(document, {time: 600});
-    hammer.on('press', function(e) {
-        handleLinksInContextMenu(e);
-    });
-
     //On double click, display contextual menu as a popup
     $(document).on('dblclick', '.employees-area', function (e) {
         //Prevent text selection after double click

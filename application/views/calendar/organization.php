@@ -26,39 +26,37 @@
         </div>
     </div>
     <div class="span5">
-        <label for="chkIncludeDaysOffs">
-            <input type="checkbox" class="input-centered" checked id="chkIncludeDaysOffs" name="chkIncludeDaysOffs"> <?php echo lang('calendar_individual_day_offs');?>
-        </label>
         <div class="input-prepend input-append">
             <button id="cmdPrevious" class="btn btn-primary" title="<?php echo lang('calendar_tabular_button_previous');?>"><i class="mdi mdi-chevron-left"></i></button>
             <input type="text" id="txtMonthYear" style="cursor:pointer;" value="<?php echo $monthName . ' ' . $year;?>" class="input-medium" readonly />
             <button id="cmdNext" class="btn btn-primary" title="<?php echo lang('calendar_tabular_button_next');?>"><i class="mdi mdi-chevron-right"></i></button>
         </div>
     </div>
-    <?php if (($this->config->item('ics_enabled') == TRUE) && ($logged_in == TRUE)) {?>
-    <div class="span2 pull-right"><a id="lnkICS" href="#"><i class="mdi mdi-earth nolink"></i> ICS</a></div>
-    <?php } else {?>
-    <div class="span2">&nbsp;</div>
-    <?php }?>
+    <?php if (($this->config->item('ics_enabled') == TRUE) && ($logged_in == TRUE)) { ?>
+        <div class="span2 pull-right"><a id="lnkICS" href="#"><i class="mdi mdi-earth nolink"></i> ICS</a></div>
+    <?php } else { ?>
+        <div class="span2">&nbsp;</div>
+    <?php } ?>
 
 </div>
 
 <div class="row-fluid">
     <div class="span12">
-        <span class="label"><input type="checkbox" checked id="chkPlanned" class="filterStatus"> &nbsp;<?php echo lang('Planned');?></span> &nbsp;
-        <span class="label label-success"><input type="checkbox" checked id="chkAccepted" class="filterStatus"> &nbsp;<?php echo lang('Accepted');?></span> &nbsp;
-        <span class="label label-warning"><input type="checkbox" checked id="chkRequested" class="filterStatus"> &nbsp;<?php echo lang('Requested');?></span> &nbsp;
-        <span class="label label-important" style="background-color: #ff0000;"><input type="checkbox" checked id="chkCancellation" class="filterStatus"> &nbsp;<?php echo lang('Cancellation');?></span> &nbsp;
+        <span style="border: 3px dashed #858888"><input type="checkbox" checked id="chkPlanned" class="filterStatus">&nbsp;🤔&nbsp;<?php echo lang('Planned'); ?></span> &nbsp;
+        <span style="border: 3px solid #c48531"><input type="checkbox" checked id="chkRequested" class="filterStatus">&nbsp;🙏&nbsp;<?php echo lang('Requested'); ?></span> &nbsp;
+        <span style="border: 3px solid #21482d"><input type="checkbox" checked id="chkAccepted" class="filterStatus">&nbsp;✅&nbsp;<?php echo lang('Accepted'); ?></span> &nbsp;
+        <span style="border: 3px solid #971917" style="background-color: #ff0000;"><input type="checkbox" checked id="chkCancellation"
+                                                                                          class="filterStatus">&nbsp;🗙&nbsp;<?php echo lang('Cancellation'); ?></span> &nbsp;
     </div>
 </div>
 
 <div id="frmSelectEntity" class="modal hide fade">
     <div class="modal-header">
         <a href="#" onclick="$('#frmSelectEntity').modal('hide');" class="close">&times;</a>
-         <h3><?php echo lang('calendar_organization_popup_entity_title');?></h3>
+        <h3><?php echo lang('calendar_organization_popup_entity_title'); ?></h3>
     </div>
     <div class="modal-body" id="frmSelectEntityBody">
-        <img src="<?php echo base_url();?>assets/images/loading.gif">
+        <img src="<?php echo base_url(); ?>assets/images/loading.gif">
     </div>
     <div class="modal-footer">
         <a href="#" onclick="select_entity();" class="btn btn-primary"><?php echo lang('calendar_organization_popup_entity_button_ok');?></a>
@@ -111,12 +109,15 @@
 </div>
 
 <style>
-#frmSelectList
-{
-    width: 700px;
-    margin-left: -350px !important;
-}
+    #frmSelectList {
+        width: 700px;
+        margin-left: -350px !important;
+    }
 </style>
+
+<script type="text/javascript" src="<?php echo base_url(); ?>assets/consistent_color_generation/hsluv-0.1.0.min.js"></script>
+<script type="text/javascript" src="<?php echo base_url(); ?>assets/consistent_color_generation/sha1.js"></script>
+<script type="text/javascript" src="<?php echo base_url(); ?>assets/consistent_color_generation/consistent_color_generation.js"></script>
 
 <link rel="stylesheet" href="<?php echo base_url(); ?>assets/bootstrap-datepicker-1.8.0/css/bootstrap-datepicker.min.css">
 <script src="<?php echo base_url(); ?>assets/bootstrap-datepicker-1.8.0/js/bootstrap-datepicker.min.js"></script>
@@ -136,7 +137,6 @@
     var month = (<?php echo $month;?> - 1); //Momentjs uses a zero-based number
     var year = <?php echo $year;?>;
     var text; //Label of the selected entity
-    var toggleDayoffs = true;
     var currentDate = moment().year(year).month(month).date(1);
     var listId
 
@@ -178,26 +178,22 @@
           <?php } else {?>
           source = '<?php echo base_url();?>contracts/public/calendar/alldayoffs?entity=' + entity;
           <?php }?>
-          if ($('#chkIncludeChildren').prop('checked') == true) {
-              source += '&children=true';
-          } else {
-              source += '&children=false';
-          }
-          if (toggleDayoffs) {
-              $('#calendar').fullCalendar('addEventSource', source);
-          } else {
-              $('#calendar').fullCalendar('removeEventSource', source);
-          }
+        if ($('#chkIncludeChildren').prop('checked') == true) {
+            source += '&children=true';
+        } else {
+            source += '&children=false';
+        }
+        $('#calendar').fullCalendar('addEventSource', source);
     }
 
     function select_entity() {
-      selectedEntity = true;
-      entity = $('#organization').jstree('get_selected')[0];
-      entityName = $('#organization').jstree().get_text(entity);
-      $('#spnAddOn').html('<i class="mdi mdi-sitemap" aria-hidden="true"></i>');
-      $('#txtEntity').val(entityName);
-      refresh_calendar();
-      Cookies.set('selected', 'entity');
+        selectedEntity = true;
+        entity = $('#organization').jstree('get_selected')[0];
+        entityName = $('#organization').jstree().get_text(entity);
+        $('#spnAddOn').html('<i class="mdi mdi-sitemap" aria-hidden="true"></i>');
+        $('#txtEntity').val(entityName);
+        refresh_calendar();
+        Cookies.set('selected', 'entity');
       Cookies.set('cal_entity', entity);
       Cookies.set('cal_entityName', entityName);
       Cookies.set('cal_includeChildren', includeChildren);
@@ -300,14 +296,35 @@
                     $('#frmModalAjaxWait').modal('hide');
                 }
             },
-            eventRender: function(event, element, view) {
-                if(event.imageurl){
+            eventRender: function (event, element, view) {
+                if (event.imageurl) {
                     $(element).find('span:first').prepend('<img src="' + event.imageurl + '" />');
                 }
             },
-            eventAfterRender: function(event, element, view) {
+            eventAfterRender: function (event, element, view) {
                 //Add tooltip to the element
-                $(element).attr('title', event.title);
+                $(element).attr('title', event.cause);
+                if (typeof event.email === 'string' || event.email instanceof String) {
+                    $(element).css('background-color', colourize(event.email));
+                }
+
+                if (typeof event.status === 'string' || event.status instanceof String) {
+                    var colour = {
+                        '1': /* Planned */ 'dashed #858888' /* grey */,
+                        '2': /* Requested */ 'solid #c48531' /* orange? */,
+                        '3': /* Accepted */ 'solid #21482d' /* darkgreen */,
+                        '5': /* Cancellation */ 'solid #971917' /* red */
+                    }[event.status];
+                    var emoji = {
+                        '1': /* Planned */ '🤔' /* grey */,
+                        '2': /* Requested */ '🙏' /* orange? */,
+                        '3': /* Accepted */ '✅' /* darkgreen */,
+                        '5': /* Cancellation */ '🗙' /* red */
+                    }[event.status];
+                    if (colour !== undefined && emoji !== undefined) {
+                        $(element).css('border', '3px ' + colour).find("span").first().append(emoji);
+                    }
+                }
 
                 if (event.enddatetype == "Morning" || event.startdatetype == "Afternoon") {
                     var nb_days = event.end.diff(event.start, "days");
@@ -343,13 +360,6 @@
             windowResize: function(view) {
                 $('#calendar').fullCalendar( 'rerenderEvents' );
             }
-        });
-
-        //Toggle day offs displays
-        $('#chkIncludeDaysOffs').on('click', function() {
-            toggleDayoffs = !toggleDayoffs;
-            Cookies.set('cal_dayoffs', toggleDayoffs);
-            refresh_calendar();
         });
 
         $('#cmdNext').click(function() {
@@ -394,7 +404,6 @@
             entity = Cookies.get('cal_entity');
             entityName = Cookies.get('cal_entityName');
             includeChildren = Cookies.get('cal_includeChildren');
-            toggleDayoffs = Cookies.get('cal_dayoffs');
             selectedEntity = Cookies.get('selected') !== undefined && Cookies.get('selected') == "list" ? false : true;
             listId = Cookies.set('listId');
 
@@ -415,9 +424,7 @@
             }
 
             //Parse boolean values
-            //console.log(toggleDayoffs);
             includeChildren = $.parseJSON(includeChildren.toLowerCase());
-            toggleDayoffs = $.parseJSON(toggleDayoffs.toLowerCase());
             $('#txtEntity').val(entityName);
             $('#chkIncludeChildren').prop('checked', includeChildren);
             //Load the calendar events
@@ -426,7 +433,6 @@
             Cookies.set('cal_entity', entity);
             Cookies.set('cal_entityName', entityName);
             Cookies.set('cal_includeChildren', includeChildren);
-            Cookies.set('cal_dayoffs', toggleDayoffs);
             Cookies.set('selected', 'entity');
             refresh_calendar();
         }

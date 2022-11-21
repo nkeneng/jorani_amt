@@ -30,7 +30,7 @@ $lang['leaves_index_thead_tip_edit'] = 'bearbeiten';
 
 $lang['monday'] = 'Montag';
 $lang['tuesday'] = 'Dienstag';
-$lang['wednesday'] = 'Der Mittwoch';
+$lang['wednesday'] = 'Mittwoch';
 $lang['thursday'] = 'Donnerstag';
 $lang['friday'] = 'Freitag';
 $lang['check_all'] = 'Tout cocher';
@@ -43,7 +43,7 @@ $lang['you_have_selected_all_the_elements_of_the_table'] = 'Achtung, Sie haben a
 $lang['requests_accept_multi_flash_msg_success'] = 'Abwesenheitsanträge wurden erfolgreich akzeptiert.';
 $lang['requests_rejected_multi_flash_msg_success'] = 'Abwesenheitsanträge wurden erfolgreich abgelehnt.';
 $lang['auto_confirm'] = 'Automatische Bestätigung';
-$lang['leaves_index_button_create_free_day'] = 'Neue Anfrage für einen kostenlosen Tag';
+$lang['leaves_index_button_create_free_day'] = 'Neue Anfrage für einen freien Tag';
 $lang['leaves_index_button_create_day'] = 'Neue Anfrage für einen freien Tag';
 $lang['choose_date_interval'] = 'Das gewählte Startdatum muss ein Montag und das gewählte Enddatum muss ein Sonntag sein';
 $lang['prev'] = 'Zurück';
